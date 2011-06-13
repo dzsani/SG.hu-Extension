@@ -1,18 +1,8 @@
 
 function removeChatWindow() {
 
-	// Remove top BR tags from the two column top	
-	$('center iframe').next().next().find('table:first').prev().remove();
-	$('center iframe').next().next().find('tbody tr').children('td:eq(2)').children(':not(div)').remove();
-	
-	// Remove BR and chat SCRIPT tag
-	$('center iframe').closest('td').children(':not(center)').remove();
-	
-	// Remove 'new window' DIV
-	$('center iframe').next().remove();
-	
-	// Remove the chat frame
-	$('center iframe').remove();
+	$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').remove();
+	$('table:eq(3) td:eq(2) br').remove();
 }
 
 $(document).ready(function() {
@@ -20,7 +10,24 @@ $(document).ready(function() {
 	// FORUM.PHP
 	if(window.location.href.match('forum.php')) {
 	
-		removeChatWindow();	
+		// Remove chat window
+		if(dataStore['chat_hide']) {
+			removeChatWindow();
+		}
 	}
+});
 
+
+var dataStore;
+var port = chrome.extension.connect();
+
+
+port.postMessage({ type : "getStorageData" });
+
+port.onMessage.addListener(function(response) {
+
+	if(response.type == 'setStorageData') {
+		dataStore = response.data;
+		extInit();
+	}
 });

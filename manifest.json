@@ -13,7 +13,7 @@
 	"content_scripts": [{
 		"matches" : [ "http://www.sg.hu/*", "http://sg.hu/*" ],
 		"js" : ["js/jquery.js", "js/content.js", "js/dom.js"],
-		"css" : ["css/style.css"],
+		"css" : ["css/content.css"],
 		"run_at" : "document_end",
 		"all_frames": false
 		}],
