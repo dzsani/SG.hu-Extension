@@ -14,6 +14,10 @@ $(document).ready(function() {
 		if(dataStore['chat_hide']) {
 			removeChatWindow();
 		}
+		
+		if(dataStore['valami']) {
+			// valami
+		}
 	}
 });
 
