@@ -9,9 +9,6 @@ function _toBoolean(val) {
 	}
 }
 
-// List of checkboxes
-var checkboxes = ['chat_hide'];
-
 function checkPrefs() {
 	
 	if(localStorage['chat_hide']		== undefined) localStorage['chat_hide']		= 'false';
@@ -19,22 +16,31 @@ function checkPrefs() {
 	restorePrefs();
 	}
 
+
 function restorePrefs() {
 
-	$.each(checkboxes, function(index, value) {
-		if(localStorage[value] == 'true') $('#'+value).attr('checked', true);
-		});
-	}
+	$('input:checkbox').each(function() {
+		if(localStorage[ $(this).attr('id') ] == 'true') {
+			$(this).attr('checked', true);
+		}
+	});
+}
+
 
 function savePrefs() {
-	
-	$.each(checkboxes, function(index, value) {
-		$('#'+value).click(function(){ localStorage[value] = $('#'+value).attr('checked'); });
-		});
-	
-	}
+
+	$('input:checkbox').click(function(){ 
+		localStorage[ $(this).attr('id') ] = $(this).attr('checked'); 
+		alert($(this).attr('checked'));
+	});
+}
 
 $(document).ready(function() {
+	
+	// Check localStorage vars,
+	// create with default vals if dont exists
 	checkPrefs();
+	
+	// Save setting fn
 	savePrefs();
-	});
+});
