@@ -11,12 +11,8 @@ $(document).ready(function() {
 	if(window.location.href.match('forum.php')) {
 	
 		// Remove chat window
-		if(dataStore['chat_hide']) {
+		if(dataStore['chat_hide'] == 'true') {
 			removeChatWindow();
-		}
-		
-		if(dataStore['valami']) {
-			// valami
 		}
 	}
 });
