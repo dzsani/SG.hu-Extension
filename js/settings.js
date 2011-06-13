@@ -31,7 +31,6 @@ function savePrefs() {
 
 	$('input:checkbox').click(function(){ 
 		localStorage[ $(this).attr('id') ] = $(this).attr('checked'); 
-		alert($(this).attr('checked'));
 	});
 }
 
