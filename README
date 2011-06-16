@@ -1,1 +1,11 @@
-valami
+Az sg.hu nemhivatalos Chrome bővítménye.
+
+Használati útmutató:
+	A Google Extension Gallery-ből letöltött bővítmény telepítése ugyan úgy zajlik mint bármelyik másiknál.
+	A kicsomagolt developer verzió telepítését a Csavarkulcs -> Eszközök -> Bővítmények alatt található 
+	Developer mode 'Load unpacked extension'-nel kell elvégezni, itt egyszerűen kitallózzuk a letöltött 
+	bövítmény mappáját.
+
+A bővítmény funkciói:
+	- Chat elrejtése
+	- 'Ugrás az utolsó olvasatlan üzenethez' több oldalon keresztül
