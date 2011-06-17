@@ -63,11 +63,27 @@ var  jumpLastUnreadedMessage = {
 };
 
 function filterOutReadedFaves() {
-	$('.b-h-o-head:eq(2)').next().find('div:not(.std0) a').each(function() {
+
+	var counter = 0;
+
+	$($('.b-h-o-head:eq(2)').next().find('div a').get().reverse()).each(function() {
 		
 		// Skip topics that have unreaded messages
 		if( $(this).find('small').length > 0) {
+			counter++;
 			return true;
+		}
+		
+		if( $(this).parent().is('div.std0') ) {
+		
+			if(counter == 0) {
+				$(this).parent().addClass('ext_hidden_fave');
+				return true;
+			} else {
+				counter = 0;
+				return true;
+			}
+
 		}
 		
 		// Otherwise, add hidden class
