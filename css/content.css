@@ -2,3 +2,43 @@
 .ext_hidden_fave {
 	display: none;
 }
+
+.b-h-o-head {
+	position: relative;
+}
+
+#ext_show_filtered_faves {
+	width: 5px;
+ 	position: absolute;
+ 	right: 0px;
+ 	top: 0px;
+ 	background-image: -webkit-linear-gradient(top, #fbd859, #f5b85e);
+ 	border-radius: 2px;
+}
+
+#ext_show_filtered_faves.show {
+	padding: 5px 6px 5px 7px;
+}
+
+#ext_show_filtered_faves.hide {
+	padding:6px 8px 3px 5px;
+}
+
+#ext_show_filtered_faves_arrow {
+	width: 0px;
+    height: 0px; 	
+	display: block;
+ 	cursor: pointer;
+}	
+
+#ext_show_filtered_faves_arrow.show {
+	border-color: transparent transparent transparent #9d8039;
+	border-style: solid;
+	border-width: 4px;
+}
+
+#ext_show_filtered_faves_arrow.hide {
+	border-color: #9d8039 transparent transparent transparent;
+	border-style: solid;
+	border-width: 4px;	
+}

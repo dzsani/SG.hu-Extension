@@ -75,12 +75,25 @@ function filterOutReadedFaves() {
 	});
 	
 	// Set the "show" button
-	$('.b-h-o-head:eq(2)').append('<span id="ext_show_filtered_faves">mutat</span>');
+	$('.b-h-o-head:eq(2)').append('<div id="ext_show_filtered_faves"></div>');
+	$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
+	// Apply some styles
+	$('#ext_show_filtered_faves').attr('class', 'show');
+	$('#ext_show_filtered_faves_arrow').attr('class', 'show');
+
 	// Set event handling
 	$('#ext_show_filtered_faves').toggle(
-		function() { $(this).html('elrejt'); $('.ext_hidden_fave').show(); },
-		function() { $(this).html('mutat'); $('.ext_hidden_fave').hide(); }
+		function() {
+			$(this).attr('class', 'hide');
+			$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
+			$('.ext_hidden_fave').show();
+		},
+		function() {
+			$(this).attr('class', 'show');
+			$('#ext_show_filtered_faves_arrow').attr('class', 'show');
+			$('.ext_hidden_fave').hide(); 
+		}
 	);
 }
 
