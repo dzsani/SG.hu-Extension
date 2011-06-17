@@ -62,6 +62,29 @@ var  jumpLastUnreadedMessage = {
 	
 };
 
+function filterOutReadedFaves() {
+	$('.b-h-o-head:eq(2)').next().find('div:not(.std0) a').each(function() {
+		
+		// Skip topics that have unreaded messages
+		if( $(this).find('small').length > 0) {
+			return true;
+		}
+		
+		// Otherwise, add hidden class
+		$(this).parent().addClass('ext_hidden_fave');
+	});
+	
+	// Set the "show" button
+	$('.b-h-o-head:eq(2)').append('<span id="ext_show_filtered_faves">mutat</span>');
+	
+	// Set event handling
+	$('#ext_show_filtered_faves').toggle(
+		function() { $(this).html('elrejt'); $('.ext_hidden_fave').show(); },
+		function() { $(this).html('mutat'); $('.ext_hidden_fave').hide(); }
+	);
+}
+
+
 $(document).ready(function() {
 	
 	// FORUM.PHP
@@ -75,6 +98,11 @@ $(document).ready(function() {
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] == 'true') {
 			jumpLastUnreadedMessage.init();
+		}
+		
+		// Faves: show only with unreaded messages
+		if(dataStore['fav_show_only_unreaded'] == 'true') {
+			filterOutReadedFaves();
 		}
 	}
 	
