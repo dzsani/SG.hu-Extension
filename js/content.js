@@ -37,12 +37,27 @@ var  jumpLastUnreadedMessage = {
 		var target = $('#ujhszjott').next().children('center:eq('+(lastMsg-1)+')');
 		
 		// Insert the horizontal rule
-		$('hr').insertBefore(target);
-		
-		// Target scrollTop
-		var targetOffset = $(target).offset().top;
+		$('<hr>').insertAfter(target);
 
-		$('body').animate({ scrollTop : targetOffset}, 1000);
+		// Target offsetTop
+		var targetOffset = $(target).offset().top;
+		
+		// Scroll to target element
+		$('body').animate({ scrollTop : targetOffset}, 500);
+		
+		// Watch offsetTop while the content loads completly
+		var interval = setInterval(function(){
+			// Target offsetTop
+			var targetOffset = $(target).offset().top;
+		
+			// Scroll to target element
+			$('body').animate({ scrollTop : targetOffset}, 200);
+		}, 200, target);
+		
+		// Clear interval when the page loads
+		$(window).load(function() {
+     		clearInterval(interval);
+		});
 	}
 	
 };
