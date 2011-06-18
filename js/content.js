@@ -50,6 +50,7 @@ var  jumpLastUnreadedMessage = {
 		// Scroll to target element
 		$('body').animate({ scrollTop : targetOffset}, 500);
 		
+		/*
 		// Watch offsetTop while the content loads completly
 		var interval = setInterval(function(){
 			// Target offsetTop
@@ -63,6 +64,7 @@ var  jumpLastUnreadedMessage = {
 		$(window).load(function() {
      		clearInterval(interval);
 		});
+		*/
 	}
 	
 };

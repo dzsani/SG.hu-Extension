@@ -36,3 +36,10 @@
 	border-style: solid;
 	border-width: 4px;	
 }
+
+/* General style settings */
+
+hr {
+	margin-top: 20px;
+	border: 1px solid red;
+}
