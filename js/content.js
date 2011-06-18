@@ -134,6 +134,61 @@ function shortCommentMarker() {
 	});
 }
 
+function blockMessages() {
+
+	var deletelist = dataStore['block_list'].split(',');
+
+	$(".topichead").each( function() {
+		
+		var username = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+			username = username.replace(/ - VIP/, "");
+		
+		for(var i = 0; i < deletelist.length; i++) {
+			if(username.toLowerCase() == deletelist[i].toLowerCase()) {
+				$(this).parent().remove();
+			}
+		}
+	});
+}
+
+function getBlockedUserNameFromLink(data) {
+
+	var userName = '';
+	var tmpUrl = data['linkUrl'].replace('http://www.sg.hu/', '');
+	
+	$('.topichead a[href='+tmpUrl+']').each(function() {
+	
+		// Fetch username
+		userName = $(this).html();
+		
+		// Remove the comment
+		$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
+			$(this).remove();
+		})
+	});
+	
+	if(userName != '') { port.postMessage({ type : "setBlockedUser", data : userName }); }
+}
+
+function getBlockedUserNameFromImage(data) {
+
+	var userName = '';
+	var tmpUrl = data['srcUrl'].replace('http://www.sg.hu', '');
+	
+	$('.topichead img[src='+tmpUrl+']').each(function() {
+	
+		// Fetch the username
+		userName = ($(this).attr('title').replace(' - VIP', ''));
+		
+		// Remove the comment
+		$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
+			$(this).remove();
+		})
+	});
+	
+	if(userName != '') { port.postMessage({ type : "setBlockedUser", data : userName }); }
+}
+
 
 $(document).ready(function() {
 	
@@ -168,6 +223,11 @@ $(document).ready(function() {
 		if(dataStore['jump_unreaded_messages']) {
 			jumpLastUnreadedMessage.jump();
 		}
+		
+		// Block users/messages
+		if(dataStore['block_list'] != '') {
+			blockMessages();
+		}
 	}
 });
 
@@ -182,6 +242,11 @@ port.onMessage.addListener(function(response) {
 
 	if(response.type == 'setStorageData') {
 		dataStore = response.data;
-		extInit();
-	}
+	
+	} else if(response.type == 'getBlockedUserNameFromLink') {
+		getBlockedUserNameFromLink(response.data);
+	
+	} else if(response.type == 'getBlockedUserNameFromImage') {
+		getBlockedUserNameFromImage(response.data);
+	}	
 });

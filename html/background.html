@@ -1,18 +1,59 @@
-<html> 
-	<head> 
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" /> 
-		<script> 
- 
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<script>
+
 		chrome.extension.onConnect.addListener(function(port) {
 			port.onMessage.addListener(function(msg) {
 			
 				if (msg.type == "getStorageData") {
 					port.postMessage({ type : "setStorageData", data : localStorage });
 					chrome.pageAction.show(port.sender.tab.id);
-				}
 				
-			});	
+				} else if(msg.type == "setBlockedUser") {
+					addToBlockList(msg.data);
+				}
+
+			});
+		
+		
+			// Right-clikk menu
+			chrome.contextMenus.removeAll();
+			chrome.contextMenus.create({ 
+				"type": "normal", "title": "Felhasználó tiltása", "contexts" : ["link"], 
+				"documentUrlPatterns" : ["http://www.sg.hu/listazas.php*"], 
+				"targetUrlPatterns" : ["http://www.sg.hu/forumuserinfo*"], 
+				"onclick" : function(OnClickData) { port.postMessage({ type : "getBlockedUserNameFromLink", data : OnClickData }); }
+				});
+			
+			chrome.contextMenus.create({ 
+				"type": "normal", "title": "Felhasználó tiltása", "contexts" : ["image"], 
+				"documentUrlPatterns" : ["http://www.sg.hu/listazas.php*"], 
+				"targetUrlPatterns" : ["http://www.sg.hu/kep/nicklogok/*"], 
+				"onclick" : function(OnClickData) { port.postMessage({ type : "getBlockedUserNameFromImage", data : OnClickData }); }
+				});
+		
 		});
-		</script> 
-	</head> 
-</html> 
+
+	function addToBlockList(name){
+		
+		// If theres in no entry in localStorage
+		if(typeof localStorage['block_list'] == "undefined") {
+			localStorage['block_list'] = '';
+		}
+		
+		// If the blocklist is empty
+		if(localStorage['block_list'] == '') { 
+			localStorage['block_list'] = name;
+		
+		// If the blocklist is not empty
+		} else {
+			var blocklist = new Array();
+				blockList = localStorage['block_list'].split(',');
+				if(blockList.indexOf(name) == -1) { blockList.push(name);  localStorage['block_list'] = blockList; }
+		}
+	}
+		
+		</script>
+	</head>
+</html>
