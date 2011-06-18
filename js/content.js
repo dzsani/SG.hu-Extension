@@ -138,6 +138,22 @@ function shortCommentMarker() {
 	});
 }
 
+function setBlockButton() {
+	
+	// Create the block buttons
+	$('.topichead a[href*="forummsg.php"]').each(function() {
+	
+		$('<a href="#" class="block_user">letiltás | </a> ').insertBefore(this);
+	});
+	
+	// Create the block evenst
+	$('.block_user').click(function(e) {
+	
+		e.preventDefault();
+		getBlockedUserNameFromButton(this);
+	});
+}
+
 function blockMessages() {
 	
 	// Return false if theres no blocklist entry
@@ -158,6 +174,34 @@ function blockMessages() {
 			}
 		}
 	});
+}
+
+function getBlockedUserNameFromButton(el) {
+
+	var userName = '';
+	
+	var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
+	var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
+	
+	if(anchor.children('img').length > 0) {
+		userName = anchor.children('img').attr('title').replace(" - VIP", "");
+	
+	} else {
+		userName = anchor.html().replace(" - VIP", "");
+	}
+	
+	if(confirm('Biztos tiltólistára teszed "'+userName+'" nevű felhasználót?')) {
+	
+		$('.topichead a[href='+tmpUrl+']').each(function() {
+	
+			// Remove the comment
+			$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
+				$(this).remove();
+			})
+		});
+	
+		if(userName != '') { port.postMessage({ type : "setBlockedUser", data : userName }); }
+	}
 }
 
 function getBlockedUserNameFromLink(data) {
@@ -238,6 +282,9 @@ $(document).ready(function() {
 		if(dataStore['block_list'] != '') {
 			blockMessages();
 		}
+		
+		// setBlockButton
+		setBlockButton();
 	}
 });
 

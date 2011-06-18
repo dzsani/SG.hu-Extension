@@ -6,7 +6,7 @@
 	"options_page": "html/settings.html",
 
 	"page_action": {
-    "default_icon": "img/icon.png",
+	"default_icon": "img/icon.png",
 	"default_title": "SG Fórum+"
 	},
 	
