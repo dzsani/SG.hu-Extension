@@ -63,7 +63,7 @@ var blocklist =  {
 		$('#blocklist').html('');
 	
 		// Fetch the userlist into an array
-		var users = localStorage['block_list'].split(',');
+		var users = localStorage['block_list'].split(',').sort();
 	
 		// Iterate over, add users to the list
 		for(c = 0; c < users.length; c++) {
