@@ -30,6 +30,11 @@ var  jumpLastUnreadedMessage = {
 		// Get new messages counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
 
+		// Return if there isnot comment counter set
+		if(typeof newMsg == "undefined" || newMsg == '') {
+			return false;
+		}
+		
 		// Get the last msg
 		var lastMsg = newMsg % 80;
 		
