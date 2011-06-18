@@ -100,18 +100,15 @@ function filterOutReadedFaves() {
 	$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
 	// Apply some styles
-	$('#ext_show_filtered_faves').attr('class', 'show');
 	$('#ext_show_filtered_faves_arrow').attr('class', 'show');
 
 	// Set event handling
 	$('#ext_show_filtered_faves').toggle(
 		function() {
-			$(this).attr('class', 'hide');
 			$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
 			$('.ext_hidden_fave').show();
 		},
 		function() {
-			$(this).attr('class', 'show');
 			$('#ext_show_filtered_faves_arrow').attr('class', 'show');
 			$('.ext_hidden_fave').hide(); 
 		}
