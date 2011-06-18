@@ -140,7 +140,12 @@ function shortCommentMarker() {
 }
 
 function blockMessages() {
-
+	
+	// Return false if theres no blocklist entry
+	if(typeof dataStore['block_list'] == "undefined" || dataStore['block_list'] == '') {
+		return false;
+	}
+	
 	var deletelist = dataStore['block_list'].split(',');
 
 	$(".topichead").each( function() {
