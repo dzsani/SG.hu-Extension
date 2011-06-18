@@ -170,6 +170,7 @@ function getBlockedUserNameFromLink(data) {
 	if(userName != '') { port.postMessage({ type : "setBlockedUser", data : userName }); }
 }
 
+
 function getBlockedUserNameFromImage(data) {
 
 	var userName = '';
