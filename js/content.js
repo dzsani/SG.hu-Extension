@@ -114,6 +114,27 @@ function filterOutReadedFaves() {
 }
 
 
+function shortCommentMarker() {
+	
+	$('.b-h-o-head:eq(2)').next().find('div a').each(function() {
+		
+		if( $(this).find('small').length > 0) {
+			
+			// Received new messages counter
+			var newMsg = parseInt( $(this).find('small').html().match(/\d+/g) );
+			
+			// Remove the old marker text
+			$(this).find('br').remove();
+			$(this).find('font').remove();
+			
+			// Add the new marker after the topic title
+			$(this).html( $(this).html() + ' <span style="color: red;">'+newMsg+'</span>');
+		}
+	
+	});
+}
+
+
 $(document).ready(function() {
 	
 	// FORUM.PHP
@@ -132,6 +153,11 @@ $(document).ready(function() {
 		// Faves: show only with unreaded messages
 		if(dataStore['fav_show_only_unreaded'] == 'true') {
 			filterOutReadedFaves();
+		}
+
+		// Faves: short comment marker
+		if(dataStore['short_comment_marker'] == 'true') {
+			shortCommentMarker();
 		}
 	}
 	
