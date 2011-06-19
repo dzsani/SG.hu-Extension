@@ -129,7 +129,7 @@ function shortCommentMarker() {
 			
 			// Remove the old marker text
 			$(this).find('br').remove();
-			$(this).find('font').remove();
+			$(this).find('font:last').remove();
 			
 			// Add the new marker after the topic title
 			$(this).html( $(this).html() + ' <span style="color: red;">'+newMsg+'</span>');
@@ -143,7 +143,7 @@ function setBlockButton() {
 	// Create the block buttons
 	$('.topichead a[href*="forummsg.php"]').each(function() {
 	
-		$('<a href="#" class="block_user">letiltás | </a> ').insertBefore(this);
+		$('<a href="#" class="block_user">letiltás</a> <span>| </span> ').insertBefore(this);
 	});
 	
 	// Create the block evenst
