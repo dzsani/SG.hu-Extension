@@ -37,6 +37,12 @@
 	border-width: 4px;	
 }
 
+#ext_filtered_faves_error {
+	color: #333;
+	font-size: 13px;
+	text-align: center;
+}
+
 /* General style settings */
 
 hr {
