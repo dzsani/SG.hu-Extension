@@ -45,7 +45,7 @@
 
 /* General style settings */
 
-hr {
+#ext_unreaded_hr {
 	margin-top: 20px;
 	border: 1px solid red;
 }

@@ -1,4 +1,18 @@
 
+
+function isLoggedIn() {
+
+	// Forum main page
+	if(window.location.href.match('forum.php')) {
+		return $('.std1').length ? true : false;
+	
+	// Topic page
+	} else if(window.location.href.match('listazas.php3')) {
+		return ( $('.std1').length > 1) ? true : false;
+	}
+	
+}
+
 function removeChatWindow() {
 
 	$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').remove();
@@ -42,7 +56,7 @@ var  jumpLastUnreadedMessage = {
 		var target = $('#ujhszjott').next().children('center:eq('+(lastMsg-1)+')');
 		
 		// Insert the horizontal rule
-		$('<hr>').insertAfter(target);
+		$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
 
 		// Target offsetTop
 		var targetOffset = $(target).offset().top;
@@ -254,7 +268,7 @@ function getBlockedUserNameFromImage(data) {
 
 
 $(document).ready(function() {
-	
+
 	// FORUM.PHP
 	if(window.location.href.match('forum.php')) {
 	
@@ -264,17 +278,17 @@ $(document).ready(function() {
 		}
 		
 		// Jump the last unreaded message
-		if(dataStore['jump_unreaded_messages'] == 'true') {
+		if(dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn() ) {
 			jumpLastUnreadedMessage.init();
 		}
 		
 		// Faves: show only with unreaded messages
-		if(dataStore['fav_show_only_unreaded'] == 'true') {
+		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
 			filterOutReadedFaves();
 		}
 
 		// Faves: short comment marker
-		if(dataStore['short_comment_marker'] == 'true') {
+		if(dataStore['short_comment_marker'] == 'true'&& isLoggedIn() ) {
 			shortCommentMarker();
 		}
 	}
@@ -283,7 +297,7 @@ $(document).ready(function() {
 	else if(window.location.href.match('listazas.php3')) {
 	
 		// Jump the last unreaded message
-		if(dataStore['jump_unreaded_messages']) {
+		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
 			jumpLastUnreadedMessage.jump();
 		}
 		
