@@ -372,6 +372,25 @@ var autoLoadNextPage = {
 
 };
 
+
+var scrollToDocumentTop = {
+	
+	init : function() {
+		
+		$('<div id="ext_scrolltop">&#9650;</div>').prependTo('body');	
+		
+		$('#ext_scrolltop').click(function() {
+			scrollToDocumentTop.scroll();
+		});
+	},
+	
+	scroll : function() {
+		$('body').animate({ scrollTop : 0 }, 1000);
+	}
+	
+};
+
+
 $(document).ready(function() {
 
 	// FORUM.PHP
@@ -422,6 +441,11 @@ $(document).ready(function() {
 		// Load next page when scrolling down
 		if(dataStore['autoload_next_page'] == 'true') {
 			autoLoadNextPage.init();
+		}
+		
+		// Scroll to page top button
+		if(dataStore['scroll_to_page_top'] == 'true') {
+			scrollToDocumentTop.init();
 		}
 	
 	}
