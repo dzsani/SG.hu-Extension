@@ -292,7 +292,7 @@ function customListStyles() {
 	
 	});
 	
-	$('.std0').find('b').css('color', '#f19f00');
+	$('.std0').find('b').css('color', '#f0920a');
 	
 	// EXCEPTIONS
 	
@@ -305,7 +305,7 @@ function customListStyles() {
 	if(isLoggedIn()) {
 		$('.b-h-o-head:eq(4)').next().css({ 'background' : 'none', 'padding-left' : 5 });
 	} else {
-		$('.b-h-o-head:eq(3)').next().css({ 'background' : 'none', 'padding-left' : 5 });
+		$('.b-h-o-head:eq(2)').next().css({ 'background' : 'none', 'padding-left' : 5 });
 	}
 	
 	// User search
