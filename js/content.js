@@ -320,19 +320,23 @@ function customListStyles() {
 var autoLoadNextPage = {
 	
 	progress : false,
-	currPage : null, 
+	currPage : null,
+	maxPage : null,
 	
 	init : function() {
 		
 		// Current page index
 		autoLoadNextPage.currPage = parseInt($('.lapozo:last span.current:first').html());
 		
+		// Get max page number 
+		autoLoadNextPage.maxPage = parseInt($('.lapozo:last a:last').prev().html());
+		
 		$(document).scroll(function() {
 			
 			var docHeight = $('body').height();
 			var scrollTop = $('body').scrollTop();
 
-			if(docHeight - scrollTop < 3000 && !autoLoadNextPage.progress) {
+			if(docHeight - scrollTop < 3000 && !autoLoadNextPage.progress && autoLoadNextPage.currPage < autoLoadNextPage.maxPage) {
 				autoLoadNextPage.progress = true;
 				autoLoadNextPage.load();
 			}
