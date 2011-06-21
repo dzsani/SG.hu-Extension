@@ -287,9 +287,12 @@ function customListStyles() {
 	// Set flecks for forum cats
 	$('.std0').css({
 		'padding-left' : 15,
-		'background' : 'transparent url('+chrome.extension.getURL('/img/fleck_main.png')+') no-repeat'
+		'background' : 'transparent url('+chrome.extension.getURL('/img/fleck_main.png')+') no-repeat',
+		'margin' : '5px 0px'
 	
 	});
+	
+	$('.std0').find('b').css('color', '#f19f00');
 	
 	// EXCEPTIONS
 	
