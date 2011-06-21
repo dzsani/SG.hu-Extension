@@ -49,3 +49,14 @@
 	margin-top: 20px;
 	border: 1px solid red;
 }
+
+/* autopager */
+.ext_autopager_idicator {
+	
+	margin: 15px 15px 0px 15px;
+	background-color: #666;
+	color: white;
+	text-align: center;
+	font: normal normal bold 16px/24px Arial, sans;
+	border-radius: 5px;
+}

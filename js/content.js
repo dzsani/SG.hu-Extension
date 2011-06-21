@@ -317,6 +317,57 @@ function customListStyles() {
 }
 
 
+var autoLoadNextPage = {
+	
+	progress : false,
+	currPage : null, 
+	
+	init : function() {
+		
+		// Current page index
+		autoLoadNextPage.currPage = parseInt($('.lapozo:last span.current:first').html());
+		
+		$(document).scroll(function() {
+			
+			var docHeight = $('body').height();
+			var scrollTop = $('body').scrollTop();
+
+			if(docHeight - scrollTop < 3000 && !autoLoadNextPage.progress) {
+				autoLoadNextPage.progress = true;
+				autoLoadNextPage.load();
+			}
+		});
+		
+	},
+	
+	load : function() {
+		
+		// Url to call
+		var url = document.location.href.substring(0, 44);
+		
+		// Make the ajax query
+		$.get(url+'&index='+(autoLoadNextPage.currPage+1)+'', function(data) {
+			
+			// Create the 'next page' indicator
+			$('<div class="ext_autopager_idicator">'+(autoLoadNextPage.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+			
+			var tmp = $(data);
+			var tmp = tmp.find('.topichead');
+			
+			tmp.each(function() {
+				
+				$(this).closest('center').insertBefore('.std1:last');
+			
+			});
+			
+			autoLoadNextPage.progress = false;
+			autoLoadNextPage.currPage++;
+
+		});
+	}
+
+};
+
 $(document).ready(function() {
 
 	// FORUM.PHP
@@ -363,6 +414,11 @@ $(document).ready(function() {
 		
 		// setBlockButton
 		setBlockButton();
+		
+		// Load next page when scrolling down
+		if(dataStore['autoload_next_page'] == 'true') {
+			autoLoadNextPage.init();
+		}
 	
 	}
 });
