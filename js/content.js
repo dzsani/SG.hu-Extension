@@ -267,6 +267,53 @@ function getBlockedUserNameFromImage(data) {
 }
 
 
+function customListStyles() {
+	
+	// Set the dotted background on left sidebar
+	$('.b-h-o-head').next().each(function() {
+	
+		$(this).css('background', 'transparent url('+chrome.extension.getURL('/img/dotted_left.png')+') repeat-y');
+	});
+	
+	// Set the dotted background on right sidebar
+	$('.b-h-b-head').next().each(function() {
+	
+		$(this).css('background', 'transparent url('+chrome.extension.getURL('/img/dotted_right.png')+') repeat-y');
+	});	
+	
+	// Set flecks for topics
+	$('.cikk-bal-etc2').css('background', 'transparent url('+chrome.extension.getURL('/img/fleck_sub.png')+') no-repeat');
+	
+	// Set flecks for forum cats
+	$('.std0').css({
+		'padding-left' : 15,
+		'background' : 'transparent url('+chrome.extension.getURL('/img/fleck_main.png')+') no-repeat'
+	
+	});
+	
+	// EXCEPTIONS
+	
+	// Hi user
+	if(isLoggedIn()) {
+		$('.b-h-o-head:first').next().css('background', 'none');
+	}
+	
+	// Popular topics
+	if(isLoggedIn()) {
+		$('.b-h-o-head:eq(4)').next().css({ 'background' : 'none', 'padding-left' : 5 });
+	} else {
+		$('.b-h-o-head:eq(3)').next().css({ 'background' : 'none', 'padding-left' : 5 });
+	}
+	
+	// User search
+	$('.b-h-b-head:eq(1)').next().css('background', 'none');
+	
+	// Forum stat
+	$('.b-h-b-head:eq(4)').next().css('background', 'none');
+	$('.b-h-b-head:eq(4)').next().find('.std0').css({ 'background' : 'none', 'padding-left' : 0 });
+}
+
+
 $(document).ready(function() {
 
 	// FORUM.PHP
@@ -291,6 +338,11 @@ $(document).ready(function() {
 		if(dataStore['short_comment_marker'] == 'true'&& isLoggedIn() ) {
 			shortCommentMarker();
 		}
+
+		// Custom list styles
+		if(dataStore['custom_list_styles'] == 'true') {
+			customListStyles();
+		}
 	}
 	
 	// LISTAZAS.PHP
@@ -308,6 +360,7 @@ $(document).ready(function() {
 		
 		// setBlockButton
 		setBlockButton();
+	
 	}
 });
 
