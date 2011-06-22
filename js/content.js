@@ -421,21 +421,21 @@ var overlayReplyTo = {
 	
 	
 	init : function() {
-		
-		$('.topichead').find('a:last').prev().each(function() {
+		$('.topichead').find('a:last').prev('a').each(function() {
 		
 			var msgno = $(this).attr('href').match(/\d+/g);
 			var entry = $(this).closest('center');
-			
+		
 			$(this).unbind('click');
-			$(this).attr('href', 'javascript:;').click(function() {
+			$(this).attr('href', 'javascript:;');
+			$(this).click(function() {
 				overlayReplyTo.show(entry, msgno);
 			});
 		});
 	},
 	
 	show : function(comment, msgno) {
-	
+
 		// Return when the user is not logged in
 		if(!isLoggedIn()) { alert('Nem vagy bejelentkezve!'); return; }
 	
@@ -469,16 +469,19 @@ var overlayReplyTo = {
 			var scT = textBottom - $(window).height() + 50;
 			$('body').animate( { scrollTop : scT }, 500);
 		}
-
+		
+		// Set the textarea focus
+		textarea_clone.find('textarea').focus();
+		
 		// Add close button
 		var close_btm = $('<img src="'+chrome.extension.getURL('img/overlay_close.png')+'" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
 		
 
 		// Add Close event
 		$(close_btm).click(function() {
-			$(textarea_clone).fadeTo(300, 0, function() {
+			$(textarea_clone).fadeTo(100, 0, function() {
 				$(this).remove();
-				$(comment_clone).fadeTo(300, 0, function() {
+				$(comment_clone).fadeTo(100, 0, function() {
 					$(this).remove();
 					$('.ext_hidden_layer').fadeTo(300, 0, function() {
 						$(this).remove();
