@@ -436,40 +436,57 @@ var overlayReplyTo = {
 	
 	show : function(comment, msgno) {
 	
-		// Kilépett felhasználó
+		// Return when the user is not logged in
 		if(!isLoggedIn()) { alert('Nem vagy bejelentkezve!'); return; }
 	
-		var docWidth	= $(document).width();
-		var docHeight	= $(document).height();
-		var margin		= ($(window).width()-810) / 2;
-		var textTop		= comment.offset().top + comment.find('div:eq(0)').height() + comment.find('div:eq(1)').height() + 20;
-	
-
-		var overlay		= $('<div class="ext_overlay" style="height: '+docHeight+'px;"></div>').prependTo($('body')).animate({ 'opacity' : '0.9' });
-		var content		= $('<div class="ext_overlay_container" style="height: '+docHeight+'px; margin-left: '+margin+'px;"></div>').prependTo($('body'));
-	
-		var clone = comment.clone().prependTo(content).css({ position : 'absolute', top : comment.offset().top, opacity : 1 });
-			clone.find('div[class=topichead]:eq(1)').closest('center').remove();
-			if(clone.css('width') == '650px') { clone.css('left', 80); }
-			
-		var	texta = $('textarea').parents('div:eq(1)').clone().appendTo($(content)).attr('id', 'float_textarea');
-			texta.css({ width: 800, position : 'absolute', top : (textTop+100), left : 5, opacity : 0, '-webkit-box-shadow' : '#666 0px 0px 10px 2px' });
-			texta.animate({ opacity : 1, top : textTop }).find('input[name=no_ref]').attr('value', msgno);
+		// Create the hidden layer
+		$('<div class="ext_hidden_layer"></div>').prependTo('body').hide().fadeTo(300, 0.9);
 		
-		var close = $('<a class="ext_overlay_close"><img src="'+chrome.extension.getURL('img/overlay_close.png')+'" /></a>').appendTo($(texta));
-			close.click(function() {
-				overlay.animate({ 'opacity' : 0 }, 500, function(){ $(this).remove(); });
-				content.animate({ 'opacity' : 0 }, 500, function(){ $(this).remove(); });
-			});
-	
-		// scrollbar check
+		// Highlight the reply comment
+		var comment_clone = $(comment).clone().insertBefore(comment).addClass('ext_highlighted_comment');
+		
+		
+		// Create textarea clone
+		var textarea_clone = $('textarea:first').closest('div').clone().insertBefore(comment).addClass('ext_clone_textarea');
+		
+		// Textarea position
+		var top = $(comment).offset().top + $(comment).height();
+		
+		var left = $(document).width() / 2 - 405;
+			textarea_clone.delay(350).css({ top : top + 200, left : left, opacity : 0 }).animate({ top : top + 10, opacity : 1 }, 300);
+			
+		// Change textarea name attr to avoid conflicts
+		$('form[name=newmessage]:first').attr('name', 'tmp');
+		
+		// Set msg no input
+		textarea_clone.find('input[name=no_ref]').attr('value', msgno);
+		
+		// Autoscroll
 		var pageBottom	= $(window).scrollTop() + $(window).height();
-		var textBottom 	= $('#float_textarea').offset().top + $('#float_textarea').height();
+		var textBottom 	= $('.ext_clone_textarea').offset().top + $('.ext_clone_textarea').height();
 
 		if(textBottom > pageBottom) { 
 			var scT = textBottom - $(window).height() + 50;
 			$('body').animate( { scrollTop : scT }, 500);
 		}
+
+		// Add close button
+		var close_btm = $('<img src="'+chrome.extension.getURL('img/overlay_close.png')+'" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
+		
+
+		// Add Close event
+		$(close_btm).click(function() {
+			$(textarea_clone).fadeTo(300, 0, function() {
+				$(this).remove();
+				$(comment_clone).fadeTo(300, 0, function() {
+					$(this).remove();
+					$('.ext_hidden_layer').fadeTo(300, 0, function() {
+						$(this).remove();
+						$('form[name=tmp]:first').attr('name', 'newmessage');
+					});
+				});
+			});
+		});
 	}
 };
 
