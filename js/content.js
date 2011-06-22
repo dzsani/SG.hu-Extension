@@ -366,6 +366,7 @@ var autoLoadNextPage = {
 			
 			autoLoadNextPage.progress = false;
 			autoLoadNextPage.currPage++;
+			replyTo();
 
 		});
 	}
@@ -390,6 +391,30 @@ var scrollToDocumentTop = {
 	
 };
 
+function replyTo() {
+	$('.msg-replyto a').each(function() {
+		
+		var _params = $(this).attr('href').split(':');
+		if(_params[1] != ';') {
+			$(this).attr('href', 'javascript:;');
+			$(this).click(function(){ eval('ext_'+_params[1]+''); });
+		}
+	});
+}
+
+
+function ext_valaszmsg(target, id, no, callerid) {
+	
+	if ($('#'+target).css('display') != 'block') {
+		var url = '/listazas_egy.php3?callerid=2&id=' + id + '&no=' + no;
+		$.get(url, function(data) { 
+			$('#'+target).html(data).hide().slideDown();
+			$('#'+target).css('display', 'block');
+			replyTo();
+		});
+	}
+	else { $('#'+target).slideUp(); }
+}
 
 $(document).ready(function() {
 
@@ -446,6 +471,11 @@ $(document).ready(function() {
 		// Scroll to page top button
 		if(dataStore['scroll_to_page_top'] == 'true') {
 			scrollToDocumentTop.init();
+		}
+		
+		// Animated replyto
+		if(dataStore['animated_reply_to'] == 'true') {
+			replyTo();
 		}
 	
 	}
