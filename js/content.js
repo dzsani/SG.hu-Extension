@@ -13,6 +13,18 @@ function isLoggedIn() {
 	
 }
 
+function getUserName() {
+	// Forum main page
+	if(window.location.href.match('forum.php')) {
+		return $('.std1 b').text().match(/Szia (.*)!/)[1];
+	
+	// Topic page
+	} else if(window.location.href.match('listazas.php3')) {
+	
+		return $('.std1:contains("Bejelentkezve")').text().replace('Bejelentkezve: ', '');
+	}
+}
+
 function removeChatWindow() {
 
 	$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').remove();
@@ -493,6 +505,17 @@ var overlayReplyTo = {
 	}
 };
 
+
+function highlightCommentsForMe() {
+	var userName = getUserName();
+	var comments = $('.msg-replyto a:contains("'+getUserName()+'")').closest('center');
+	
+	comments.each(function() {
+		$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('img/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+	});
+	
+}
+
 $(document).ready(function() {
 
 	// FORUM.PHP
@@ -522,6 +545,7 @@ $(document).ready(function() {
 		if(dataStore['custom_list_styles'] == 'true') {
 			customListStyles();
 		}
+
 	}
 	
 	// LISTAZAS.PHP
@@ -560,6 +584,11 @@ $(document).ready(function() {
 			overlayReplyTo.init();
 		}
 		
+		// highlight_comments_for_me
+		if(dataStore['highlight_comments_for_me'] == 'true') {
+			highlightCommentsForMe();
+		}
+	
 	}
 });
 

@@ -107,3 +107,12 @@
 	right: 0px;
 	cursor: pointer;
 }
+
+/* Comments for me indicator */
+.ext_comments_for_me_indicator {
+	width: 12px;
+	height: 12px;
+	position: absolute;
+	top: 18px;
+	left: 0px;
+}
