@@ -367,7 +367,7 @@ var autoLoadNextPage = {
 			autoLoadNextPage.progress = false;
 			autoLoadNextPage.currPage++;
 			replyTo();
-
+			overlayReplyTo.init();
 		});
 	}
 
@@ -411,6 +411,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 			$('#'+target).html(data).hide().slideDown();
 			$('#'+target).css('display', 'block');
 			replyTo();
+			overlayReplyTo.init();
 		});
 	}
 	else { $('#'+target).slideUp(); }
