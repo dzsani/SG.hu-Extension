@@ -74,3 +74,31 @@
 	font: normal normal normal 40px/60px Arial;
 	cursor: pointer;
 }
+
+/* Overlay commentbox */
+.ext_overlay {
+	width			: 100%;
+	position		: absolute;
+	top				: 0px;
+	left			: 0px;
+	background-color: #999;
+	opacity			: 0;
+	z-index			: 10;
+	}
+
+.ext_overlay_container {
+	width			: 810px;
+	position		: absolute;
+	top				: 0px;
+	left			: 0px;
+	overflow		: hidden;
+	z-index			: 11;
+	}
+
+.ext_overlay_close {
+	width			: 34px;
+	height			: 34px;
+	position		: absolute;
+	top				: 0px;
+	right			: 0px;
+	}

@@ -416,6 +416,62 @@ function ext_valaszmsg(target, id, no, callerid) {
 	else { $('#'+target).slideUp(); }
 }
 
+var overlayReplyTo = {
+	
+	
+	init : function() {
+		
+		$('.topichead').find('a:last').prev().each(function() {
+		
+			var msgno = $(this).attr('href').match(/\d+/g);
+			var entry = $(this).closest('center');
+			
+			$(this).unbind('click');
+			$(this).attr('href', 'javascript:;').click(function() {
+				overlayReplyTo.show(entry, msgno);
+			});
+		});
+	},
+	
+	show : function(comment, msgno) {
+	
+		// Kilépett felhasználó
+		if(!isLoggedIn()) { alert('Nem vagy bejelentkezve!'); return; }
+	
+		var docWidth	= $(document).width();
+		var docHeight	= $(document).height();
+		var margin		= ($(window).width()-810) / 2;
+		var textTop		= comment.offset().top + comment.find('div:eq(0)').height() + comment.find('div:eq(1)').height() + 20;
+	
+
+		var overlay		= $('<div class="ext_overlay" style="height: '+docHeight+'px;"></div>').prependTo($('body')).animate({ 'opacity' : '0.9' });
+		var content		= $('<div class="ext_overlay_container" style="height: '+docHeight+'px; margin-left: '+margin+'px;"></div>').prependTo($('body'));
+	
+		var clone = comment.clone().prependTo(content).css({ position : 'absolute', top : comment.offset().top, opacity : 1 });
+			clone.find('div[class=topichead]:eq(1)').closest('center').remove();
+			if(clone.css('width') == '650px') { clone.css('left', 80); }
+			
+		var	texta = $('textarea').parents('div:eq(1)').clone().appendTo($(content)).attr('id', 'float_textarea');
+			texta.css({ width: 800, position : 'absolute', top : (textTop+100), left : 5, opacity : 0, '-webkit-box-shadow' : '#666 0px 0px 10px 2px' });
+			texta.animate({ opacity : 1, top : textTop }).find('input[name=no_ref]').attr('value', msgno);
+		
+		var close = $('<a class="ext_overlay_close"><img src="'+chrome.extension.getURL('img/overlay_close.png')+'" /></a>').appendTo($(texta));
+			close.click(function() {
+				overlay.animate({ 'opacity' : 0 }, 500, function(){ $(this).remove(); });
+				content.animate({ 'opacity' : 0 }, 500, function(){ $(this).remove(); });
+			});
+	
+		// scrollbar check
+		var pageBottom	= $(window).scrollTop() + $(window).height();
+		var textBottom 	= $('#float_textarea').offset().top + $('#float_textarea').height();
+
+		if(textBottom > pageBottom) { 
+			var scT = textBottom - $(window).height() + 50;
+			$('body').animate( { scrollTop : scT }, 500);
+		}
+	}
+};
+
 $(document).ready(function() {
 
 	// FORUM.PHP
@@ -477,7 +533,12 @@ $(document).ready(function() {
 		if(dataStore['animated_reply_to'] == 'true') {
 			replyTo();
 		}
-	
+		
+		// Overlay reply-to
+		if(dataStore['overlay_reply_to'] == 'true') {
+			overlayReplyTo.init();
+		}
+		
 	}
 });
 
