@@ -52,7 +52,7 @@ var  jumpLastUnreadedMessage = {
 	}, 
 	
 	jump : function() {
-		
+	
 		// Get new messages counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
 
@@ -65,7 +65,7 @@ var  jumpLastUnreadedMessage = {
 		var lastMsg = newMsg % 80;
 		
 		// Target comment ele
-		var target = $('#ujhszjott').next().children('center:eq('+(lastMsg-1)+')');
+		var target = $('.topichead').closest('center').eq(lastMsg-1);
 		
 		// Insert the horizontal rule
 		$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
@@ -74,7 +74,7 @@ var  jumpLastUnreadedMessage = {
 		var targetOffset = $(target).offset().top;
 		
 		// Scroll to target element
-		$('body').animate({ scrollTop : targetOffset}, 500);
+		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500);
 		
 		/*
 		// Watch offsetTop while the content loads completly
@@ -378,8 +378,23 @@ var autoLoadNextPage = {
 			
 			autoLoadNextPage.progress = false;
 			autoLoadNextPage.currPage++;
-			replyTo();
-			overlayReplyTo.init();
+			
+			// Reinit settings
+			
+			// Animated replyto
+			if(dataStore['animated_reply_to'] == 'true') {
+				replyTo();
+			}
+			
+			// Overlay reply-to
+			if(dataStore['overlay_reply_to'] == 'true') {
+				overlayReplyTo.init();
+			}
+			
+			// highlight_comments_for_me
+			if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
+				highlightCommentsForMe();
+			}
 		});
 	}
 
@@ -511,7 +526,11 @@ function highlightCommentsForMe() {
 	var comments = $('.msg-replyto a:contains("'+getUserName()+'")').closest('center');
 	
 	comments.each(function() {
-		$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('img/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+		
+		if($(this).find('.ext_comments_for_me_indicator').length == 0) {
+		
+			$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('img/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+		}
 	});
 	
 }
@@ -585,7 +604,7 @@ $(document).ready(function() {
 		}
 		
 		// highlight_comments_for_me
-		if(dataStore['highlight_comments_for_me'] == 'true') {
+		if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 			highlightCommentsForMe();
 		}
 	

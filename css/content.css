@@ -86,8 +86,8 @@
 }
 
 .ext_highlighted_comment {
-	margin-left: 16px;
-	position: absolute;
+	padding-left: 16px;
+	position: absolute !important;
 	z-index: 302;
 }
 
