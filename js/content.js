@@ -75,7 +75,7 @@ var  jumpLastUnreadedMessage = {
 		
 		// Target offsets
 		var windowHalf = $(window).height() / 2;
-		var targetHalf = $(target).height() / 2;
+		var targetHalf = $(target).outerHeight() / 2;
 		var targetTop = $(target).offset().top;
 		var targetOffset = targetTop - (windowHalf - targetHalf);
 		
@@ -395,16 +395,6 @@ var autoLoadNextPage = {
 			
 			// Reinit settings
 			
-			// Animated replyto
-			if(dataStore['animated_reply_to'] == 'true') {
-				replyTo();
-			}
-			
-			// Overlay reply-to
-			if(dataStore['overlay_reply_to'] == 'true') {
-				overlayReplyTo.init();
-			}
-			
 			// highlight_comments_for_me
 			if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 				highlightCommentsForMe();
@@ -433,13 +423,16 @@ var scrollToDocumentTop = {
 };
 
 function replyTo() {
-	$('.msg-replyto a').each(function() {
+	$('.msg-replyto a').live('click', function(e) {
+	
+		// Prevent default submisson
+		e.preventDefault();
 		
+		// Get original link params
 		var _params = $(this).attr('href').split(':');
-		if(_params[1] != ';') {
-			$(this).attr('href', 'javascript:;');
-			$(this).click(function(){ eval('ext_'+_params[1]+''); });
-		}
+		
+		// Run replacement funciton
+		eval('ext_'+_params[1]+'');
 	});
 }
 
@@ -462,16 +455,17 @@ var overlayReplyTo = {
 	
 	
 	init : function() {
-		$('.topichead').find('a:last').prev('a').each(function() {
-		
+		$('.topichead a:contains("válasz erre")').live('click', function(e) {
+			
+			// Prevent default submission
+			e.preventDefault();
+			
+			// Get ref msg ID and comment element
 			var msgno = $(this).attr('href').match(/\d+/g);
 			var entry = $(this).closest('center');
-		
-			$(this).unbind('click');
-			$(this).attr('href', 'javascript:;');
-			$(this).click(function() {
-				overlayReplyTo.show(entry, msgno);
-			});
+
+			// Call show method
+			overlayReplyTo.show(entry, msgno);
 		});
 	},
 	
