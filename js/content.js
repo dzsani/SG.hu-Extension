@@ -445,7 +445,6 @@ function ext_valaszmsg(target, id, no, callerid) {
 			$('#'+target).html(data).hide().slideDown();
 			$('#'+target).css('display', 'block');
 			replyTo();
-			overlayReplyTo.init();
 		});
 	}
 	else { $('#'+target).slideUp(); }
@@ -480,6 +479,9 @@ var overlayReplyTo = {
 		// Highlight the reply comment
 		var comment_clone = $(comment).clone().insertBefore(comment).addClass('ext_highlighted_comment');
 		
+		// Maintain comment clone positions
+		comment_clone.css('left', comment.children('table:first').offset().left);
+
 		
 		// Create textarea clone
 		var textarea_clone = $('textarea:first').closest('div').clone().insertBefore(comment).addClass('ext_clone_textarea');

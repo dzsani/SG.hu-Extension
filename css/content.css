@@ -86,7 +86,6 @@
 }
 
 .ext_highlighted_comment {
-	padding-left: 16px;
 	position: absolute !important;
 	z-index: 302;
 }
@@ -97,7 +96,7 @@
 	top: 0px;
 	left: 0px;
 	z-index: 303;
-	
+	text-align: center;
 	-webkit-box-shadow: #333 0px 0px 10px;
 }
 
