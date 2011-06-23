@@ -3,11 +3,11 @@
 function isLoggedIn() {
 
 	// Forum main page
-	if(window.location.href.match('forum.php')) {
+	if(document.location.href.match('forum.php')) {
 		return $('.std1').length ? true : false;
 	
 	// Topic page
-	} else if(window.location.href.match('listazas.php3')) {
+	} else if(document.location.href.match(/listazas.php3\?id/gi)) {
 		return ( $('.std1').length > 1) ? true : false;
 	}
 	
@@ -15,11 +15,11 @@ function isLoggedIn() {
 
 function getUserName() {
 	// Forum main page
-	if(window.location.href.match('forum.php')) {
+	if(document.location.href.match('forum.php')) {
 		return $('.std1 b').text().match(/Szia (.*)!/)[1];
 	
 	// Topic page
-	} else if(window.location.href.match('listazas.php3')) {
+	} else if(document.location.href.match(/listazas.php3\?id/gi)) {
 	
 		return $('.std1:contains("Bejelentkezve")').text().replace('Bejelentkezve: ', '');
 	}
@@ -70,11 +70,25 @@ var  jumpLastUnreadedMessage = {
 		// Insert the horizontal rule
 		$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
 
-		// Target offsetTop
-		var targetOffset = $(target).offset().top;
+		// Autoscroll
+		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500);
+		
+		// Target offsets
+		var windowHalf = $(window).height() / 2;
+		var targetHalf = $(target).height() / 2;
+		var targetTop = $(target).offset().top;
+		var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 		// Scroll to target element
 		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500);
+		
+		// Url to rewrite
+		var url = document.location.href.substring(0, 44);
+		
+		// Update the url to avoid re-jump
+		history.replaceState({ page : url }, '', url);
+		
+
 		
 		/*
 		// Watch offsetTop while the content loads completly
@@ -538,7 +552,7 @@ function highlightCommentsForMe() {
 $(document).ready(function() {
 
 	// FORUM.PHP
-	if(window.location.href.match('forum.php')) {
+	if(document.location.href.match('forum.php')) {
 	
 		// Remove chat window
 		if(dataStore['chat_hide'] == 'true') {
@@ -568,8 +582,8 @@ $(document).ready(function() {
 	}
 	
 	// LISTAZAS.PHP
-	else if(window.location.href.match('listazas.php3')) {
-	
+	else if(document.location.href.match(/listazas.php3\?id/gi)) {
+
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
 			jumpLastUnreadedMessage.jump();
