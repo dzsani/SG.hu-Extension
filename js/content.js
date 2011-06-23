@@ -74,10 +74,7 @@ var  jumpLastUnreadedMessage = {
 		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500);
 		
 		// Target offsets
-		var windowHalf = $(window).height() / 2;
-		var targetHalf = $(target).outerHeight() / 2;
-		var targetTop = $(target).offset().top;
-		var targetOffset = targetTop - (windowHalf - targetHalf);
+		var targetOffset = $(target).offset().top - 300;
 		
 		// Scroll to target element
 		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500);
