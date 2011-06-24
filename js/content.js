@@ -443,7 +443,6 @@ function ext_valaszmsg(target, id, no, callerid) {
 		var url = '/listazas_egy.php3?callerid=2&id=' + id + '&no=' + no;
 		$.get(url, function(data) { 
 			$('#'+target).html(data).hide().slideDown();
-			$('#'+target).css('display', 'block');
 		});
 	}
 	else { $('#'+target).slideUp(); }
@@ -476,10 +475,10 @@ var overlayReplyTo = {
 		$('<div class="ext_hidden_layer"></div>').prependTo('body').hide().fadeTo(300, 0.9);
 		
 		// Highlight the reply comment
-		var comment_clone = $(comment).clone().insertBefore(comment).addClass('ext_highlighted_comment');
+		var comment_clone = $(comment).clone().prependTo('body').addClass('ext_highlighted_comment');
 		
 		// Maintain comment clone positions
-		comment_clone.css('left', comment.children('table:first').offset().left);
+		comment_clone.css({ 'left' : comment.children('table:first').offset().left, 'top' : comment.children('table:first').offset().top });
 		
 		// Remove 'msg for me' indicator
 		comment_clone.find('.ext_comments_for_me_indicator').remove();
@@ -488,10 +487,11 @@ var overlayReplyTo = {
 		comment_clone.find('center').parent('div').remove();
 		
 		// Create textarea clone
-		var textarea_clone = $('textarea:first').closest('div').clone().insertBefore(comment).addClass('ext_clone_textarea');
+		var textarea_clone = $('textarea:first').closest('div').clone().prependTo('body').addClass('ext_clone_textarea');
 		
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
+	
 		
 		var left = $(document).width() / 2 - 405;
 			textarea_clone.delay(350).css({ top : top + 200, left : left, opacity : 0 }).animate({ top : top + 10, opacity : 1 }, 300);
