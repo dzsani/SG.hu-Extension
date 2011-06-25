@@ -497,7 +497,7 @@ var overlayReplyTo = {
 			textarea_clone.delay(350).css({ top : top + 200, left : left, opacity : 0 }).animate({ top : top + 10, opacity : 1 }, 300);
 			
 		// Change textarea name attr to avoid conflicts
-		$('form[name=newmessage]:first').attr('name', 'tmp');
+		$('form[name=newmessage]:gt(0)').attr('name', 'tmp');
 		
 		// Set msg no input
 		textarea_clone.find('input[name=no_ref]').attr('value', msgno);
