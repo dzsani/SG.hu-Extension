@@ -1,4 +1,10 @@
+// Predefined vars
+var userName, isLoggedIn;
 
+function setPredefinedVars() {
+	userName = getUserName();
+	loggedIn = isLoggedIn();
+}
 
 function isLoggedIn() {
 
@@ -69,22 +75,26 @@ var  jumpLastUnreadedMessage = {
 		
 		// Insert the horizontal rule
 		$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+		
 
-		// Autoscroll
-		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500);
+		// Set 1 sec delay 
+		setTimeout(function(){ 
 		
-		// Target offsets
-		var targetOffset = $(target).offset().top - 300;
+			// Target offsets
+			var windowHalf = $(window).height() / 2;
+			var targetHalf = $(target).outerHeight() / 2;
+			var targetTop = $(target).offset().top;
+			var targetOffset = targetTop - (windowHalf - targetHalf);
 		
-		// Scroll to target element
-		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500);
+			// Scroll to target element
+			$('body').animate({ scrollTop : targetOffset}, 500);
 		
-		// Url to rewrite
-		var url = document.location.href.substring(0, 44);
+			// Url to rewrite
+			var url = document.location.href.substring(0, 44);
 		
-		// Update the url to avoid re-jump
-		history.replaceState({ page : url }, '', url);
-		
+			// Update the url to avoid re-jump
+			history.replaceState({ page : url }, '', url);
+		}, 1000, target);
 
 		
 		/*
@@ -211,11 +221,11 @@ function blockMessages() {
 
 	$(".topichead").each( function() {
 		
-		var username = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
-			username = username.replace(/ - VIP/, "");
+		var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+			nick = nick.replace(/ - VIP/, "");
 		
 		for(var i = 0; i < deletelist.length; i++) {
-			if(username.toLowerCase() == deletelist[i].toLowerCase()) {
+			if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
 				$(this).parent().remove();
 			}
 		}
@@ -224,19 +234,19 @@ function blockMessages() {
 
 function getBlockedUserNameFromButton(el) {
 
-	var userName = '';
+	var nick = '';
 	
 	var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
 	var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
 	
 	if(anchor.children('img').length > 0) {
-		userName = anchor.children('img').attr('title').replace(" - VIP", "");
+		nick = anchor.children('img').attr('title').replace(" - VIP", "");
 	
 	} else {
-		userName = anchor.html().replace(" - VIP", "");
+		nick = anchor.html().replace(" - VIP", "");
 	}
 	
-	if(confirm('Biztos tiltólistára teszed "'+userName+'" nevű felhasználót?')) {
+	if(confirm('Biztos tiltólistára teszed "'+nick+'" nevű felhasználót?')) {
 	
 		$('.topichead a[href='+tmpUrl+']').each(function() {
 	
@@ -246,19 +256,19 @@ function getBlockedUserNameFromButton(el) {
 			})
 		});
 	
-		if(userName != '') { port.postMessage({ type : "setBlockedUser", data : userName }); }
+		if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
 	}
 }
 
 function getBlockedUserNameFromLink(data) {
 
-	var userName = '';
+	var nick = '';
 	var tmpUrl = data['linkUrl'].replace('http://www.sg.hu/', '');
 	
 	$('.topichead a[href='+tmpUrl+']').each(function() {
 	
 		// Fetch username
-		userName = $(this).html();
+		nick = $(this).html();
 		
 		// Remove the comment
 		$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
@@ -266,19 +276,19 @@ function getBlockedUserNameFromLink(data) {
 		})
 	});
 	
-	if(userName != '') { port.postMessage({ type : "setBlockedUser", data : userName }); }
+	if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
 }
 
 
 function getBlockedUserNameFromImage(data) {
 
-	var userName = '';
+	var nick = '';
 	var tmpUrl = data['srcUrl'].replace('http://www.sg.hu', '');
 	
 	$('.topichead img[src='+tmpUrl+']').each(function() {
 	
 		// Fetch the username
-		userName = ($(this).attr('title').replace(' - VIP', ''));
+		nick = ($(this).attr('title').replace(' - VIP', ''));
 		
 		// Remove the comment
 		$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
@@ -286,7 +296,7 @@ function getBlockedUserNameFromImage(data) {
 		})
 	});
 	
-	if(userName != '') { port.postMessage({ type : "setBlockedUser", data : userName }); }
+	if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
 }
 
 
@@ -533,9 +543,16 @@ var overlayReplyTo = {
 
 
 function highlightCommentsForMe() {
-	var userName = getUserName();
-	var comments = $('.msg-replyto a:contains("'+getUserName()+'")').closest('center');
 	
+	// Return false when no username set
+	if(userName == '') {
+		return false;
+	}
+	
+	// Get the proper domnodes
+	var comments = $('.msg-replyto a:contains("'+userName+'")').closest('center');
+	
+	// Iterate over them
 	comments.each(function() {
 		
 		if($(this).find('.ext_comments_for_me_indicator').length == 0) {
@@ -550,7 +567,10 @@ $(document).ready(function() {
 
 	// FORUM.PHP
 	if(document.location.href.match('forum.php')) {
-	
+
+		// setPredefinedVars
+		setPredefinedVars();
+		
 		// Remove chat window
 		if(dataStore['chat_hide'] == 'true') {
 			removeChatWindow();
@@ -580,7 +600,10 @@ $(document).ready(function() {
 	
 	// LISTAZAS.PHP
 	else if(document.location.href.match(/listazas.php3\?id/gi)) {
-
+		
+		// setPredefinedVars
+		setPredefinedVars();
+		
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
 			jumpLastUnreadedMessage.jump();
