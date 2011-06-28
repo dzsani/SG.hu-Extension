@@ -563,41 +563,6 @@ function highlightCommentsForMe() {
 }
 
 
-function wysiwygEditor() {
-	
-	// Inser script tag into the DOM
-	/*$('<script type="text/javascript" src="'+chrome.extension.getURL('/js/tiny_mce/tiny_mce.js')+'"></script>').appendTo('body');*/
-	
-	tinyMCE.init({
-		document_base_url : chrome.extension.getURL('/'),
-		relative_urls : true,
-			
-		mode : "textareas", language : "hu", theme : "advanced", skin : "o2k7", skin_variant : "silver",
-		plugins : "save,fullscreen,nonbreaking,xhtmlxtras,paste",
-	 
-		paste_use_dialog : false,
-		paste_auto_cleanup_on_paste : true,
-		paste_convert_headers_to_strong : false,
-		paste_strip_class_attributes : "all",
-		paste_remove_spans : true,
-		paste_remove_styles : true,			
-
-		// Theme options
-		theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,link|,formatselect,|,pastetext,pasteword,selectall,removeformat",
-		theme_advanced_buttons2 : "",
-		theme_advanced_buttons3 : "",
-		theme_advanced_toolbar_location : "top",
-		theme_advanced_toolbar_align : "center",
-		theme_advanced_blockformats : "h1,h2,h3,h4,p",
-	 
-		// Drop lists for link/image/media/template dialogs
-		template_external_list_url : "lists/template_list.js",
-		external_link_list_url : "lists/link_list.js",
-		external_image_list_url : "lists/image_list.js",
-		media_external_list_url : "lists/media_list.js",
-		});
-}
-
 $(document).ready(function() {
 
 	// FORUM.PHP
@@ -677,10 +642,6 @@ $(document).ready(function() {
 			highlightCommentsForMe();
 		}
 
-		// highlight_comments_for_me
-		if(dataStore['wysiwyg_editor'] == 'true' && isLoggedIn()) {
-			wysiwygEditor();
-		}
 	}
 });
 
