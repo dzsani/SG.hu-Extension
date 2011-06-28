@@ -76,7 +76,6 @@ var  jumpLastUnreadedMessage = {
 		// Insert the horizontal rule
 		$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
 		
-
 		// Set 1 sec delay 
 		setTimeout(function(){ 
 		
