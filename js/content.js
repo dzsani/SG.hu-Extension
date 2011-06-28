@@ -75,25 +75,25 @@ var  jumpLastUnreadedMessage = {
 		
 		// Insert the horizontal rule
 		$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
-
-		// Autoscroll
-		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500);
 		
-		// Target offsets
-		var windowHalf = $(window).height() / 2;
-		var targetHalf = $(target).outerHeight() / 2;
-		var targetTop = $(target).offset().top;
-		var targetOffset = targetTop - (windowHalf - targetHalf);
+		// Set 1 sec delay 
+		setTimeout(function(){ 
 		
-		// Scroll to target element
-		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500);
+			// Target offsets
+			var windowHalf = $(window).height() / 2;
+			var targetHalf = $(target).outerHeight() / 2;
+			var targetTop = $(target).offset().top;
+			var targetOffset = targetTop - (windowHalf - targetHalf);
 		
-		// Url to rewrite
-		var url = document.location.href.substring(0, 44);
+			// Scroll to target element
+			$('body').animate({ scrollTop : targetOffset}, 500);
 		
-		// Update the url to avoid re-jump
-		history.replaceState({ page : url }, '', url);
+			// Url to rewrite
+			var url = document.location.href.substring(0, 44);
 		
+			// Update the url to avoid re-jump
+			history.replaceState({ page : url }, '', url);
+		}, 1000, target);
 
 		
 		/*
