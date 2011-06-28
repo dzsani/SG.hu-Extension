@@ -542,9 +542,16 @@ var overlayReplyTo = {
 
 
 function highlightCommentsForMe() {
-
+	
+	// Return false when no username set
+	if(userName == '') {
+		return false;
+	}
+	
+	// Get the proper domnodes
 	var comments = $('.msg-replyto a:contains("'+userName+'")').closest('center');
 	
+	// Iterate over them
 	comments.each(function() {
 		
 		if($(this).find('.ext_comments_for_me_indicator').length == 0) {
