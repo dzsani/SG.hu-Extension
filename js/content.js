@@ -563,6 +563,28 @@ function highlightCommentsForMe() {
 }
 
 
+function gradualComments() {
+	
+	$( $('.topichead').closest('center').get().reverse() ).each(function() {
+	
+		// Check if theres an answered message
+		if($(this).find('.msg-replyto a').length == 0) {
+			return true;
+		}
+		
+		// Get answered comment numer
+		var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g)
+		
+		// Seach for parent node via comment number
+		$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'")').closest('center') );
+		
+		// Set style settings
+		$(this).css('margin-left', 50);
+		$(this).find('.topichead').parent().css('width', 810 - $(this).parents('center').length * 50);
+	
+	});
+}
+
 $(document).ready(function() {
 
 	// FORUM.PHP
@@ -641,7 +663,12 @@ $(document).ready(function() {
 		if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 			highlightCommentsForMe();
 		}
-
+		
+		
+		//gradual_comments
+		if(dataStore['gradual_comments'] == 'true') {
+			gradualComments();
+		}
 	}
 });
 
