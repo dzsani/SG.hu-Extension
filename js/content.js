@@ -579,8 +579,8 @@ function gradualComments() {
 		$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'")').closest('center') );
 		
 		// Set style settings
-		$(this).css('margin-left', 50);
-		$(this).find('.topichead').parent().css('width', 810 - $(this).parents('center').length * 50);
+		$(this).css('margin-left', 30);
+		$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
 	
 	});
 }
