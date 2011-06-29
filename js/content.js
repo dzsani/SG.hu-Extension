@@ -563,8 +563,20 @@ function highlightCommentsForMe() {
 }
 
 
-function gradualComments() {
+function threadedComments() {
 	
+	// Mark new comments
+	
+	// New message counter
+	var newMsg = document.location.href.split('&newmsg=')[1];
+
+	// Only if theres new messages
+	if(typeof newMsg != "undefined" && newMsg != '') {
+		
+		$('.topichead:lt('+newMsg+')').find('a:last').css('color', 'red');
+	}
+	
+	// Sort to thread
 	$( $('.topichead').closest('center').get().reverse() ).each(function() {
 	
 		// Check if theres an answered message
@@ -579,7 +591,7 @@ function gradualComments() {
 		$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'")').closest('center') );
 		
 		// Set style settings
-		$(this).css({ 'margin-left' : 16, 'padding-left' : 14, 'border-left' : '1px solid #ddd' });
+		$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
 		$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
 		$(this).find('.msg-replyto').remove();
 	
@@ -626,6 +638,11 @@ function extInit() {
 		
 		// setPredefinedVars
 		setPredefinedVars();
+
+		//gradual_comments
+		if(dataStore['threaded_comments'] == 'true') {
+			threadedComments();
+		}
 		
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
@@ -663,12 +680,6 @@ function extInit() {
 		// highlight_comments_for_me
 		if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 			highlightCommentsForMe();
-		}
-		
-		
-		//gradual_comments
-		if(dataStore['gradual_comments'] == 'true') {
-			gradualComments();
 		}
 	}
 }
