@@ -579,13 +579,14 @@ function gradualComments() {
 		$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'")').closest('center') );
 		
 		// Set style settings
-		$(this).css('margin-left', 30);
+		$(this).css({ 'margin-left' : 16, 'padding-left' : 14, 'border-left' : '1px solid #ddd' });
 		$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
+		$(this).find('.msg-replyto').remove();
 	
 	});
 }
 
-$(document).ready(function() {
+function extInit() {
 
 	// FORUM.PHP
 	if(document.location.href.match('forum.php')) {
@@ -670,7 +671,7 @@ $(document).ready(function() {
 			gradualComments();
 		}
 	}
-});
+}
 
 
 var dataStore;
@@ -682,7 +683,14 @@ port.postMessage({ type : "getStorageData" });
 port.onMessage.addListener(function(response) {
 
 	if(response.type == 'setStorageData') {
+		
+		// Save localStorage data
 		dataStore = response.data;
+		
+		// Add domready event
+		$(document).ready(function() {
+			extInit();
+		});
 	
 	} else if(response.type == 'getBlockedUserNameFromLink') {
 		getBlockedUserNameFromLink(response.data);
