@@ -672,6 +672,21 @@ var threadedComments = {
 	}
 };
 
+function monitorNewCommentsNotification() {
+	
+	setInterval(function(){
+		
+		if($('#ujhszjott a').length > 0) {	
+		
+			var topic_url = $('#ujhszjott a').attr('href').substring(0, 27);
+			var comment_c = $('#ujhszjott a').text().match(/\d+/g);
+			
+			$('#ujhszjott a').attr('href',  topic_url + '&newmsg=' + comment_c);
+		}
+	
+	}, 1000);
+}
+
 function extInit() {
 
 	// FORUM.PHP
@@ -712,7 +727,10 @@ function extInit() {
 		
 		// setPredefinedVars
 		setPredefinedVars();
-
+		
+		// Monitor the new comments notification
+		monitorNewCommentsNotification();
+		
 		//gradual_comments
 		if(dataStore['threaded_comments'] == 'true') {
 			threadedComments.init();
