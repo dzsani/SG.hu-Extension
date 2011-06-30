@@ -574,40 +574,101 @@ function highlightCommentsForMe() {
 }
 
 
-function threadedComments() {
+var threadedComments = {
 	
-	// Mark new comments
+	currComment : 1,
 	
-	// New message counter
-	var newMsg = document.location.href.split('&newmsg=')[1];
+	init : function() {
+		// New message counter
+		var newMsg = document.location.href.split('&newmsg=')[1];
 
-	// Only if theres new messages
-	if(typeof newMsg != "undefined" && newMsg != '') {
-		
-		$('.topichead:lt('+newMsg+')').find('a:last').after( $('<span> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>') );
-	}
+		// Mark new messages if any
+		if(typeof newMsg != "undefined" && newMsg != '') {
+			$('.topichead:lt('+newMsg+')').find('a:last').after( $('<span> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>') );
+		}
 	
-	// Sort to thread
-	$( $('.topichead').closest('center').get().reverse() ).each(function() {
-	
-		// Check if theres an answered message
-		if($(this).find('.msg-replyto a').length == 0) {
-			return true;
+		// Set prev and next button if any new messages
+		if(newMsg > 0) {
+			
+			// Create the buttons
+			$('body').prepend('<div id="thread_prev">&#9650;</div> <div id="thread_next">&#9660;</div>');
+			
+			// Bind events
+			$('#thread_prev').click(function() {
+				threadedComments.prev();
+			});
+
+			$('#thread_next').click(function() {
+				threadedComments.next();
+			});
 		}
 		
-		// Get answered comment numer
-		var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g)
+		// Sort comments to thread
+		threadedComments.sort();
+	},
+
+	prev : function() {
 		
-		// Seach for parent node via comment number
-		$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'")').closest('center') );
+		if(threadedComments.currComment < 2) {
+			return false;
+		}
 		
-		// Set style settings
-		$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
-		$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
-		$(this).find('.msg-replyto').remove();
+		var target = $('.ext_new_comment').eq((threadedComments.currComment-2)).closest('center').children('table');
+		
+		// Target offsets
+		var windowHalf = $(window).height() / 2;
+		var targetHalf = $(target).outerHeight() / 2;
+		var targetTop = $(target).offset().top;
+		var targetOffset = targetTop - (windowHalf - targetHalf);
+		
+		// Scroll to target element
+		$('body').animate({ scrollTop : targetOffset}, 500);
+		
+		threadedComments.currComment--;
+	},
 	
-	});
-}
+	next : function() {
+	
+		if(threadedComments.currComment > ($('.ext_new_comment').length - 1) ) {
+			return false;
+		}
+	
+		var target = $('.ext_new_comment').eq(threadedComments.currComment).closest('center').children('table');
+
+		// Target offsets
+		var windowHalf = $(window).height() / 2;
+		var targetHalf = $(target).outerHeight() / 2;
+		var targetTop = $(target).offset().top;
+		var targetOffset = targetTop - (windowHalf - targetHalf);
+		
+		// Scroll to target element
+		$('body').animate({ scrollTop : targetOffset}, 500);
+		
+		threadedComments.currComment++;
+	},
+	
+	sort : function() {
+		// Sort to thread
+		$( $('.topichead').closest('center').get().reverse() ).each(function() {
+		
+			// Check if theres an answered message
+			if($(this).find('.msg-replyto a').length == 0) {
+				return true;
+			}
+		
+			// Get answered comment numer
+			var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g)
+		
+			// Seach for parent node via comment number
+			$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'")').closest('center') );
+		
+			// Set style settings
+			$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
+			$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
+			$(this).find('.msg-replyto').remove();
+		});
+	}
+};
 
 function extInit() {
 
@@ -652,7 +713,7 @@ function extInit() {
 
 		//gradual_comments
 		if(dataStore['threaded_comments'] == 'true') {
-			threadedComments();
+			threadedComments.init();
 		}
 		
 		// Jump the last unreaded message
