@@ -576,8 +576,6 @@ function highlightCommentsForMe() {
 
 var threadedComments = {
 	
-	currComment : 1,
-	
 	init : function() {
 		// New message counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
@@ -590,16 +588,16 @@ var threadedComments = {
 		// Set prev and next button if any new messages
 		if(newMsg > 0) {
 			
-			// Create the buttons
-			$('body').prepend('<div id="thread_prev">&#9650;</div> <div id="thread_next">&#9660;</div>');
+			$('<span class="thread_prev">&laquo;</span>').insertBefore( $('.ext_new_comment') );
+			$('<span class="thread_next">&raquo;</span>').insertAfter( $('.ext_new_comment') );
 			
 			// Bind events
-			$('#thread_prev').click(function() {
-				threadedComments.prev();
+			$('.thread_prev').live('click', function() {
+				threadedComments.prev(this);
 			});
 
-			$('#thread_next').click(function() {
-				threadedComments.next();
+			$('.thread_next').live('click', function() {
+				threadedComments.next(this);
 			});
 		}
 		
@@ -607,13 +605,17 @@ var threadedComments = {
 		threadedComments.sort();
 	},
 
-	prev : function() {
+	prev : function(ele) {
 		
-		if(threadedComments.currComment < 2) {
+		// Get the index value of the current element
+		var index = $(ele).index('.thread_prev');
+		
+		// Check if is it the first element
+		if(index == 0) {
 			return false;
 		}
 		
-		var target = $('.ext_new_comment').eq((threadedComments.currComment-2)).closest('center').children('table');
+		var target = $('.ext_new_comment').eq((index-1)).closest('center').children('table');
 		
 		// Target offsets
 		var windowHalf = $(window).height() / 2;
@@ -623,17 +625,19 @@ var threadedComments = {
 		
 		// Scroll to target element
 		$('body').animate({ scrollTop : targetOffset}, 500);
-		
-		threadedComments.currComment--;
 	},
 	
-	next : function() {
-	
-		if(threadedComments.currComment > ($('.ext_new_comment').length - 1) ) {
+	next : function(ele) {
+		
+		// Get the index value of the current element
+		var index = $(ele).index('.thread_next');
+		
+		// Check if is it the last element
+		if(index+1 >= $('.ext_new_comment').length) {
 			return false;
 		}
-	
-		var target = $('.ext_new_comment').eq(threadedComments.currComment).closest('center').children('table');
+		
+		var target = $('.ext_new_comment').eq((index+1)).closest('center').children('table');
 
 		// Target offsets
 		var windowHalf = $(window).height() / 2;
@@ -643,8 +647,6 @@ var threadedComments = {
 		
 		// Scroll to target element
 		$('body').animate({ scrollTop : targetOffset}, 500);
-		
-		threadedComments.currComment++;
 	},
 	
 	sort : function() {
