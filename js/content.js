@@ -70,11 +70,22 @@ var  jumpLastUnreadedMessage = {
 		// Get the last msg
 		var lastMsg = newMsg % 80;
 		
-		// Target comment ele
-		var target = $('.topichead').closest('center').eq(lastMsg-1);
+		// Target comment element
+		if($('.ext_new_comment').length > 0) {
+			var target = $('.ext_new_comment:first').closest('center');
 		
-		// Insert the horizontal rule
-		$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+		} else if( $('a[name=pirosvonal]').length > 0) {
+			var target = $('a[name=pirosvonal]').prev();
+			
+				// Insert the horizontal rule
+				$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+		} else {
+			var target = $('.topichead').closest('center').eq(lastMsg-1);
+			
+			// Insert the horizontal rule
+			$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+		}
+		
 		
 		// Set 1 sec delay 
 		setTimeout(function(){ 
@@ -573,7 +584,7 @@ function threadedComments() {
 	// Only if theres new messages
 	if(typeof newMsg != "undefined" && newMsg != '') {
 		
-		$('.topichead:lt('+newMsg+')').find('a:last').after( $('<span> | </span> <span style="color: red;">ÚJ</span>') );
+		$('.topichead:lt('+newMsg+')').find('a:last').after( $('<span> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>') );
 	}
 	
 	// Sort to thread
