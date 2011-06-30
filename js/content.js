@@ -573,7 +573,7 @@ function threadedComments() {
 	// Only if theres new messages
 	if(typeof newMsg != "undefined" && newMsg != '') {
 		
-		$('.topichead:lt('+newMsg+')').find('a:last').css('color', 'red');
+		$('.topichead:lt('+newMsg+')').find('a:last').after( $('<span> | </span> <span style="color: red;">ÚJ</span>') );
 	}
 	
 	// Sort to thread
