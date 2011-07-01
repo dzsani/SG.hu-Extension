@@ -502,6 +502,9 @@ var overlayReplyTo = {
 		// Maintain comment clone positions
 		comment_clone.css({ 'left' : comment.children('table:first').offset().left, 'top' : comment.children('table:first').offset().top });
 		
+		// Remove threaded view padding and border
+		comment_clone.css({ margin : 0 , padding : 0, border : 0 });
+		
 		// Remove 'msg for me' indicator
 		comment_clone.find('.ext_comments_for_me_indicator').remove();
 		
