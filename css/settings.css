@@ -6,15 +6,14 @@ body {
 	width: 900px;
 	height: 90%;
 	margin: 5% auto;
-	padding: 10px;
 	background-color: #FFF;
 	-webkit-box-shadow: #666 0px 0px 10px;
+	border-radius: 5px;
 }
 
 #left {
 	width: 189px;
 	height: 100%;
-	padding-right: 10px;
 	margin-right: 10px;
 	float: left;
 	border-right: 1px solid #999;
@@ -23,6 +22,7 @@ body {
 #right {
 	width: 690px;
 	height: 100%;
+	padding-right: 10px;
 	float: right;
 }
 
@@ -40,8 +40,19 @@ body {
 	cursor: pointer;
 }
 
+#left ul li:first-child {
+	border-top-left-radius: 5px;
+}
+
 #left ul li.active {
-	background-color: #666;
+	
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, rgb(0,86,147)),
+		color-stop(1, rgb(63,174,254))
+	);
 	color: #FFF;
 }
 
