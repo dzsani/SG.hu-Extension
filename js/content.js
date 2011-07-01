@@ -370,6 +370,7 @@ var autoLoadNextPage = {
 	progress : false,
 	currPage : null,
 	maxPage : null,
+	counter : 0,
 	
 	init : function() {
 		
@@ -401,7 +402,9 @@ var autoLoadNextPage = {
 		$.get(url+'&index='+(autoLoadNextPage.currPage+1)+'', function(data) {
 			
 			// Create the 'next page' indicator
-			$('<div class="ext_autopager_idicator">'+(autoLoadNextPage.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+			if(dataStore['threaded_comments'] != 'true') {
+				$('<div class="ext_autopager_idicator">'+(autoLoadNextPage.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+			}
 			
 			var tmp = $(data);
 			var tmp = tmp.find('.topichead');
@@ -414,13 +417,20 @@ var autoLoadNextPage = {
 			
 			autoLoadNextPage.progress = false;
 			autoLoadNextPage.currPage++;
+			autoLoadNextPage.counter++;
 			
 			// Reinit settings
-			
+
+			// threaded comments
+			if(dataStore['threaded_comments'] == 'true') {
+				threadedComments.sortByOffset( autoLoadNextPage.counter * 80 - 1 );
+			}
+
 			// highlight_comments_for_me
 			if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 				highlightCommentsForMe();
 			}
+			
 		});
 	}
 
@@ -680,7 +690,30 @@ var threadedComments = {
 			$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
 			$(this).find('.msg-replyto').remove();
 		});
-	}
+	},
+	
+	sortByOffset : function(offset) {
+
+		// Sort to thread
+		$( $('.topichead:gt('+offset+')').closest('center').get().reverse() ).each(function() {
+			
+			// Check if theres an answered message
+			if($(this).find('.msg-replyto a').length == 0) {
+				return true;
+			}
+			
+			// Get answered comment numer
+			var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g)
+		
+			// Seach for parent node via comment number
+			$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'")').closest('center') );
+		
+			// Set style settings
+			$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
+			$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
+			$(this).find('.msg-replyto').remove();
+		});
+	}	
 };
 
 function monitorNewCommentsNotification() {
