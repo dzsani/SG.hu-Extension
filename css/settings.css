@@ -86,10 +86,10 @@ body {
 	background-image: url(../img/handler.png); 
 }
 
-#right .button.on p {
+#right .button.on {
 	background-position-x: 0px;
 }
 
-#right .button.off p {
+#right .button.off {
 	background-position-x: -70px; 
 }
