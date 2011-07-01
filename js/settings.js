@@ -9,30 +9,51 @@ function _toBoolean(val) {
 	}
 }
 
-function checkPrefs() {
+
+var _settings = {
 	
-	if(localStorage['chat_hide']		== undefined) localStorage['chat_hide']		= 'false';
+	check : function() {
+
+		if(localStorage['chat_hide']					== undefined) localStorage['chat_hide']						= 'false';
+		if(localStorage['fav_show_only_unreaded']		== undefined) localStorage['fav_show_only_unreaded']		= 'false';
+		if(localStorage['short_comment_marker']			== undefined) localStorage['short_comment_marker']			= 'false';
+		if(localStorage['custom_list_styles']			== undefined) localStorage['custom_list_styles']			= 'false';
+		if(localStorage['jump_unreaded_messages']		== undefined) localStorage['jump_unreaded_messages']		= 'false';
+		if(localStorage['autoload_next_page']			== undefined) localStorage['autoload_next_page']			= 'false';
+		if(localStorage['scroll_to_page_top']			== undefined) localStorage['scroll_to_page_top']			= 'false';
+		if(localStorage['animated_reply_to']			== undefined) localStorage['animated_reply_to']				= 'false';
+		if(localStorage['overlay_reply_to']				== undefined) localStorage['overlay_reply_to']				= 'false';
+		if(localStorage['highlight_comments_for_me']	== undefined) localStorage['highlight_comments_for_me']		= 'false';
+		if(localStorage['threaded_comments']			== undefined) localStorage['threaded_comments']				= 'false';
+
 	
-	restorePrefs();
-	}
+		_settings.restore();
+	},
+	
+	restore : function() {
+	
+		$('#right .button').each(function() {
 
-
-function restorePrefs() {
-
-	$('input:checkbox').each(function() {
-		if(localStorage[ $(this).attr('id') ] == 'true') {
-			$(this).attr('checked', true);
+			if(localStorage[ $(this).attr('id') ] == 'true') {
+				$(this).addClass('on');
+			
+			} else {
+				$(this).addClass('off');
+			}
+		});
+	},
+	
+	save : function(ele) {
+		
+		if( $(ele).hasClass('on') ) {
+			localStorage[ $(ele).attr('id') ] = true; 
+		
+		} else {
+			localStorage[ $(ele).attr('id') ] = false; 
 		}
-	});
-}
+	}
+};
 
-
-function savePrefs() {
-
-	$('input:checkbox').click(function(){ 
-		localStorage[ $(this).attr('id') ] = $(this).attr('checked'); 
-	});
-}
 
 var blocklist =  {
 	
@@ -98,15 +119,70 @@ var blocklist =  {
 	}
 }
 
+/**********************************************************/
+/*                P A G E  S C R I P T S                  */
+/**********************************************************/
+var _page = {
+
+	init : function() {
+		
+		// Bind click event for left side menu
+		$('#left ul li').click(function() {
+		
+			// Get settings option index
+			var index = $(this).index();
+			
+			// Remove 'active' class for all
+			// left side menu items
+			$('#left ul li').removeAttr('class');
+			
+			// Hide all subpages
+			$('#right > div').hide();
+			
+			// Add active class for active left menu item
+			$(this).attr('class', 'active');
+			
+			// Show the chosen subpage
+			$('#right > div').eq(index).show();
+		});
+		
+		// Auto-click on the first item
+		$('#left ul li:first').click();
+		
+		// Set buttons
+		$('#right .button').click(function() {
+			_page.button(this);
+		});
+	},
+	
+	button : function(ele) {
+		
+		if( $(ele).hasClass('on') ) {
+			$(ele).animate({ 'background-position-x' : -70 }, 300);
+			$(ele).attr('class', 'button off');
+			
+			_settings.save(ele);
+		} else {
+		
+			$(ele).animate({ 'background-position-x' : 0 }, 300);
+			$(ele).attr('class', 'button on');
+			
+			_settings.save(ele);
+		}
+	}
+};
+
+
 $(document).ready(function() {
 	
 	// Check localStorage vars,
 	// create with default vals if dont exists
-	checkPrefs();
+	_settings.check();
 	
-	// Save setting fn
-	savePrefs();
 	
 	// List blocked users
 	blocklist.init();
+	
+	// Init page scripts
+	_page.init();
 });

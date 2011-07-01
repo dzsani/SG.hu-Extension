@@ -5,25 +5,103 @@
 	<link type="text/css" href="/css/settings.css" rel="stylesheet" />
 </head>
 <body>
-<h1>SG Fórum+ Beállítások</h1>
-
 	<div id="wrapper">
-		<label><input type="checkbox" id="chat_hide"> Chat elrejtése</label><br>
-		<label><input type="checkbox" id="jump_unreaded_messages"> Ugrás az utolsó üzenethez</label><br>
-		<label><input type="checkbox" id="fav_show_only_unreaded"> Kedvencek: csak olvasatlan üzenttel rendelkező topikok mutatása</label><br>
-		<label><input type="checkbox" id="short_comment_marker"> Rövid kommentjelzők</label><br>
-		<label><input type="checkbox" id="custom_list_styles"> Egyedi listaelemek</label><br>
-		<label><input type="checkbox" id="autoload_next_page"> Következő oldal betöltése a lap aljára érve</label><br>
-		<label><input type="checkbox" id="scroll_to_page_top"> Oldal tetejére görgető gomb</label><br>
-		<label><input type="checkbox" id="animated_reply_to"> Animált válaszerre</label><br>
-		<label><input type="checkbox" id="overlay_reply_to"> Overlay válaszerre</label><br>
-		<label><input type="checkbox" id="highlight_comments_for_me"> Nekem érkező üzenetek kiemelése</label><br>
-		<label><input type="checkbox" id="threaded_comments"> Kommentek szálonkénti elrendezése</label><br>
-
-		<h3>Tiltólista</h3>
-		<ul id="blocklist">
-			<li>Jelenleg üres a tiltólistád</li>
-		</ul>
+		<div id="left">
+			<ul>
+				<li>Fórum főoldal</li>
+				<li>Topik oldal</li>
+				<li>Tiltólista</li>
+			</ul>
+		</div>
+		
+		<div id="right">
+			<div>
+				<div>
+					<h3>Chat elrejtése</h3>
+					<p>Ezzel az opcióval a fórum főoldalon levő közös chatet tüntethted el maradéktalanul.</p>
+					<div class="button" id="chat_hide">
+						<p></p>
+					</div>
+				</div>
+				<div>
+					<h3>Csak olvasatlan üzenttel rendelkező kedvencek mutatása</h3>
+					<p>A fórum főoldalán található kedvencek listában csak az olvasatlan üzenettel rendelkező topikok lesznek listázva. A bővítmény létrehoz tovább egy kapcsolót a kedvencek cím mellett mellyel könnyen visszaválthatsz a régi nézetre.</p>
+					<div class="button" id="fav_show_only_unreaded">
+						<p></p>
+					</div>
+				</div>
+				<div>
+					<h3>Rövid kommentjelzők</h3>
+					<p>A főoldali kedvencek listában nem jelenik meg helyet foglalva új sorban az "N új üzeneted érkezett" szöveg, ehelyett helytakarékos módon csak egy piros szám jelzi az új üzeneteket a topik neve mellett.</p>
+					<div class="button" id="short_comment_marker">
+						<p></p>
+					</div>
+				</div>
+				<div>
+					<h3>Egyedi listaelemek</h3>
+					<p>A fórum főoldalon átalakított, átdizájnolt listákat láthatsz, mely jobban kiemeli többek között a kedvenceknél a fórumkategóriákat is.</p>
+					<div class="button" id="custom_list_styles">
+						<p></p>
+					</div>
+				</div>	
+			</div>
+			<div>
+				<div>
+					<h3>Ugrás az utolsó üzenethez</h3>
+					<p>Az "ugrás az utolsó olvasatlan üzenethez" több oldalon keresztül is működik, egy topikba lépve automatikusan az utolsó üzenethez görget.</p>
+					<div class="button" id="jump_unreaded_messages">
+						<p></p>
+					</div>
+				</div>	
+				<div>
+					<h3>Következő oldal betöltése a lap aljára érve</h3>
+					<p>A lap aljára görgetve a bővítmény a háttérben betölti a következő oldal tartalmát, majd megjeleníti az új kommenteket oldalfrissítés vagy lapozás nélkül.</p>
+					<div class="button" id="autoload_next_page">
+						<p></p>
+					</div>
+				</div>	
+				<div>
+					<h3>Oldal tetejére görgető gomb</h3>
+					<p>A jobb felső sarokban a bővítmény létrehoz egy gombot, melyre ráklikkelve az oldal tetejére görget.</p>
+					<div class="button" id="scroll_to_page_top">
+						<p></p>
+					</div>
+				</div>
+				<div>
+					<h3>Animált válaszerre</h3>
+					<p>A "válasz XY üzenetére" linkre kattintva animáltan nyílnak le a visszaidézett hozzászólások.</p>
+					<div class="button" id="animated_reply_to">
+						<p></p>
+					</div>
+				</div>
+				<div>
+					<h3>Overlay kommentmező</h3>
+					<p>Egy hozzászólásra válaszolva az oldal nem ugrik fel a felső textarához, ehelyett kiemeli a megválaszolandó kommentet és egy overlay szövegmező jelenik meg alatta.</p>
+					<div class="button" id="overlay_reply_to">
+						<p></p>
+					</div>
+				</div>
+				<div>
+					<h3>Nekem érkező üzenetek kiemelése</h3>
+					<p>Bármely topikban a neked címzett üzenetek mellé egy narancssárga nyíl kerül, ezzel jelezve hogy ezt az üzenetet neked szánták.</p>
+					<div class="button" id="highlight_comments_for_me">
+						<p></p>
+					</div>
+				</div>				
+				<div>
+					<h3>Kommentek szálonkénti elrendezése</h3>
+					<p>Bármely topikban a megkezdett beszélgetéseket szálonként átrendezi a script. Egy megválaszolt üzenet az eredeti üzenet alá kerül, ezzel jelezve és elkülönítve az egymásnak szánt üzeneteket.</p>
+					<div class="button" id="threaded_comments">
+						<p></p>
+					</div>
+				</div>
+			</div>
+			<div>
+				<ul id="blocklist">
+					<li>Jelenleg üres a tiltólistád</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 	
 	<script type="text/javascript" src="/js/jquery.js"></script>
