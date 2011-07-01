@@ -79,6 +79,7 @@ var  jumpLastUnreadedMessage = {
 			
 				// Insert the horizontal rule
 				$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+				
 		} else {
 			var target = $('.topichead').closest('center').eq(lastMsg-1);
 			
@@ -104,6 +105,10 @@ var  jumpLastUnreadedMessage = {
 		
 			// Update the url to avoid re-jump
 			history.replaceState({ page : url }, '', url);
+			
+			// Remove original HR tag
+			$('a[name=pirosvonal]').remove();
+			
 		}, 1000, target);
 
 		
