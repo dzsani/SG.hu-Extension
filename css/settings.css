@@ -8,7 +8,6 @@ body {
 	margin: 5% auto;
 	background-color: #FFF;
 	-webkit-box-shadow: #666 0px 0px 10px;
-	border-radius: 5px;
 }
 
 #left {
@@ -38,10 +37,6 @@ body {
 	font: normal normal bold 14px/30px Arial, serif;
 	color: #000;
 	cursor: pointer;
-}
-
-#left ul li:first-child {
-	border-top-left-radius: 5px;
 }
 
 #left ul li.active {
@@ -103,4 +98,16 @@ body {
 
 #right .button.off {
 	background-position-x: -70px; 
+}
+
+#blocklist {
+	font: normal normal normal 14px/18px Arial, serif;
+	color: #333;
+	list-style-type: square;
+}
+
+#blocklist a {
+	font: normal normal normal 14px/18px Arial, serif;
+	color: #999;
+	text-decoration: none;
 }
