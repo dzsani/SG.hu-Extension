@@ -508,6 +508,9 @@ var overlayReplyTo = {
 		// Remove 'msg for me' indicator
 		comment_clone.find('.ext_comments_for_me_indicator').remove();
 		
+		// Remove sub-center tags
+		comment_clone.find('center').remove();
+		
 		// Remove quoted subcomments
 		comment_clone.find('center').parent('div').remove();
 		
