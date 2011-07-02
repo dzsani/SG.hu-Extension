@@ -482,6 +482,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 
 var overlayReplyTo = {
 	
+	opened : false,
 	
 	init : function() {
 		$('.topichead a:contains("válasz erre")').live('click', function(e) {
@@ -502,7 +503,16 @@ var overlayReplyTo = {
 
 		// Return when the user is not logged in
 		if(!isLoggedIn()) { alert('Nem vagy bejelentkezve!'); return; }
-	
+		
+		// Prevent multiple instances
+		if(overlayReplyTo.opened) {
+			return false;
+		
+		// Set opened status
+		} else {
+			overlayReplyTo.opened = true;
+		}
+		
 		// Create the hidden layer
 		$('<div class="ext_hidden_layer"></div>').prependTo('body').hide().fadeTo(300, 0.9);
 		
@@ -565,6 +575,9 @@ var overlayReplyTo = {
 					$('.ext_hidden_layer').fadeTo(300, 0, function() {
 						$(this).remove();
 						$('form[name=tmp]:first').attr('name', 'newmessage');
+						
+						// Set back opened status
+						overlayReplyTo.opened = false;
 					});
 				});
 			});
