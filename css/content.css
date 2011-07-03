@@ -120,3 +120,10 @@
 .thread_prev, .thread_next {
 	cursor: pointer;
 }
+
+/* mentioned comments */
+.ext_mentioned {
+	color: #999;
+	text-decoration: underline;
+	cursor: pointer;
+}

@@ -431,7 +431,10 @@ var autoLoadNextPage = {
 				highlightCommentsForMe();
 			}
 			
-			showMentionedComment.init();
+			// show menitoned comment
+			if(dataStore['show_mentioned_comments'] == 'true') {
+				showMentionedComment.init();
+			}
 			
 		});
 	}
