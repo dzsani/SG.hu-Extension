@@ -744,6 +744,46 @@ function monitorNewCommentsNotification() {
 	}, 1000);
 }
 
+var showMentionedComment = {
+
+	init : function() {
+		
+		$('.maskwindow').each(function() {
+						
+			// Search and replace mentioned comment numbers
+			var repaced = $(this).html().replace(/(\#\d+)/g, "<a href=\"#\" class=\"ext_mentioned\">$1</a>");
+			
+			// Change the text in the original comment
+			$(this).html(repaced);
+		});
+		
+		// Attach click events
+		$('.ext_mentioned').unbind('click').click(function(e) {
+		
+			// Prevent browser default submission
+			e.preventDefault();
+			
+			// Call the show method
+			showMentionedComment.show(this);
+		});
+	},
+	
+	show : function(ele) {
+		
+		// Get comment number
+		var no = $(ele).html().match(/\d+/g);
+		
+		// Get topic ID
+		var id = document.location.href.split('?id=')[1];
+			id = id.split('#')[0];
+			id = id.split('&')[0];
+		
+		var target = $(ele).closest('.msg-text').next().attr('id');
+		
+		eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);");
+	}
+};
+
 function extInit() {
 
 	// FORUM.PHP
@@ -829,6 +869,11 @@ function extInit() {
 		// highlight_comments_for_me
 		if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 			highlightCommentsForMe();
+		}
+		
+		// show menitoned comment
+		if(dataStore['show_mentioned_comments'] == 'true') {
+			showMentionedComment.init();
 		}
 	}
 }
