@@ -756,10 +756,14 @@ var showMentionedComment = {
 		$('.maskwindow:not(.checked)').each(function() {
 
 			// Search and replace mentioned comment numbers
-			var repaced = $(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");
-
+			if( $(this).html().match(/\#\d+/g) ){
+				if( !$(this).html().match(/<.*\#\d+.*>/g) ){
+					var replaced = $(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");	
+				}
+			}
+			
 			// Change the text in the original comment
-			$(this).html(repaced);
+			$(this).html(replaced);
 			
 			// Add a special class to not run again this comment
 			$(this).addClass('checked');
