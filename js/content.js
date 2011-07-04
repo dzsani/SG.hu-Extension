@@ -340,7 +340,13 @@ function customListStyles() {
 	
 	});
 	
-	$('.std0').find('b').css('color', '#f0920a');
+	if(dataStore['custom_list_styles_merlinw'] == 'true') {
+		$('.std0').find('b').css('color', '#ffffff');
+		$('.std0').find('b').css('background-color', '#6c9ff7');
+		$('.std0').find('b').css('padding', '2px');
+	} else {
+		$('.std0').find('b').css('color', '#f0920a');
+	}
 	
 	// EXCEPTIONS
 	
