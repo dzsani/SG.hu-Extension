@@ -123,7 +123,6 @@
 
 /* mentioned comments */
 .ext_mentioned {
-	color: #999;
-	text-decoration: underline;
+	color: blue;
 	cursor: pointer;
 }

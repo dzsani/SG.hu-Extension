@@ -757,9 +757,14 @@ var showMentionedComment = {
 
 			// Search and replace mentioned comment numbers
 			if( $(this).html().match(/\#\d+/g) ){
-				if( !$(this).html().match(/<.*\#\d+.*>/g) ){
-					var replaced = $(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");	
+				if( $(this).html().match(/<a[^>]+>\#\d+<\/a>/g) && dataStore['show_mentioned_comments_in_links'] == 'true' ) {
+					var replaced = $(this).html().replace(/<a[^>]+>(\#\d+)<\/a>/g, "<span class=\"ext_mentioned\">$1</span>");
+				} else if( !$(this).html().match(/<.*\#\d+.*>/g) ) {
+					var replaced = $(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");					
 				}
+				
+				// Change the text in the original comment
+				$(this).html(replaced);
 			}
 			
 			// Change the text in the original comment

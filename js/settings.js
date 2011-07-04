@@ -14,24 +14,26 @@ var _settings = {
 	
 	check : function() {
 
-		if(localStorage['chat_hide']					== undefined) localStorage['chat_hide']						= 'false';
-		if(localStorage['fav_show_only_unreaded']		== undefined) localStorage['fav_show_only_unreaded']		= 'false';
-		if(localStorage['short_comment_marker']			== undefined) localStorage['short_comment_marker']			= 'false';
-		if(localStorage['custom_list_styles']			== undefined) localStorage['custom_list_styles']			= 'false';
-		if(localStorage['jump_unreaded_messages']		== undefined) localStorage['jump_unreaded_messages']		= 'false';
-		if(localStorage['autoload_next_page']			== undefined) localStorage['autoload_next_page']			= 'false';
-		if(localStorage['scroll_to_page_top']			== undefined) localStorage['scroll_to_page_top']			= 'false';
-		if(localStorage['animated_reply_to']			== undefined) localStorage['animated_reply_to']				= 'false';
-		if(localStorage['overlay_reply_to']				== undefined) localStorage['overlay_reply_to']				= 'false';
-		if(localStorage['highlight_comments_for_me']	== undefined) localStorage['highlight_comments_for_me']		= 'false';
-		if(localStorage['threaded_comments']			== undefined) localStorage['threaded_comments']				= 'false';
+		if(localStorage['chat_hide']						== undefined) localStorage['chat_hide']							= 'false';
+		if(localStorage['fav_show_only_unreaded']			== undefined) localStorage['fav_show_only_unreaded']			= 'false';
+		if(localStorage['short_comment_marker']				== undefined) localStorage['short_comment_marker']				= 'false';
+		if(localStorage['custom_list_styles']				== undefined) localStorage['custom_list_styles']				= 'false';
+		if(localStorage['jump_unreaded_messages']			== undefined) localStorage['jump_unreaded_messages']			= 'false';
+		if(localStorage['autoload_next_page']				== undefined) localStorage['autoload_next_page']				= 'false';
+		if(localStorage['scroll_to_page_top']				== undefined) localStorage['scroll_to_page_top']				= 'false';
+		if(localStorage['animated_reply_to']				== undefined) localStorage['animated_reply_to']					= 'false';
+		if(localStorage['overlay_reply_to']					== undefined) localStorage['overlay_reply_to']					= 'false';
+		if(localStorage['highlight_comments_for_me']		== undefined) localStorage['highlight_comments_for_me']			= 'false';
+		if(localStorage['threaded_comments']				== undefined) localStorage['threaded_comments']					= 'false';
+		if(localStorage['show_mentioned_comments_in_links']	== undefined) localStorage['show_mentioned_comments_in_links']	= 'false';
 
 	
 		_settings.restore();
 	},
 	
 	restore : function() {
-	
+		
+		// Restore settings for buttons
 		$('#right .button').each(function() {
 
 			if(localStorage[ $(this).attr('id') ] == 'true') {
@@ -41,11 +43,19 @@ var _settings = {
 				$(this).addClass('off');
 			}
 		});
+		
+		// Restore settings for checkboxes
+		$('input:checkbox').each(function() {
+			
+			if(localStorage[ $(this).attr('id') ] == 'true') {
+				$(this).attr('checked', true);
+			}
+		});
 	},
 	
 	save : function(ele) {
 		
-		if( $(ele).hasClass('on') ) {
+		if( $(ele).hasClass('on') || $(ele).attr('checked') == true) {
 			localStorage[ $(ele).attr('id') ] = true; 
 		
 		} else {
@@ -153,6 +163,11 @@ var _page = {
 		$('#right .button').click(function() {
 			_page.button(this);
 		});
+		
+		// Set checkboxes
+		$('input:checkbox').click(function() {
+			_settings.save(this);
+		})
 	},
 	
 	button : function(ele) {
