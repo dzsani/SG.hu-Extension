@@ -753,31 +753,16 @@ var showMentionedComment = {
 
 	init : function() {
 		
-		$('.maskwindow').each(function() {
-	
+		$('.maskwindow:not(.checked)').each(function() {
+
 			// Search and replace mentioned comment numbers
 			var repaced = $(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");
-			
+
 			// Change the text in the original comment
 			$(this).html(repaced);
 			
-			// Find duplicate span tags
-			$(this).find('span').each(function() {
-				if($(this).parent().hasClass('ext_mentioned')) {
-					
-					// The parent node
-					var parent = $(this).parent();
-					
-					// Store child html content
-					var content = $(this).html();
-					
-					// Remove child node
-					$(this).remove();
-					
-					// Add original content to parent
-					parent.html(content);
-				}
-			});
+			// Add a special class to not run again this comment
+			$(this).addClass('checked');
 		});
 		
 		// Attach click events
