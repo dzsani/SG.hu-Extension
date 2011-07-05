@@ -429,7 +429,7 @@ var autoLoadNextPage = {
 
 			// threaded comments
 			if(dataStore['threaded_comments'] == 'true') {
-				threadedComments.sortByOffset( autoLoadNextPage.counter * 80 - 1 );
+				threadedComments.sort();
 			}
 
 			// highlight_comments_for_me
@@ -696,48 +696,35 @@ var threadedComments = {
 	
 	sort : function() {
 		// Sort to thread
-		$( $('.topichead').closest('center').get().reverse() ).each(function() {
+		$( $('.topichead:not(.checked)').closest('center').get().reverse() ).each(function() {
 		
 			// Check if theres an answered message
 			if($(this).find('.msg-replyto a').length == 0) {
+			
+				// Add checked class
+				$(this).find('.topichead:first').addClass('checked');
+				
+				// Return true
 				return true;
 			}
 		
 			// Get answered comment numer
 			var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g)
-		
+			
+			
 			// Seach for parent node via comment number
-			$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'")').closest('center') );
+			$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'"):last').closest('center') );
 		
 			// Set style settings
 			$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
 			$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
 			$(this).find('.msg-replyto').remove();
-		});
-	},
-	
-	sortByOffset : function(offset) {
+			
+			// Add checked class
+			$(this).find('.topichead:first').addClass('checked');
 
-		// Sort to thread
-		$( $('.topichead:gt('+offset+')').closest('center').get().reverse() ).each(function() {
-			
-			// Check if theres an answered message
-			if($(this).find('.msg-replyto a').length == 0) {
-				return true;
-			}
-			
-			// Get answered comment numer
-			var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g)
-		
-			// Seach for parent node via comment number
-			$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'")').closest('center') );
-		
-			// Set style settings
-			$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
-			$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
-			$(this).find('.msg-replyto').remove();
 		});
-	}	
+	}
 };
 
 function monitorNewCommentsNotification() {
