@@ -99,18 +99,17 @@ var  jumpLastUnreadedMessage = {
 		
 			// Scroll to target element
 			$('body').animate({ scrollTop : targetOffset}, 500);
-		
-			// Url to rewrite
-			var url = document.location.href.substring(0, 44);
-		
-			// Update the url to avoid re-jump
-			history.replaceState({ page : url }, '', url);
 			
 			// Remove original HR tag
 			$('a[name=pirosvonal]').remove();
 			
 		}, 1000, target);
 
+		// Url to rewrite
+		var url = document.location.href.substring(0, 44);
+
+		// Update the url to avoid re-jump
+		history.replaceState({ page : url }, '', url);
 		
 		/*
 		// Watch offsetTop while the content loads completly
