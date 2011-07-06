@@ -115,3 +115,14 @@
 	top: 20px;
 	left: 0px;
 }
+
+/* Threaded comments */
+.thread_prev, .thread_next {
+	cursor: pointer;
+}
+
+/* mentioned comments */
+.ext_mentioned {
+	color: blue;
+	cursor: pointer;
+}

@@ -70,11 +70,23 @@ var  jumpLastUnreadedMessage = {
 		// Get the last msg
 		var lastMsg = newMsg % 80;
 		
-		// Target comment ele
-		var target = $('.topichead').closest('center').eq(lastMsg-1);
+		// Target comment element
+		if($('.ext_new_comment').length > 0) {
+			var target = $('.ext_new_comment:first').closest('center');
 		
-		// Insert the horizontal rule
-		$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+		} else if( $('a[name=pirosvonal]').length > 0) {
+			var target = $('a[name=pirosvonal]').prev();
+			
+				// Insert the horizontal rule
+				$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+				
+		} else {
+			var target = $('.topichead').closest('center').eq(lastMsg-1);
+			
+			// Insert the horizontal rule
+			$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
+		}
+		
 		
 		// Set 1 sec delay 
 		setTimeout(function(){ 
@@ -87,14 +99,17 @@ var  jumpLastUnreadedMessage = {
 		
 			// Scroll to target element
 			$('body').animate({ scrollTop : targetOffset}, 500);
-		
-			// Url to rewrite
-			var url = document.location.href.substring(0, 44);
-		
-			// Update the url to avoid re-jump
-			history.replaceState({ page : url }, '', url);
+			
+			// Remove original HR tag
+			$('a[name=pirosvonal]').remove();
+			
 		}, 1000, target);
 
+		// Url to rewrite
+		var url = document.location.href.substring(0, 44);
+
+		// Update the url to avoid re-jump
+		history.replaceState({ page : url }, '', url);
 		
 		/*
 		// Watch offsetTop while the content loads completly
@@ -324,7 +339,13 @@ function customListStyles() {
 	
 	});
 	
-	$('.std0').find('b').css('color', '#f0920a');
+	if(dataStore['custom_list_styles_merlinw'] == 'true') {
+		$('.std0').find('b').css('color', '#ffffff');
+		$('.std0').find('b').css('background-color', '#6c9ff7');
+		$('.std0').find('b').css('padding', '2px');
+	} else {
+		$('.std0').find('b').css('color', '#f0920a');
+	}
 	
 	// EXCEPTIONS
 	
@@ -354,6 +375,7 @@ var autoLoadNextPage = {
 	progress : false,
 	currPage : null,
 	maxPage : null,
+	counter : 0,
 	
 	init : function() {
 		
@@ -385,7 +407,9 @@ var autoLoadNextPage = {
 		$.get(url+'&index='+(autoLoadNextPage.currPage+1)+'', function(data) {
 			
 			// Create the 'next page' indicator
-			$('<div class="ext_autopager_idicator">'+(autoLoadNextPage.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+			if(dataStore['threaded_comments'] != 'true') {
+				$('<div class="ext_autopager_idicator">'+(autoLoadNextPage.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+			}
 			
 			var tmp = $(data);
 			var tmp = tmp.find('.topichead');
@@ -398,13 +422,25 @@ var autoLoadNextPage = {
 			
 			autoLoadNextPage.progress = false;
 			autoLoadNextPage.currPage++;
+			autoLoadNextPage.counter++;
 			
 			// Reinit settings
-			
+
+			// threaded comments
+			if(dataStore['threaded_comments'] == 'true') {
+				threadedComments.sort();
+			}
+
 			// highlight_comments_for_me
 			if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 				highlightCommentsForMe();
 			}
+			
+			// show menitoned comment
+			if(dataStore['show_mentioned_comments'] == 'true') {
+				showMentionedComment.init();
+			}
+			
 		});
 	}
 
@@ -456,6 +492,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 
 var overlayReplyTo = {
 	
+	opened : false,
 	
 	init : function() {
 		$('.topichead a:contains("válasz erre")').live('click', function(e) {
@@ -476,7 +513,16 @@ var overlayReplyTo = {
 
 		// Return when the user is not logged in
 		if(!isLoggedIn()) { alert('Nem vagy bejelentkezve!'); return; }
-	
+		
+		// Prevent multiple instances
+		if(overlayReplyTo.opened) {
+			return false;
+		
+		// Set opened status
+		} else {
+			overlayReplyTo.opened = true;
+		}
+		
 		// Create the hidden layer
 		$('<div class="ext_hidden_layer"></div>').prependTo('body').hide().fadeTo(300, 0.9);
 		
@@ -486,8 +532,14 @@ var overlayReplyTo = {
 		// Maintain comment clone positions
 		comment_clone.css({ 'left' : comment.children('table:first').offset().left, 'top' : comment.children('table:first').offset().top });
 		
+		// Remove threaded view padding and border
+		comment_clone.css({ margin : 0 , padding : 0, border : 0 });
+		
 		// Remove 'msg for me' indicator
 		comment_clone.find('.ext_comments_for_me_indicator').remove();
+		
+		// Remove sub-center tags
+		comment_clone.find('center').remove();
 		
 		// Remove quoted subcomments
 		comment_clone.find('center').parent('div').remove();
@@ -533,6 +585,9 @@ var overlayReplyTo = {
 					$('.ext_hidden_layer').fadeTo(300, 0, function() {
 						$(this).remove();
 						$('form[name=tmp]:first').attr('name', 'newmessage');
+						
+						// Set back opened status
+						overlayReplyTo.opened = false;
 					});
 				});
 			});
@@ -562,7 +617,183 @@ function highlightCommentsForMe() {
 	
 }
 
-$(document).ready(function() {
+
+var threadedComments = {
+	
+	init : function() {
+		// New message counter
+		var newMsg = document.location.href.split('&newmsg=')[1];
+
+		// Mark new messages if any
+		if(typeof newMsg != "undefined" && newMsg != '') {
+			$('.topichead:lt('+newMsg+')').find('a:last').after( $('<span> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>') );
+		}
+	
+		// Set prev and next button if any new messages
+		if(newMsg > 0) {
+			
+			$('<span class="thread_prev">&laquo;</span>').insertBefore( $('.ext_new_comment') );
+			$('<span class="thread_next">&raquo;</span>').insertAfter( $('.ext_new_comment') );
+			
+			// Bind events
+			$('.thread_prev').live('click', function() {
+				threadedComments.prev(this);
+			});
+
+			$('.thread_next').live('click', function() {
+				threadedComments.next(this);
+			});
+		}
+		
+		// Sort comments to thread
+		threadedComments.sort();
+	},
+
+	prev : function(ele) {
+		
+		// Get the index value of the current element
+		var index = $(ele).index('.thread_prev');
+		
+		// Check if is it the first element
+		if(index == 0) {
+			return false;
+		}
+		
+		var target = $('.ext_new_comment').eq((index-1)).closest('center').children('table');
+		
+		// Target offsets
+		var windowHalf = $(window).height() / 2;
+		var targetHalf = $(target).outerHeight() / 2;
+		var targetTop = $(target).offset().top;
+		var targetOffset = targetTop - (windowHalf - targetHalf);
+		
+		// Scroll to target element
+		$('body').animate({ scrollTop : targetOffset}, 500);
+	},
+	
+	next : function(ele) {
+		
+		// Get the index value of the current element
+		var index = $(ele).index('.thread_next');
+		
+		// Check if is it the last element
+		if(index+1 >= $('.ext_new_comment').length) {
+			return false;
+		}
+		
+		var target = $('.ext_new_comment').eq((index+1)).closest('center').children('table');
+
+		// Target offsets
+		var windowHalf = $(window).height() / 2;
+		var targetHalf = $(target).outerHeight() / 2;
+		var targetTop = $(target).offset().top;
+		var targetOffset = targetTop - (windowHalf - targetHalf);
+		
+		// Scroll to target element
+		$('body').animate({ scrollTop : targetOffset}, 500);
+	},
+	
+	sort : function() {
+		// Sort to thread
+		$( $('.topichead:not(.checked)').closest('center').get().reverse() ).each(function() {
+		
+			// Check if theres an answered message
+			if($(this).find('.msg-replyto a').length == 0) {
+			
+				// Add checked class
+				$(this).find('.topichead:first').addClass('checked');
+				
+				// Return true
+				return true;
+			}
+		
+			// Get answered comment numer
+			var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g)
+			
+			
+			// Seach for parent node via comment number
+			$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'"):last').closest('center') );
+		
+			// Set style settings
+			$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
+			$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
+			$(this).find('.msg-replyto').remove();
+			
+			// Add checked class
+			$(this).find('.topichead:first').addClass('checked');
+
+		});
+	}
+};
+
+function monitorNewCommentsNotification() {
+	
+	setInterval(function(){
+		
+		if($('#ujhszjott a').length > 0) {	
+		
+			var topic_url = $('#ujhszjott a').attr('href').substring(0, 27);
+			var comment_c = $('#ujhszjott a').text().match(/\d+/g);
+			
+			$('#ujhszjott a').attr('href',  topic_url + '&newmsg=' + comment_c);
+		}
+	
+	}, 1000);
+}
+
+var showMentionedComment = {
+
+	init : function() {
+		
+		$('.maskwindow:not(.checked)').each(function() {
+
+			// Search and replace mentioned comment numbers
+			if( $(this).html().match(/\#\d+/g) ){
+				if( $(this).html().match(/<a[^>]+>\#\d+<\/a>/g) && dataStore['show_mentioned_comments_in_links'] == 'true' ) {
+					var replaced = $(this).html().replace(/<a[^>]+>(\#\d+)<\/a>/g, "<span class=\"ext_mentioned\">$1</span>");
+				} else if( !$(this).html().match(/<.*\#\d+.*>/g) ) {
+					var replaced = $(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");					
+				}
+				
+				// Change the text in the original comment
+				$(this).html(replaced);
+			}
+			
+			// Change the text in the original comment
+			$(this).html(replaced);
+			
+			// Add a special class to not run again this comment
+			$(this).addClass('checked');
+		});
+		
+		// Attach click events
+		$('.ext_mentioned').unbind('click').click(function(e) {
+		
+			// Prevent browser default submission
+			e.preventDefault();
+			
+			// Call the show method
+			showMentionedComment.show(this);
+		});
+	},
+	
+	show : function(ele) {
+		
+		// Get comment number
+		var no = $(ele).html().match(/\d+/g);
+		
+		// Get topic ID
+		var id = document.location.href.split('?id=')[1];
+			id = id.split('#')[0];
+			id = id.split('&')[0];
+		
+		var target = $(ele).closest('.msg-text').next().attr('id');
+		
+		eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);");
+	}
+};
+
+function extInit() {
 
 	// FORUM.PHP
 	if(document.location.href.match('forum.php')) {
@@ -603,6 +834,14 @@ $(document).ready(function() {
 		// setPredefinedVars
 		setPredefinedVars();
 		
+		// Monitor the new comments notification
+		monitorNewCommentsNotification();
+		
+		//gradual_comments
+		if(dataStore['threaded_comments'] == 'true') {
+			threadedComments.init();
+		}
+		
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
 			jumpLastUnreadedMessage.jump();
@@ -640,9 +879,13 @@ $(document).ready(function() {
 		if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
 			highlightCommentsForMe();
 		}
-	
+		
+		// show menitoned comment
+		if(dataStore['show_mentioned_comments'] == 'true') {
+			showMentionedComment.init();
+		}
 	}
-});
+}
 
 
 var dataStore;
@@ -654,7 +897,14 @@ port.postMessage({ type : "getStorageData" });
 port.onMessage.addListener(function(response) {
 
 	if(response.type == 'setStorageData') {
+		
+		// Save localStorage data
 		dataStore = response.data;
+		
+		// Add domready event
+		$(document).ready(function() {
+			extInit();
+		});
 	
 	} else if(response.type == 'getBlockedUserNameFromLink') {
 		getBlockedUserNameFromLink(response.data);
