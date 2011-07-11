@@ -190,7 +190,7 @@ function filterOutReadedFaves() {
 
 function shortCommentMarker() {
 	
-	$('.b-h-o-head:eq(2)').next().find('div a').each(function() {
+	$('#ext_faves').next().find('div a').each(function() {
 		
 		if( $(this).find('small').length > 0) {
 			
