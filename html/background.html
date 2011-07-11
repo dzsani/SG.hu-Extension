@@ -12,6 +12,9 @@
 				
 				} else if(msg.type == "setBlockedUser") {
 					addToBlockList(msg.data);
+					
+				} else if(msg.type == "setBlocksConfig") {
+					setBlockConfig(msg.data);
 				}
 
 			});
@@ -52,6 +55,10 @@
 				blockList = localStorage['block_list'].split(',');
 				if(blockList.indexOf(name) == -1) { blockList.push(name);  localStorage['block_list'] = blockList; }
 		}
+	}
+	
+	function setBlockConfig(data) {
+		localStorage['blocks_config'] = data;
 	}
 		
 		</script>

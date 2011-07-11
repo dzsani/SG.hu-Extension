@@ -793,6 +793,157 @@ var showMentionedComment = {
 	}
 };
 
+
+var blocks = {
+	
+	init : function() {
+		
+		// Set blocks IDs
+		blocks.setIDs();
+		
+		// Check localStorage for config
+		if( typeof dataStore['blocks_config'] == 'undefined') {
+			blocks.buildConfig();
+		}
+		
+		// Execute config
+		blocks.executeConfig();
+		
+		// Set overlays
+		blocks.setOverlay();
+	
+	},
+	
+	setIDs : function() {
+		
+		// Blocks counter
+		var counter = 1;
+		
+		// Left side blocks
+		$('.b-h-o-head, .b-h-b-head').parent().each(function() {
+			
+			// Set the ID
+			$(this).attr('class', 'ext_block').attr('id', 'block-'+counter);
+			
+			// Increase the counter
+			counter++;
+		});
+	},
+	
+	buildConfig : function() {
+		
+		// Var for config
+		var config = [];
+		
+		// Iterate over the blocks
+		$('.ext_block').each(function(index) {
+			
+			var tmp = {
+				
+				id 			: $(this).attr('id'),
+				visibility	: true,
+				contentHide	: false,
+				side		: $(this).find('.b-h-o-head').length > 0 ? 'left' : 'right',
+				index 		: index
+			};
+			
+			config.push(tmp);
+			
+		});
+
+		
+		// Store in localStorage
+		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(config) });
+	},
+	
+	
+	setConfigByKey : function(id, key, value) {
+		
+		var config = JSON.parse(dataStore['blocks_config']);
+		
+		for(c = 0; c < config.length; c++) {
+
+			if(config[c]['id'] == id) {
+				config[c][key] = value;
+			}
+		}
+	
+		// Store in localStorage
+		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(config) });
+	},
+	
+	executeConfig : function() {
+		
+		var config = JSON.parse(dataStore['blocks_config']);
+		
+		for(c = 0; c < config.length; c++) {
+			
+			alert(config[c]['id']);
+			
+			// Visibility
+			if( config[c]['visibility'] == false ) {
+				blocks.hide(config[c]['id']);
+			}
+			
+			// ContentHide
+			/*if( config[c]['contentHide'] == true ) {
+				blocks.contentHide(config[c]['id']);
+			}*/
+		}
+	},
+	
+	setOverlay : function() {
+		
+		$('.ext_block').each(function() {
+			
+			var item = $('<p class="ext_blocks_buttons"></p>').prependTo(this);
+			
+			// Hide
+			$('<a href="#">X</a>').prependTo(item).click(function(e) {
+				e.preventDefault();
+				blocks.hide( $(this).closest('div').attr('id') );
+			});
+			
+			// Contenthide
+			$('<a href="#">-</a>').prependTo(item).click(function(e) {
+				e.preventDefault();
+				blocks.contentHide( $(this).closest('div').attr('id') );
+			});
+			
+		});
+	},
+	
+	hide : function(id) {
+
+		// Change the config
+		blocks.setConfigByKey( id, 'visibility', false);
+		
+		// Hide the item
+		$('#'+id).slideUp(200);
+	},
+	
+	contentHide : function(id) {
+		
+		if( $('#'+id).children('div:eq(1)').css('display') == 'none' ) {
+		
+			// Change the config
+			blocks.setConfigByKey( id, 'contentHide', false);
+		
+			// Hide the item
+			$('#'+id).children('div:eq(1)').slideDown(200);
+		
+		} else {
+
+			// Change the config
+			blocks.setConfigByKey( id, 'contentHide', true);
+		
+			// Hide the item
+			$('#'+id).children('div:eq(1)').slideUp(200);
+		}
+	}
+
+};
+
 function extInit() {
 
 	// FORUM.PHP
@@ -800,6 +951,11 @@ function extInit() {
 
 		// setPredefinedVars
 		setPredefinedVars();
+		
+		// Custom blocks
+		if(dataStore['custom_blocks'] == 'true') {
+			blocks.init();
+		}
 		
 		// Remove chat window
 		if(dataStore['chat_hide'] == 'true') {

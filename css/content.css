@@ -126,3 +126,23 @@
 	color: blue;
 	cursor: pointer;
 }
+
+/* BLOCKS */
+.ext_block {
+	position: relative;
+}
+
+.ext_blocks_buttons {
+	width: 165px;
+	height: 20px;
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: #fff;
+	z-index: 99;
+}
+
+.ext_block:hover p {
+	display: block;
+}
