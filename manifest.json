@@ -1,6 +1,6 @@
 {
 	"name": "SG Fórum+",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "Az sg.hu nemhivatalos Chrome bővítménye.",
 	"background_page": "html/background.html",
 	"options_page": "html/settings.html",
@@ -12,7 +12,7 @@
 	
 	"content_scripts": [{
 		"matches" : [ "http://www.sg.hu/*", "http://sg.hu/*" ],
-		"js" : [ "js/jquery.js", "js/json.js", "js/content.js", "js/dom.js" ],
+		"js" : [ "js/jquery.js", "js/json.js", "js/dom.js", "js/content.js" ],
 		"css" : ["css/content.css"],
 		"run_at" : "document_start",
 		"all_frames": false

@@ -1038,30 +1038,38 @@ var blocks = {
 	
 	left : function(id) {
 		
-		// Move the block
-		$('#'+id).prependTo('table:eq(3) td:eq(0)');
-
-		// Maintain style settings
-		$('table:eq(3) td:eq(0)').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
-		$('table:eq(3) td:eq(0)').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
-		$('table:eq(3) td:eq(0)').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+		// Check current side settings
+		if($('#'+id).find('.b-h-o-head').length == 0) {
 		
-		// Store data in localStorage
-		blocks.reindexOrderConfig();
+			// Move the block
+			$('#'+id).prependTo('table:eq(3) td:eq(0)');
+
+			// Maintain style settings
+			$('ext_left_sidebar').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
+			$('ext_left_sidebar').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+			$('ext_left_sidebar').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+		
+			// Store data in localStorage
+			blocks.reindexOrderConfig();
+		}
 	},
 
 	right : function(id) {
 		
-		// Move the block
-		$('#'+id).prependTo('table:eq(3) td:eq(2) table:first tr > td:eq(2)');
+		// Check current side settings
+		if($('#'+id).find('.b-h-b-head').length == 0) {
+		
+			// Move the block
+			$('#'+id).prependTo('table:eq(3) td:eq(2) table:first tr > td:eq(2)');
 
-		// Maintain style settings
-		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
-		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+			// Maintain style settings
+			$('ext_right_sidebar').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
+			$('ext_right_sidebar').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
+			$('ext_right_sidebar').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
 	
-		// Store data in localStorage
-		blocks.reindexOrderConfig();	
+			// Store data in localStorage
+			blocks.reindexOrderConfig();
+		}
 	},
 	
 	up: function(id) {
@@ -1069,6 +1077,21 @@ var blocks = {
 		// Get index val
 		var index = $('#'+id).index('.ext_block');
 
+		// Current position
+		if( $('#'+id).closest('#ext_left_sidebar').length > 0 ) {
+		
+			if(index == 0) {
+				return false;
+			}
+		
+		} else {
+
+			var first = $('#ext_left_sidebar .ext_block').length;
+			if(index == first) {
+				return false;
+			}
+		}
+		
 		// Move to target
 		$('#'+id).insertBefore('.ext_block:eq('+(index-1)+')');		
 
@@ -1080,6 +1103,16 @@ var blocks = {
 
 		// Get index val
 		var index = $('#'+id).index('.ext_block');
+		
+		// Current position
+		if( $('#'+id).closest('#ext_left_sidebar').length > 0 ) {
+			
+			var last = $('#ext_left_sidebar .ext_block').length - 1;
+			
+			if(last == index) {
+				return false;
+			}
+		}
 		
 		// Move to target
 		$('#'+id).insertAfter('.ext_block:eq('+(index+1)+')');
