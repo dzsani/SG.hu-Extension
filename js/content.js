@@ -973,8 +973,49 @@ var blocks = {
 			// Hide the item
 			$('#'+id).children('div:eq(1)').slideUp(200);
 		}
-	}
+	},
+	
+	left : function(id) {
+		
+		// Move the block
+		$('#'+id).prependTo('table:eq(3) td:eq(0)');
 
+		// Maintain style settings
+		$('table:eq(3) td:eq(0)').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
+		$('table:eq(3) td:eq(0)').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+		$('table:eq(3) td:eq(0)').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+	},
+
+	right : function(id) {
+		
+		// Move the block
+		$('#'+id).prependTo('table:eq(3) td:eq(2) table:first tr > td:eq(2)');
+
+		// Maintain style settings
+		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
+		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
+		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+	},
+	
+	up: function(id) {
+		
+		// Get index val
+		var index = $('#'+id).index('.ext_block');
+		
+		// Move to target
+		$('#'+id).insertBefore('.ext_block:eq('+(index-1)+')');
+		
+	},
+	
+	down : function(id) {
+
+		// Get index val
+		var index = $('#'+id).index('.ext_block');
+		
+		// Move to target
+		$('#'+id).insertAfter('.ext_block:eq('+(index+1)+')');
+
+	}
 };
 
 function extInit() {
