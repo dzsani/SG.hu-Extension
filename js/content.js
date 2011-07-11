@@ -135,7 +135,7 @@ function filterOutReadedFaves() {
 	var counter = 0;
 	var counterAll = 0;
 
-	$($('.b-h-o-head:eq(2)').next().find('div a').get().reverse()).each(function() {
+	$($('#ext_faves').next().find('div a').get().reverse()).each(function() {
 		
 		// Skip topics that have unreaded messages
 		if( $(this).find('small').length > 0) {
@@ -162,11 +162,11 @@ function filterOutReadedFaves() {
 	
 	// Create an error message if theres no topik with unreaded messages
 	if(counterAll == 0) {
-		$('.b-h-o-head:eq(2)').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan topik</p>');
+		$('#ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan topik</p>');
 	}
 	
 	// Set the "show" button
-	$('.b-h-o-head:eq(2)').append('<div id="ext_show_filtered_faves"></div>');
+	$('#ext_faves').append('<div id="ext_show_filtered_faves"></div>');
 	$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
 	// Apply some styles

@@ -1,5 +1,8 @@
 $(document).ready(function() {
 	
+	// Faves
+	$('.b-h-o-head:eq(2)').attr('id', 'ext_faves');
+	
 	// Left sidebar
 	$('table:eq(3) td:eq(0)').attr('id', 'ext_left_sidebar');
 	
