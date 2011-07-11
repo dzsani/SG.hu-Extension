@@ -877,18 +877,16 @@ var blocks = {
 		var config = JSON.parse(dataStore['blocks_config']);
 		
 		for(c = 0; c < config.length; c++) {
-			
-			alert(config[c]['id']);
-			
+
 			// Visibility
 			if( config[c]['visibility'] == false ) {
-				blocks.hide(config[c]['id']);
+				blocks.hide(config[c]['id'], false);
 			}
-			alert('a');
+
 			// ContentHide
-			/*if( config[c]['contentHide'] == true ) {
-				blocks.contentHide(config[c]['id']);
-			}*/
+			if( config[c]['contentHide'] == true ) {
+				blocks.contentHide(config[c]['id'], false);
+			}
 		}
 	},
 	
@@ -901,28 +899,37 @@ var blocks = {
 			// Hide
 			$('<img src="'+chrome.extension.getURL('img/blocks/close.png')+'">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				blocks.hide( $(this).closest('div').attr('id') );
+				blocks.hide( $(this).closest('div').attr('id'), true );
 			});
 			
 			// Contenthide
 			$('<img src="'+chrome.extension.getURL('img/blocks/minimalize.png')+'">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				blocks.contentHide( $(this).closest('div').attr('id') );
+				blocks.contentHide( $(this).closest('div').attr('id'), true );
 			});
 			
 		});
 	},
 	
-	hide : function(id) {
-
-		// Change the config
-		blocks.setConfigByKey( id, 'visibility', false);
+	hide : function(id, clicked) {
 		
-		// Hide the item
-		$('#'+id).slideUp(200);
+		if(clicked == true) {
+			// Change the config
+			blocks.setConfigByKey( id, 'visibility', false);
+		
+			// Hide the item
+			$('#'+id).slideUp(200);
+		} else {
+			$('#'+id).hide();
+		}
 	},
 	
-	contentHide : function(id) {
+	contentHide : function(id, clicked) {
+		
+		if(clicked == false) {
+			$('#'+id).children('div:eq(1)').hide();
+			return true;
+		}
 		
 		if( $('#'+id).children('div:eq(1)').css('display') == 'none' ) {
 		
