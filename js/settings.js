@@ -130,6 +130,11 @@ var blocklist =  {
 	}
 }
 
+
+function resetBlocksConfig() {
+	localStorage.removeItem('blocks_config');
+}
+
 /**********************************************************/
 /*                P A G E  S C R I P T S                  */
 /**********************************************************/
@@ -169,6 +174,11 @@ var _page = {
 		$('input:checkbox').click(function() {
 			_settings.save(this);
 		})
+		
+		// Reset blocks config
+		$('#reset_blocks_config').click(function() {
+			resetBlocksConfig();
+		});
 	},
 	
 	button : function(ele) {
