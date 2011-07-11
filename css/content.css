@@ -137,12 +137,20 @@
 	height: 20px;
 	display: none;
 	position: absolute;
-	top: 0px;
+	top: -20px;
 	left: 0px;
-	background-color: #e2ac45;
+
 	z-index: 99;
 }
 
 .ext_block:hover p {
 	display: block;
+}
+
+.ext_block_button_left {
+	float: left;
+}
+
+.ext_block_button_right {
+	float: right;
 }
