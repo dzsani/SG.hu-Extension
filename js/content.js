@@ -884,7 +884,7 @@ var blocks = {
 			if( config[c]['visibility'] == false ) {
 				blocks.hide(config[c]['id']);
 			}
-			
+			alert('a');
 			// ContentHide
 			/*if( config[c]['contentHide'] == true ) {
 				blocks.contentHide(config[c]['id']);
@@ -899,13 +899,13 @@ var blocks = {
 			var item = $('<p class="ext_blocks_buttons"></p>').prependTo(this);
 			
 			// Hide
-			$('<a href="#">X</a>').prependTo(item).click(function(e) {
+			$('<img src="'+chrome.extension.getURL('img/blocks/close.png')+'">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				blocks.hide( $(this).closest('div').attr('id') );
 			});
 			
 			// Contenthide
-			$('<a href="#">-</a>').prependTo(item).click(function(e) {
+			$('<img src="'+chrome.extension.getURL('img/blocks/minimalize.png')+'">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				blocks.contentHide( $(this).closest('div').attr('id') );
 			});
