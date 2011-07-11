@@ -874,10 +874,50 @@ var blocks = {
 		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(config) });
 	},
 	
+	getConfigValByKey : function(id, key) {
+	
+		var config = JSON.parse(dataStore['blocks_config']);
+		
+		for(c = 0; c < config.length; c++) {
+
+			if(config[c]['id'] == id) {
+				return config[c][key];
+			}
+		}
+	},
+	
+	reindexOrderConfig : function() {
+
+		// Var for config
+		var config = JSON.parse(dataStore['blocks_config']);
+		var _config = [];
+		
+		// Iterate over the blocks
+		$('.ext_block').each(function(index) {
+			
+			var tmp = {
+				
+				id 			: $(this).attr('id'),
+				visibility	: blocks.getConfigValByKey($(this).attr('id'), 'visibility'),
+				contentHide	: blocks.getConfigValByKey($(this).attr('id'), 'contentHide'),
+				side		: $(this).find('.b-h-o-head').length > 0 ? 'left' : 'right',
+				index 		: index
+			};
+			
+			_config.push(tmp);
+			
+		});
+
+		
+		// Store in localStorage
+		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(_config) });
+	},
+	
 	executeConfig : function() {
 		
 		var config = JSON.parse(dataStore['blocks_config']);
-		
+			config = config.reverse();
+			
 		for(c = 0; c < config.length; c++) {
 
 			// Visibility
@@ -889,7 +929,28 @@ var blocks = {
 			if( config[c]['contentHide'] == true ) {
 				blocks.contentHide(config[c]['id'], false);
 			}
+			
+			// Side and pos
+			if( config[c]['side'] == 'left' ) {
+				
+				$('#'+config[c]['id']).prependTo('table:eq(3) td:eq(0)');
+				
+			} else {
+				
+				$('#'+config[c]['id']).prependTo('table:eq(3) td:eq(2) table:first tr > td:eq(2)');
+			}
 		}
+		
+		// Maintain style settings
+		$('table:eq(3) td:eq(0)').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
+		$('table:eq(3) td:eq(0)').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+		$('table:eq(3) td:eq(0)').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+
+		// Maintain style settings
+		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
+		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
+		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+	
 	},
 	
 	setOverlay : function() {
@@ -984,6 +1045,9 @@ var blocks = {
 		$('table:eq(3) td:eq(0)').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
 		$('table:eq(3) td:eq(0)').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
 		$('table:eq(3) td:eq(0)').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+		
+		// Store data in localStorage
+		blocks.reindexOrderConfig();
 	},
 
 	right : function(id) {
@@ -995,16 +1059,21 @@ var blocks = {
 		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
 		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
 		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+	
+		// Store data in localStorage
+		blocks.reindexOrderConfig();	
 	},
 	
 	up: function(id) {
 		
 		// Get index val
 		var index = $('#'+id).index('.ext_block');
-		
+
 		// Move to target
-		$('#'+id).insertBefore('.ext_block:eq('+(index-1)+')');
-		
+		$('#'+id).insertBefore('.ext_block:eq('+(index-1)+')');		
+
+		// Store data in localStorage
+		blocks.reindexOrderConfig();
 	},
 	
 	down : function(id) {
@@ -1015,6 +1084,8 @@ var blocks = {
 		// Move to target
 		$('#'+id).insertAfter('.ext_block:eq('+(index+1)+')');
 
+		// Store data in localStorage
+		blocks.reindexOrderConfig();
 	}
 };
 
