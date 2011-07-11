@@ -27,6 +27,7 @@ var _settings = {
 		if(localStorage['threaded_comments']				== undefined) localStorage['threaded_comments']					= 'false';
 		if(localStorage['show_mentioned_comments_in_links']	== undefined) localStorage['show_mentioned_comments_in_links']	= 'false';
 		if(localStorage['custom_blocks']					== undefined) localStorage['custom_blocks']						= 'false';
+		if(localStorage['hide_blocks_buttons']				== undefined) localStorage['hide_blocks_buttons']				= 'false';
 
 	
 		_settings.restore();

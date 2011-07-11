@@ -810,7 +810,9 @@ var blocks = {
 		blocks.executeConfig();
 		
 		// Set overlays
-		blocks.setOverlay();
+		if(dataStore['hide_blocks_buttons'] == 'false') {
+			blocks.setOverlay();
+		}
 	
 	},
 	
