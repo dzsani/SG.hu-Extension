@@ -40,7 +40,7 @@ function removeChatWindow() {
 var  jumpLastUnreadedMessage = {
 	
 	init : function() {
-		$('.b-h-o-head:eq(2)').next().find('a').each(function() {
+		$('.ext_faves').next().find('a').each(function() {
 			
 			// If theres a new message
 			if($(this).find('small').length > 0) {
@@ -135,7 +135,7 @@ function filterOutReadedFaves() {
 	var counter = 0;
 	var counterAll = 0;
 
-	$($('#ext_faves').next().find('div a').get().reverse()).each(function() {
+	$($('.ext_faves').next().find('div a').get().reverse()).each(function() {
 		
 		// Skip topics that have unreaded messages
 		if( $(this).find('small').length > 0) {
@@ -162,11 +162,11 @@ function filterOutReadedFaves() {
 	
 	// Create an error message if theres no topik with unreaded messages
 	if(counterAll == 0) {
-		$('#ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan topik</p>');
+		$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan topik</p>');
 	}
 	
 	// Set the "show" button
-	$('#ext_faves').append('<div id="ext_show_filtered_faves"></div>');
+	$('.ext_faves').append('<div id="ext_show_filtered_faves"></div>');
 	$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
 	// Apply some styles
@@ -190,7 +190,7 @@ function filterOutReadedFaves() {
 
 function shortCommentMarker() {
 	
-	$('#ext_faves').next().find('div a').each(function() {
+	$('.ext_faves').next().find('div a').each(function() {
 		
 		if( $(this).find('small').length > 0) {
 			
