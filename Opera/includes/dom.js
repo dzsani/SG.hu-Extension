@@ -1,3 +1,4 @@
+/*
 $(document).ready(function() {
 	
 	// Faves
@@ -9,3 +10,5 @@ $(document).ready(function() {
 	// Right sidebar
 	$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').attr('id', 'ext_right_sidebar');
 });
+
+*/

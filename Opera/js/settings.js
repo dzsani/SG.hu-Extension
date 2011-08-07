@@ -1,4 +1,3 @@
-
 // Convert LocalStorage string based variables
 // to real boolean type
 function _toBoolean(val) {

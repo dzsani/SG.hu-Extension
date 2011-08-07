@@ -2,19 +2,12 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<script>
-			
+
+
+		
 			window.addEventListener("load", setupConnection, false);
 			
 			function setupConnection() {
-				
-				opera.extension.onconnect = function(event) {
-					
-					// Post back LocalStorage data
-					event.source.postMessage({ type : "setStorageData", data : localStorage });
-					
-					// Log this event
-					opera.postError('LocalStorage data were sent');
-				}
 				
 				opera.extension.onmessage = function(event) {
 				
@@ -34,23 +27,23 @@
 		
 				// If theres in no entry in localStorage
 				if(typeof localStorage['block_list'] == "undefined") {
-					localStorage['block_list'] = '';
+					widget.preferences['block_list'] = '';
 				}
 		
 				// If the blocklist is empty
 				if(localStorage['block_list'] == '') { 
-					localStorage['block_list'] = name;
+					widget.preferences['block_list'] = name;
 		
 				// If the blocklist is not empty
 				} else {
 					var blocklist = new Array();
-						blockList = localStorage['block_list'].split(',');
-						if(blockList.indexOf(name) == -1) { blockList.push(name);  localStorage['block_list'] = blockList; }
+						blockList = widget.preferences['block_list'].split(',');
+						if(blockList.indexOf(name) == -1) { blockList.push(name);  widget.preferences['block_list'] = blockList; }
 				}
 			}
 		
 			function setBlockConfig(data) {
-				localStorage['blocks_config'] = data;
+				widget.preferences['blocks_config'] = data;
 			}
 		
 		</script>

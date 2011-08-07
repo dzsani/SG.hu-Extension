@@ -1,4 +1,6 @@
 /* Display none to hidden faves (without unreaded messages) */
+
+
 .ext_hidden_fave {
 	display: none;
 }
