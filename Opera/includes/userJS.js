@@ -7,6 +7,7 @@
 // @include https://*.sg.hu/*
 // ==/UserScript==
 
+
 // Predefined vars
 var userName, isLoggedIn, dataStore;
 
@@ -1132,7 +1133,7 @@ var blocks = {
 };
 
 function extInit() {
-
+alert('init');
 	// FORUM.PHP
 	if(document.location.href.match('forum.php')) {
 
@@ -1233,7 +1234,7 @@ function extInit() {
 
 
 opera.extension.onmessage = function(event) {
-
+alert(event);
 	if(event.data.type == 'setStorageData') {
 		
 		// Save localStorage data

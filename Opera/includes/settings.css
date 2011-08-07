@@ -7,7 +7,7 @@ body {
 	height: 90%;
 	margin: 5% auto;
 	background-color: #FFF;
-	-webkit-box-shadow: #666 0px 0px 10px;
+	box-shadow: #666 0px 0px 10px;
 }
 
 #left {
@@ -41,13 +41,7 @@ body {
 
 #left ul li.active {
 	
-	background-image: -webkit-gradient(
-		linear,
-		left bottom,
-		left top,
-		color-stop(0, rgb(0,86,147)),
-		color-stop(1, rgb(63,174,254))
-	);
+	background-image: -o-linear-gradient(rgb(0,86,147),rgb(63,174,254));
 	color: #FFF;
 }
 
@@ -93,11 +87,11 @@ body {
 }
 
 #right .button.on {
-	background-position-x: 0px;
+	background-position: 0px 0px;
 }
 
 #right .button.off {
-	background-position-x: -70px; 
+	background-position: -70px 0px; 
 }
 
 #right p.sub {

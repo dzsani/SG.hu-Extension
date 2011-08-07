@@ -14,31 +14,34 @@ var _settings = {
 	
 	check : function() {
 
-		if(localStorage['chat_hide']						== undefined) localStorage['chat_hide']							= 'false';
-		if(localStorage['fav_show_only_unreaded']			== undefined) localStorage['fav_show_only_unreaded']			= 'false';
-		if(localStorage['short_comment_marker']				== undefined) localStorage['short_comment_marker']				= 'false';
-		if(localStorage['custom_list_styles']				== undefined) localStorage['custom_list_styles']				= 'false';
-		if(localStorage['jump_unreaded_messages']			== undefined) localStorage['jump_unreaded_messages']			= 'false';
-		if(localStorage['autoload_next_page']				== undefined) localStorage['autoload_next_page']				= 'false';
-		if(localStorage['scroll_to_page_top']				== undefined) localStorage['scroll_to_page_top']				= 'false';
-		if(localStorage['animated_reply_to']				== undefined) localStorage['animated_reply_to']					= 'false';
-		if(localStorage['overlay_reply_to']					== undefined) localStorage['overlay_reply_to']					= 'false';
-		if(localStorage['highlight_comments_for_me']		== undefined) localStorage['highlight_comments_for_me']			= 'false';
-		if(localStorage['threaded_comments']				== undefined) localStorage['threaded_comments']					= 'false';
-		if(localStorage['show_mentioned_comments_in_links']	== undefined) localStorage['show_mentioned_comments_in_links']	= 'false';
-		if(localStorage['custom_blocks']					== undefined) localStorage['custom_blocks']						= 'false';
-		if(localStorage['hide_blocks_buttons']				== undefined) localStorage['hide_blocks_buttons']				= 'false';
+		if(widget.preferences.chat_hide							== undefined) widget.preferences.chat_hide							= 'false';
+		if(widget.preferences.fav_show_only_unreaded			== undefined) widget.preferences.fav_show_only_unreaded				= 'false';
+		if(widget.preferences.short_comment_marker				== undefined) widget.preferences.short_comment_marker				= 'false';
+		if(widget.preferences.custom_list_styles				== undefined) widget.preferences.custom_list_styles					= 'false';
+		if(widget.preferences.jump_unreaded_messages			== undefined) widget.preferences.jump_unreaded_messages				= 'false';
+		if(widget.preferences.autoload_next_page				== undefined) widget.preferences.autoload_next_page					= 'false';
+		if(widget.preferences.scroll_to_page_top				== undefined) widget.preferences.scroll_to_page_top					= 'false';
+		if(widget.preferences.animated_reply_to					== undefined) widget.preferences.animated_reply_to					= 'false';
+		if(widget.preferences.overlay_reply_to					== undefined) widget.preferences.overlay_reply_to					= 'false';
+		if(widget.preferences.highlight_comments_for_me			== undefined) widget.preferences.highlight_comments_for_me			= 'false';
+		if(widget.preferences.threaded_comments					== undefined) widget.preferences.threaded_comments					= 'false';
+		if(widget.preferences.show_mentioned_comments_in_links	== undefined) widget.preferences.show_mentioned_comments_in_links	= 'false';
+		if(widget.preferences.custom_blocks						== undefined) widget.preferences.custom_blocks						= 'false';
+		if(widget.preferences.hide_blocks_buttons				== undefined) widget.preferences.hide_blocks_buttons				= 'false';
 
 	
 		_settings.restore();
 	},
 	
+	
 	restore : function() {
+		
+
 		
 		// Restore settings for buttons
 		$('#right .button').each(function() {
 
-			if(localStorage[ $(this).attr('id') ] == 'true') {
+			if(widget.preferences[ $(this).attr('id') ] == 'true') {
 				$(this).addClass('on');
 			
 			} else {
@@ -49,7 +52,7 @@ var _settings = {
 		// Restore settings for checkboxes
 		$('input:checkbox').each(function() {
 			
-			if(localStorage[ $(this).attr('id') ] == 'true') {
+			if(widget.preferences[ $(this).attr('id') ] == 'true') {
 				$(this).attr('checked', true);
 			}
 		});
@@ -58,10 +61,10 @@ var _settings = {
 	save : function(ele) {
 		
 		if( $(ele).hasClass('on') || $(ele).attr('checked') == true) {
-			localStorage[ $(ele).attr('id') ] = true; 
+			widget.preferences[ $(ele).attr('id') ] = true; 
 		
 		} else {
-			localStorage[ $(ele).attr('id') ] = false; 
+			widget.preferences[ $(ele).attr('id') ] = false; 
 		}
 	}
 };
@@ -83,12 +86,12 @@ var blocklist =  {
 	
 	list: function() {
 		// If theres is no entry in localStorage
-		if(typeof localStorage['block_list'] == "undefined") {
+		if(typeof widget.preferences['block_list'] == "undefined") {
 			return false;
 		}
 	
 		// If the list is empty
-		if(localStorage['block_list'] == '') {
+		if(widget.preferences['block_list'] == '') {
 			return false;
 		}
 	
@@ -96,7 +99,7 @@ var blocklist =  {
 		$('#blocklist').html('');
 	
 		// Fetch the userlist into an array
-		var users = localStorage['block_list'].split(',').sort();
+		var users = widget.preferences['block_list'].split(',').sort();
 	
 		// Iterate over, add users to the list
 		for(c = 0; c < users.length; c++) {
@@ -113,7 +116,7 @@ var blocklist =  {
 		$(el).closest('li').remove();
 		
 		// Get the blocklist array
-		var list = localStorage['block_list'].split(',');
+		var list = widget.preferences['block_list'].split(',');
 		
 		// Get the removed user index
 		var index = list.indexOf(user);
@@ -122,7 +125,7 @@ var blocklist =  {
 		list.splice(index, 1);
 		
 		// Save changes in localStorage
-		localStorage['block_list'] = list;
+		widget.preferences['block_list'] = list;
 		
 		// Add default message to the list if it is now empty
 		if($('#blocklist li').length == 0) {
@@ -133,7 +136,7 @@ var blocklist =  {
 
 
 function resetBlocksConfig() {
-	localStorage.removeItem('blocks_config');
+	widget.preferences.removeItem('blocks_config');
 }
 
 /**********************************************************/
@@ -145,7 +148,7 @@ var _page = {
 		
 		// Bind click event for left side menu
 		$('#left ul li').click(function() {
-		
+
 			// Get settings option index
 			var index = $(this).index();
 			
@@ -183,15 +186,15 @@ var _page = {
 	},
 	
 	button : function(ele) {
-		
+
 		if( $(ele).hasClass('on') ) {
-			$(ele).animate({ 'background-position-x' : -70 }, 300);
+			$(ele).css({ 'background-position' : '-70px 0px' });
 			$(ele).attr('class', 'button off');
 			
 			_settings.save(ele);
 		} else {
 		
-			$(ele).animate({ 'background-position-x' : 0 }, 300);
+			$(ele).css({ 'background-position' : '0px 0px' });
 			$(ele).attr('class', 'button on');
 			
 			_settings.save(ele);
