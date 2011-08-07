@@ -1,5 +1,5 @@
 // Predefined vars
-var userName, isLoggedIn;
+var userName, isLoggedIn, dataStore;
 
 function setPredefinedVars() {
 	userName = getUserName();
@@ -1222,28 +1222,23 @@ function extInit() {
 }
 
 
-var dataStore;
-var port = chrome.extension.connect();
 
+opera.extension.onmessage = function(event) {
 
-port.postMessage({ type : "getStorageData" });
-
-port.onMessage.addListener(function(response) {
-
-	if(response.type == 'setStorageData') {
+	if(event.data.type == 'setStorageData') {
 		
 		// Save localStorage data
-		dataStore = response.data;
+		dataStore = event.data.data;
 		
 		// Add domready event
 		$(document).ready(function() {
 			extInit();
 		});
 	
-	} else if(response.type == 'getBlockedUserNameFromLink') {
-		getBlockedUserNameFromLink(response.data);
+	} else if(event.data.type == 'getBlockedUserNameFromLink') {
+		getBlockedUserNameFromLink(event.data.data);
 	
-	} else if(response.type == 'getBlockedUserNameFromImage') {
-		getBlockedUserNameFromImage(response.data);
+	} else if(event.data.type == 'getBlockedUserNameFromImage') {
+		getBlockedUserNameFromImage(event.data.data);
 	}	
-});
+};
