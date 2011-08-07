@@ -1,6 +1,5 @@
 /* Display none to hidden faves (without unreaded messages) */
 
-
 .ext_hidden_fave {
 	display: none;
 }
@@ -14,7 +13,7 @@
  	position: absolute;
  	right: 0px;
  	top: 0px;
- 	background-image: -webkit-linear-gradient(top, #fbd859, #f5b85e);
+ 	background-image: -o-linear-gradient(#fbd859,#f5b85e);
  	border-radius: 2px;
  	cursor: pointer;
 }

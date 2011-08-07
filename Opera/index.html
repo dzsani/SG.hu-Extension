@@ -12,8 +12,11 @@
 				opera.extension.onmessage = function(event) {
 				
 					msg = event.data;
-			
-					if(msg.type == "setBlockedUser") {
+					
+					if (msg.topic == 'LoadInjectedCSS') {
+						loadInjectedCSS(event, msg.data);
+					
+					} else if(msg.type == "setBlockedUser") {
 						addToBlockList(msg.data);
 	
 					} else if(msg.type == "setBlocksConfig") {
@@ -21,7 +24,29 @@
 					}
 				}
 			}
-	
+
+			function loadInjectedCSS(event, path) {
+				// Try to get the contents of the stylesheet.
+				var req = new XMLHttpRequest();
+				req.open('GET', path, false);
+				req.send();
+    
+				// Error check for reading the stylesheet.
+				if (!req.responseText) {
+					opera.postError('EXTENSION ERROR: Can\'t read ' + path);
+					return;
+				}
+    
+				// Send the contents of the stylesheet to the injected script.
+				event.source.postMessage({
+					topic: 'LoadedInjectedCSS',
+					data: {
+						css: req.responseText,
+						path: path
+					}
+				});
+			}	
+
 
 			function addToBlockList(name){
 		
