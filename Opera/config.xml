@@ -1,0 +1,19 @@
+<widget xmlns="http://www.w3.org/ns/widgets" id="http://kreaturamedia.com/" version="0.4.0">
+
+		<name short="SG Plus">SG Forum+ Opera Extension</name>
+		<name xml:lang="hu" short="SG Plus">SG Fórum+ Opera Bővítmény</name>
+		
+		<description>This extension is made for a popular Hungarian website, sg.hu.</description>
+		<description xml:lang="hu">Az sg.hu nemhivatalos Opera bővítménye</description>
+
+		<author href="http://kreaturamedia.com" email="gerajanos@kreaturamedia.com">Janos Gera</author>
+		<author xml:lang="hu" href="http://kreaturamedia.com" email="gerajanos@kreaturamedia.com">Gera János</author>
+		
+		<license href="http://www.opensource.org/licenses/mit-license.php">Licensed under the MIT license</license>
+		
+		<icon src="img/logo.png"/>
+		
+		<content src="index.html" type="text/html" encoding="utf-8"/>
+		
+		<access origin="http://www.sg.hu" subdomains="true"/>
+</widget>
