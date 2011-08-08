@@ -58,8 +58,8 @@ var _settings = {
 	},
 	
 	save : function(ele) {
-		
-		if( $(ele).hasClass('on') || $(ele).attr('checked') == true) {
+
+		if( $(ele).hasClass('on') || $(ele).attr('checked') == 'checked') {
 			widget.preferences[ $(ele).attr('id') ] = true; 
 		
 		} else {

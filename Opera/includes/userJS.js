@@ -109,34 +109,13 @@ var  jumpLastUnreadedMessage = {
 			var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 			// Scroll to target element
-			window.$('body').animate({ scrollTop : targetOffset}, 500);
+			window.$('html').animate({ scrollTop : targetOffset}, 500);
 			
 			// Remove original HR tag
 			window.$('a[name=pirosvonal]').remove();
 			
 		}, 1000, target);
 
-		// Url to rewrite
-		var url = document.location.href.substring(0, 44);
-
-		// Update the url to avoid re-jump
-		history.replaceState({ page : url }, '', url);
-		
-		/*
-		// Watch offsetTop while the content loads completly
-		var interval = setInterval(function(){
-			// Target offsetTop
-			var targetOffset = window.$(target).offset().top;
-		
-			// Scroll to target element
-			window.$('body').animate({ scrollTop : targetOffset}, 200);
-		}, 200, target);
-		
-		// Clear interval when the page loads
-		window.$(window).load(function() {
-     		clearInterval(interval);
-		});
-		*/
 	}
 	
 };
@@ -376,9 +355,10 @@ var autoLoadNextPage = {
 		window.$(document).scroll(function() {
 			
 			var docHeight = window.$('body').height();
-			var scrollTop = window.$('body').scrollTop();
+			var scrollTop = window.$('html').scrollTop();
 
 			if(docHeight - scrollTop < 3000 && !autoLoadNextPage.progress && autoLoadNextPage.currPage < autoLoadNextPage.maxPage) {
+				alert('megy');
 				autoLoadNextPage.progress = true;
 				autoLoadNextPage.load();
 			}
@@ -447,7 +427,7 @@ var scrollToDocumentTop = {
 	},
 	
 	scroll : function() {
-		window.$('body').animate({ scrollTop : 0 }, 1000);
+		window.$('html').animate({ scrollTop : 0 }, 1000);
 	}
 	
 };
@@ -561,7 +541,7 @@ var overlayReplyTo = {
 		textarea_clone.find('textarea').focus();
 		
 		// Add close button
-		var close_btm = window.$('<img src="'+chrome.extension.getURL('img/overlay_close.png')+'" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
+		var close_btm = window.$('<span id="ext_close_overlay">X</span>').prependTo(textarea_clone).addClass('ext_overlay_close');
 		
 
 		// Add Close event
@@ -599,7 +579,7 @@ function highlightCommentsForMe() {
 		
 		if(window.$(this).find('.ext_comments_for_me_indicator').length == 0) {
 		
-			window.$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('img/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+			window.$(this).css('position', 'relative').append('<span class="ext_comments_for_me_indicator">--</span>');
 		}
 	});
 	
@@ -738,11 +718,11 @@ var showMentionedComment = {
 			// Search and replace mentioned comment numbers
 			if( window.$(this).html().match(/\#\d+/g) ){
 				if( window.$(this).html().match(/<a[^>]+>\#\d+<\/a>/g) && dataStore['show_mentioned_comments_in_links'] == 'true' ) {
-					var replaced = window.$(this).html().replace(/<a[^>]+>(\#\d+)<\/a>/g, "<span class=\"ext_mentioned\">window.$1</span>");
+					var replaced = window.$(this).html().replace(/<a[^>]+>(\#\d+)<\/a>/g, "<span class=\"ext_mentioned\">$1</span>");
 				} else if( !window.$(this).html().match(/<.*\#\d+.*>/g) ) {
-					var replaced = window.$(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">window.$1</span>");					
+					var replaced = window.$(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");					
 				}
-				
+
 				// Change the text in the original comment
 				window.$(this).html(replaced);
 			}
