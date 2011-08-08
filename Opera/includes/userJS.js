@@ -170,10 +170,10 @@ function filterOutReadedFaves() {
 		// Otherwise, add hidden class
 		window.$(this).parent().addClass('ext_hidden_fave');
 	});
-	
+
 	// Create an error message if theres no topik with unreaded messages
 	if(counterAll == 0) {
-		window.$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan topik</p>');
+		window.$('.ext_hidden_fave:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan topik</p>');
 	}
 	
 	// Set the "show" button
