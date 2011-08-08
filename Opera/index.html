@@ -47,29 +47,6 @@
 				});
 			}	
 
-
-			function addToBlockList(name){
-		
-				// If theres in no entry in localStorage
-				if(typeof localStorage['block_list'] == "undefined") {
-					widget.preferences['block_list'] = '';
-				}
-		
-				// If the blocklist is empty
-				if(localStorage['block_list'] == '') { 
-					widget.preferences['block_list'] = name;
-		
-				// If the blocklist is not empty
-				} else {
-					var blocklist = new Array();
-						blockList = widget.preferences['block_list'].split(',');
-						if(blockList.indexOf(name) == -1) { blockList.push(name);  widget.preferences['block_list'] = blockList; }
-				}
-			}
-		
-			function setBlockConfig(data) {
-				widget.preferences['blocks_config'] = data;
-			}
 		
 		</script>
 	</head>
