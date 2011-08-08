@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>Title</key>
+		<string>Fórum főoldal</string>
+		<key>Type</key>
+		<string>Group</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>chat_hide</string>
+		<key>Title</key>
+		<string>Chat elrejtése</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>fav_show_only_unreaded</string>
+		<key>Title</key>
+		<string>Csak olvasatlan üzenttel rendelkező kedvencek mutatása</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>short_comment_marker</string>
+		<key>Title</key>
+		<string>Rövid kommentjelzők</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>custom_blocks</string>
+		<key>Title</key>
+		<string>Blokkok átrendezése, rejtése</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>Key</key>
+		<string>hide_blocks_buttons</string>
+		<key>Title</key>
+		<string>Átrendező gombok elrejtése</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>custom_list_styles</string>
+		<key>Title</key>
+		<string>Egyedi listaelemek</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>custom_list_styles_merlinw</string>
+		<key>Title</key>
+		<string>MerlinW-féle kiemelés</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>Type</key>
+		<string>Separator</string>
+	</dict>
+	<dict>
+		<key>Title</key>
+		<string>Topik oldal</string>
+		<key>Type</key>
+		<string>Group</string>
+	</dict>
+</array>
+</plist>
