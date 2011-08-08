@@ -220,7 +220,7 @@ function shortCommentMarker() {
 }
 
 function setBlockButton() {
-	
+
 	// Create the block buttons
 	window.$('.topichead a[href*="forummsg.php"]').each(function() {
 	
@@ -263,7 +263,7 @@ function getBlockedUserNameFromButton(el) {
 	
 	var anchor = window.$(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
 	var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
-	
+
 	if(anchor.children('img').length > 0) {
 		nick = anchor.children('img').attr('title').replace(" - VIP", "");
 	
@@ -273,57 +273,34 @@ function getBlockedUserNameFromButton(el) {
 	
 	if(confirm('Biztos tiltólistára teszed "'+nick+'" nevű felhasználót?')) {
 	
-		window.$('.topichead a[href='+tmpUrl+']').each(function() {
-	
+		window.$('.topichead a[href="'+tmpUrl+'"]').each(function() {
+			
 			// Remove the comment
 			window.$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
 				window.$(this).remove();
 			})
 		});
 	
-		if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
+		if(nick != '') { 
+		
+			// If theres in no entry in localStorage
+			if(typeof widget.preferences['block_list'] == "undefined") {
+				widget.preferences['block_list'] = '';
+			}
+		
+			// If the blocklist is empty
+			if(widget.preferences['block_list'] == '') { 
+				widget.preferences['block_list'] = nick;
+		
+			// If the blocklist is not empty
+			} else {
+				var blocklist = new Array();
+					blockList = widget.preferences['block_list'].split(',');
+					if(blockList.indexOf(nick) == -1) { blockList.push(nick);  widget.preferences['block_list'] = blockList; }
+			}
+		}
 	}
 }
-
-function getBlockedUserNameFromLink(data) {
-
-	var nick = '';
-	var tmpUrl = data['linkUrl'].replace('http://www.sg.hu/', '');
-	
-	window.$('.topichead a[href='+tmpUrl+']').each(function() {
-	
-		// Fetch username
-		nick = window.$(this).html();
-		
-		// Remove the comment
-		window.$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
-			window.$(this).remove();
-		})
-	});
-	
-	if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
-}
-
-
-function getBlockedUserNameFromImage(data) {
-
-	var nick = '';
-	var tmpUrl = data['srcUrl'].replace('http://www.sg.hu', '');
-	
-	window.$('.topichead img[src='+tmpUrl+']').each(function() {
-	
-		// Fetch the username
-		nick = (window.$(this).attr('title').replace(' - VIP', ''));
-		
-		// Remove the comment
-		window.$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
-			window.$(this).remove();
-		})
-	});
-	
-	if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
-}
-
 
 function customListStyles() {
 	
@@ -1175,7 +1152,7 @@ function extInit() {
 	
 	// LISTAZAS.PHP
 	else if(document.location.href.match(/listazas.php3\?id/gi)) {
-		
+
 		// setPredefinedVars
 		setPredefinedVars();
 		
