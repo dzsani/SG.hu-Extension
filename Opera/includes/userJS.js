@@ -636,7 +636,7 @@ var threadedComments = {
 		var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 		// Scroll to target element
-		window.$('body').animate({ scrollTop : targetOffset}, 500);
+		window.$('html').animate({ scrollTop : targetOffset}, 500);
 	},
 	
 	next : function(ele) {
@@ -658,7 +658,7 @@ var threadedComments = {
 		var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 		// Scroll to target element
-		window.$('body').animate({ scrollTop : targetOffset}, 500);
+		window.$('html').animate({ scrollTop : targetOffset}, 500);
 	},
 	
 	sort : function() {
