@@ -535,7 +535,7 @@ var overlayReplyTo = {
 
 		if(textBottom > pageBottom) { 
 			var scT = textBottom - window.$(window).height() + 50;
-			window.$('body').animate( { scrollTop : scT }, 500);
+			window.$('html').animate( { scrollTop : scT }, 500);
 		}
 		
 		// Set the textarea focus
