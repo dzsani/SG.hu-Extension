@@ -10,6 +10,11 @@ Telepítés:
 	Opera:
 		A config.xml-t ráhúzzátok az Operában megnyitott Extension Manager oldalra, vagy pedig az Opera ikonjára.
 
+	Safari:
+		Engedélyezd a developer módot a beállításokban, majd Develop -> Show Extension Builder. Jobb alsó 
+		sarokban Plusz ikon -> Add Extension -> Kitallózod a Safari.safariextension mappát.
+		
+		
 A bővítmény funkciói:
 	- Chat elrejtése
 	- 'Ugrás az utolsó olvasatlan üzenethez' több oldalon keresztül
