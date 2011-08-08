@@ -371,43 +371,48 @@ var autoLoadNextPage = {
 		var url = document.location.href.substring(0, 44);
 		
 		// Make the ajax query
-		window.$.get(url+'&index='+(autoLoadNextPage.currPage+1)+'', function(data) {
+		window.$.ajax({
+		
+			url : url+'&index='+(autoLoadNextPage.currPage+1)+'', 
+			mimeType : 'text/html;charset=iso-8859-2',
+			success : function(data) {
 			
-			// Create the 'next page' indicator
-			if(dataStore['threaded_comments'] != 'true') {
-				window.$('<div class="ext_autopager_idicator">'+(autoLoadNextPage.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
-			}
+				// Create the 'next page' indicator
+				if(dataStore['threaded_comments'] != 'true') {
+					window.$('<div class="ext_autopager_idicator">'+(autoLoadNextPage.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+				}
 			
-			var tmp = window.$(data);
-			var tmp = tmp.find('.topichead');
+				var tmp = window.$(data);
+				var tmp = tmp.find('.topichead');
 			
-			tmp.each(function() {
+				tmp.each(function() {
 				
-				window.$(this).closest('center').insertBefore('.std1:last');
+					window.$(this).closest('center').insertBefore('.std1:last');
 			
-			});
+				});
 			
-			autoLoadNextPage.progress = false;
-			autoLoadNextPage.currPage++;
-			autoLoadNextPage.counter++;
+				autoLoadNextPage.progress = false;
+				autoLoadNextPage.currPage++;
+				autoLoadNextPage.counter++;
 			
-			// Reinit settings
+				// Reinit settings
 
-			// threaded comments
-			if(dataStore['threaded_comments'] == 'true') {
-				threadedComments.sort();
-			}
+				// threaded comments
+				if(dataStore['threaded_comments'] == 'true') {
+					threadedComments.sort();
+				}
 
-			// highlight_comments_for_me
-			if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
-				highlightCommentsForMe();
-			}
+				// highlight_comments_for_me
+				if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
+					highlightCommentsForMe();
+				}
 			
-			// show menitoned comment
-			if(dataStore['show_mentioned_comments'] == 'true') {
-				showMentionedComment.init();
-			}
+				// show menitoned comment
+				if(dataStore['show_mentioned_comments'] == 'true') {
+					showMentionedComment.init();
+				}
 			
+			}
 		});
 	}
 
