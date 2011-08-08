@@ -1,10 +1,14 @@
 Az sg.hu nemhivatalos Chrome és Opera bővítménye.
 
-Használati útmutató:
-	A Google Extension Gallery-ből letöltött bővítmény telepítése ugyan úgy zajlik mint bármelyik másiknál.
-	A kicsomagolt developer verzió telepítését a Csavarkulcs -> Eszközök -> Bővítmények alatt található 
-	Developer mode 'Load unpacked extension'-nel kell elvégezni, itt egyszerűen kitallózzuk a letöltött 
-	bövítmény mappáját.
+Telepítés:
+
+	Chrome:
+		A kicsomagolt developer verzió telepítését a Csavarkulcs -> Eszközök -> Bővítmények alatt található 
+		Developer mode 'Load unpacked extension'-nel kell elvégezni, itt egyszerűen kitallózzuk a letöltött 
+		bövítmény mappáját.
+	
+	Opera:
+		A config.xml-t ráhúzzátok az Operában megnyitott Extension Manager oldalra, vagy pedig az Opera ikonjára.
 
 A bővítmény funkciói:
 	- Chat elrejtése
@@ -20,12 +24,6 @@ A bővítmény funkciói:
 	- Nekem érkező üzenetek kiemelése
 	- Üzenetek szálonkénti elrendezése
 	- Említett kommentek beidézése 
-
-Egyéb megjegyzések:
-	- Tiltólista:
-		Egy topikban a választott felhasználó nevén vagy logóján jobb klikkel érhetjük el a 
-		"Felhasználó kitiltása" opciót. Ezután globálisan, egyetlen topikban sem fogjuk látni 
-		a felhasználó kommentjeit. Visszavonásra a beállításokban van lehetőség.
 
 Credits:
 	Fejlesztő: Gera János "dzsani", http://kreaturamedia.com
