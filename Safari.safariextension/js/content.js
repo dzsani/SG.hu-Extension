@@ -779,7 +779,7 @@ var blocks = {
 		blocks.executeConfig();
 		
 		// Set overlays
-		if(dataStore['hide_blocks_buttons'] == false) {
+		if(dataStore['hide_blocks_buttons'] == false || typeof dataStore['hide_blocks_buttons'] == 'undefined') {
 			blocks.setOverlay();
 		}
 	
@@ -923,7 +923,7 @@ var blocks = {
 	},
 	
 	setOverlay : function() {
-		
+
 		$('.ext_block').each(function() {
 			
 			var item = $('<p class="ext_blocks_buttons"></p>').prependTo(this);
