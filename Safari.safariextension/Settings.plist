@@ -49,6 +49,8 @@
 		<string>CheckBox</string>
 	</dict>
 	<dict>
+		<key>DefaultValue</key>
+		<false/>
 		<key>Key</key>
 		<string>hide_blocks_buttons</string>
 		<key>Title</key>
@@ -85,6 +87,96 @@
 		<string>Topik oldal</string>
 		<key>Type</key>
 		<string>Group</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>jump_unreaded_messages</string>
+		<key>Title</key>
+		<string>Ugrás az utolsó üzenethez</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>autoload_next_page</string>
+		<key>Title</key>
+		<string>Következő oldal betöltése a lap aljára érve</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>scroll_to_page_top</string>
+		<key>Title</key>
+		<string>Oldal tetejére görgető gomb</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>animated_reply_to</string>
+		<key>Title</key>
+		<string>Animált válaszerre</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>overlay_reply_to</string>
+		<key>Title</key>
+		<string>Overlay kommentmező</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>highlight_comments_for_me</string>
+		<key>Title</key>
+		<string>Nekem érkező üzenetek kiemelése</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>threaded_comments</string>
+		<key>Title</key>
+		<string>Kommentek szálonkénti elrendezése</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>show_mentioned_comments</string>
+		<key>Title</key>
+		<string>Említett kommentek beidézése</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>show_mentioned_comments_in_links</string>
+		<key>Title</key>
+		<string>Linkeken belüli keresés is</string>
+		<key>Type</key>
+		<string>CheckBox</string>
 	</dict>
 </array>
 </plist>

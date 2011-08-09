@@ -2,14 +2,63 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<script>
-			
+
 			function respondToMessage(event) {
-			
+
+				// Send back the settings object
 				if(event.name == 'getSettings') {
 					
-					// Send back
 					event.target.page.dispatchMessage("setSettings", safari.extension.settings);
+				
+				// Sets the blocks config
+				} else if(event.name == 'setBlocksConfig') {
+					safari.extension.settings.blocks_config = event.message;
+				
+				// Add user to blocklist
+				} else if(event.name == 'addToBlocklist') {
+
+					// If theres in no entry in localStorage
+					if(typeof safari.extension.settings.block_list == "undefined") {
+						safari.extension.settings.block_list = '';
+					}
+		
+					// If the blocklist is empty
+					if(safari.extension.settings.block_list == '') { 
+						safari.extension.settings.block_list = event.message;
+		
+					// If the blocklist is not empty
+					} else {
+						var blocklist = new Array();
+							blockList = safari.extension.settings.block_list.split(',');
+							if(blockList.indexOf(event.message) == -1) { 
+								blockList.push(event.message); 
+								safari.extension.settings.block_list = blockList.join(',');
+							}
+					}
+				// Reset blocks config
+				} else if(event.name == 'resetBlocksConfig') {
+					safari.extension.settings.blocks_config = '';
+				
+				// Remove user form blocklist
+				} else if(event.name == 'removeUserFromBlocklist') {
+
+		
+					// Get username
+					var user = event.message;
+	
+					// Get the blocklist array
+					var list = safari.extension.settings.block_list.split(',');
+		
+					// Get the removed user index
+					var index = list.indexOf(user);
+		
+					// Remove user from array
+					list.splice(index, 1);
+					
+					// Save changes in localStorage
+					safari.extension.settings.block_list = list.join(',');
 				}
+
 			}
 			
 			safari.application.addEventListener("message", respondToMessage, false);

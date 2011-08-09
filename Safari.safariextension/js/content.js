@@ -225,7 +225,7 @@ function setBlockButton() {
 }
 
 function blockMessages() {
-	
+
 	// Return false if theres no blocklist entry
 	if(typeof dataStore['block_list'] == "undefined" || dataStore['block_list'] == '') {
 		return false;
@@ -269,49 +269,18 @@ function getBlockedUserNameFromButton(el) {
 				$(this).remove();
 			})
 		});
-	
-		if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
+		
+		// Post message
+		safari.self.tab.dispatchMessage("addToBlocklist", nick);
+		
+		// Add name to blocklist 
+		$('<li class="unblock_user">'+nick+'</li>').appendTo('#ext_settings ul')
+		
+		// Remove empty blocklist message
+		$('#ext_empty_blocklist').remove();
 	}
 }
 
-function getBlockedUserNameFromLink(data) {
-
-	var nick = '';
-	var tmpUrl = data['linkUrl'].replace('http://www.sg.hu/', '');
-	
-	$('.topichead a[href='+tmpUrl+']').each(function() {
-	
-		// Fetch username
-		nick = $(this).html();
-		
-		// Remove the comment
-		$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
-			$(this).remove();
-		})
-	});
-	
-	if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
-}
-
-
-function getBlockedUserNameFromImage(data) {
-
-	var nick = '';
-	var tmpUrl = data['srcUrl'].replace('http://www.sg.hu', '');
-	
-	$('.topichead img[src='+tmpUrl+']').each(function() {
-	
-		// Fetch the username
-		nick = ($(this).attr('title').replace(' - VIP', ''));
-		
-		// Remove the comment
-		$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
-			$(this).remove();
-		})
-	});
-	
-	if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
-}
 
 
 function customListStyles() {
@@ -319,27 +288,27 @@ function customListStyles() {
 	// Set the dotted background on left sidebar
 	$('.b-h-o-head').next().each(function() {
 	
-		$(this).css('background', 'transparent url('+chrome.extension.getURL('/img/dotted_left.png')+') repeat-y');
+		$(this).css('background', 'transparent url('+safari.extension.baseURI+'img/dotted_left.png) repeat-y');
 	});
 	
 	// Set the dotted background on right sidebar
 	$('.b-h-b-head').next().each(function() {
 	
-		$(this).css('background', 'transparent url('+chrome.extension.getURL('/img/dotted_right.png')+') repeat-y');
+		$(this).css('background', 'transparent url('+safari.extension.baseURI+'img/dotted_right.png) repeat-y');
 	});	
 	
 	// Set flecks for topics
-	$('.cikk-bal-etc2').css('background', 'transparent url('+chrome.extension.getURL('/img/fleck_sub.png')+') no-repeat');
+	$('.cikk-bal-etc2').css('background', 'transparent url('+safari.extension.baseURI+'img/fleck_sub.png) no-repeat');
 	
 	// Set flecks for forum cats
 	$('.std0').css({
 		'padding-left' : 15,
-		'background' : 'transparent url('+chrome.extension.getURL('/img/fleck_main.png')+') no-repeat',
+		'background' : 'transparent url('+safari.extension.baseURI+'img/fleck_main.png) no-repeat',
 		'margin' : '5px 0px'
 	
 	});
 	
-	if(dataStore['custom_list_styles_merlinw'] == 'true') {
+	if(dataStore['custom_list_styles_merlinw'] == true) {
 		$('.std0').find('b').css('color', '#ffffff');
 		$('.std0').find('b').css('background-color', '#6c9ff7');
 		$('.std0').find('b').css('padding', '2px');
@@ -573,7 +542,7 @@ var overlayReplyTo = {
 		textarea_clone.find('textarea').focus();
 		
 		// Add close button
-		var close_btm = $('<img src="'+chrome.extension.getURL('img/overlay_close.png')+'" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
+		var close_btm = $('<img src="'+safari.extension.baseURI+'img/overlay_close.png" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
 		
 
 		// Add Close event
@@ -611,7 +580,7 @@ function highlightCommentsForMe() {
 		
 		if($(this).find('.ext_comments_for_me_indicator').length == 0) {
 		
-			$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('img/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+			$(this).css('position', 'relative').append('<img src="'+safari.extension.baseURI+'img/comments_for_me_indicator.png" class="ext_comments_for_me_indicator">');
 		}
 	});
 	
@@ -797,12 +766,12 @@ var showMentionedComment = {
 var blocks = {
 	
 	init : function() {
-		
+	
 		// Set blocks IDs
 		blocks.setIDs();
 		
 		// Check localStorage for config
-		if( typeof dataStore['blocks_config'] == 'undefined') {
+		if( typeof dataStore['blocks_config'] == 'undefined' || dataStore['blocks_config'] == '') {
 			blocks.buildConfig();
 		}
 		
@@ -810,7 +779,7 @@ var blocks = {
 		blocks.executeConfig();
 		
 		// Set overlays
-		if(dataStore['hide_blocks_buttons'] == 'false') {
+		if(dataStore['hide_blocks_buttons'] == false) {
 			blocks.setOverlay();
 		}
 	
@@ -853,9 +822,9 @@ var blocks = {
 			
 		});
 
-		
+
 		// Store in localStorage
-		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(config) });
+		safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
 	},
 	
 	
@@ -871,7 +840,7 @@ var blocks = {
 		}
 	
 		// Store in localStorage
-		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(config) });
+		safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
 	},
 	
 	getConfigValByKey : function(id, key) {
@@ -910,11 +879,11 @@ var blocks = {
 
 		
 		// Store in localStorage
-		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(_config) });
+		safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(_config));
 	},
 	
 	executeConfig : function() {
-		
+
 		var config = JSON.parse(dataStore['blocks_config']);
 			config = config.reverse();
 			
@@ -960,37 +929,37 @@ var blocks = {
 			var item = $('<p class="ext_blocks_buttons"></p>').prependTo(this);
 
 			// Contenthide
-			$('<img src="'+chrome.extension.getURL('img/blocks/minimalize.png')+'" class="ext_block_button_right">').prependTo(item).click(function(e) {
+			$('<img src="'+safari.extension.baseURI+'img/blocks/minimalize.png" class="ext_block_button_right">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				blocks.contentHide( $(this).closest('div').attr('id'), true );
 			});
 
 			// Hide
-			$('<img src="'+chrome.extension.getURL('img/blocks/close.png')+'" class="ext_block_button_right">').prependTo(item).click(function(e) {
+			$('<img src="'+safari.extension.baseURI+'img/blocks/close.png" class="ext_block_button_right">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				blocks.hide( $(this).closest('div').attr('id'), true );
 			});
 			
 
 			// Down
-			$('<img src="'+chrome.extension.getURL('img/blocks/down.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="'+safari.extension.baseURI+'img/blocks/down.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				blocks.down( $(this).closest('div').attr('id'), true );
 			});
 
 			// Up
-			$('<img src="'+chrome.extension.getURL('img/blocks/up.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="'+safari.extension.baseURI+'img/blocks/up.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				blocks.up( $(this).closest('div').attr('id'), true );
 			});						
 
 			// Right
-			$('<img src="'+chrome.extension.getURL('img/blocks/right.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="'+safari.extension.baseURI+'img/blocks/right.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				blocks.right( $(this).closest('div').attr('id'), true );
 			});			
 			// Left
-			$('<img src="'+chrome.extension.getURL('img/blocks/left.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="'+safari.extension.baseURI+'img/blocks/left.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				blocks.left( $(this).closest('div').attr('id'), true );
 			});
@@ -1122,6 +1091,71 @@ var blocks = {
 	}
 };
 
+var blocklist = {
+
+	init : function() {
+		
+		var html = '';
+		
+		// Create settings button
+		html += '<div id="ext_settings">';
+			html += '<ul>';
+				html += '<li class="title">Beállítások</li>';
+				html += '<li id="ext_reset_block_config">Blokkok alaphelyzetben állítása</li>';
+				html += '<li class="title">Felhasználók tiltásának feloldása</li>';
+			html += '</ul>';
+		html += '</div>';
+		
+		// Append to body
+		$(html).appendTo('body');
+
+		// Create blocked user list
+		if(typeof dataStore['block_list'] !=  "undefined" && dataStore['block_list'] != '') {
+			
+			var list = dataStore['block_list'].split(',');
+			
+			for(c = 0; c < list.length; c++) {
+			
+				$('<li class="unblock_user">'+list[c]+'</li>').appendTo('#ext_settings ul');
+			}
+		
+		// Empty list
+		} else {
+			$('<li id="ext_empty_blocklist">Üres a tiltólistád</li>').appendTo('#ext_settings ul');
+		}
+		
+		// Reset blocks event
+		$('#ext_reset_block_config').click(function() {
+		
+			safari.self.tab.dispatchMessage("resetBlocksConfig", true);
+			
+			if(document.location.href.match('forum.php')) {
+				document.location.reload(true);
+			}
+		});
+		
+		// Remove blocked user event
+		$('.unblock_user').live('click', function() {
+			
+			// Get user name
+			var user = $(this).html();
+
+			// Post message
+			safari.self.tab.dispatchMessage("removeUserFromBlocklist", user);
+			
+			// Remove element
+			$(this).remove();
+			
+			// Add default message to the list if it is now empty
+			if($('.unblock_user').length == 0) {
+				$('<li id="ext_empty_blocklist">Üres a tiltólistád</li>').appendTo('#ext_settings ul');
+			}
+		});
+		
+	}
+
+};
+
 function extInit() {
 	
 	
@@ -1130,7 +1164,10 @@ function extInit() {
 
 		// setPredefinedVars
 		setPredefinedVars();
-		
+
+		// Blocklist button
+		blocklist.init();
+
 		// Custom blocks
 		if(dataStore['custom_blocks'] == true) {
 			blocks.init();
@@ -1171,6 +1208,9 @@ function extInit() {
 		
 		// Monitor the new comments notification
 		monitorNewCommentsNotification();
+		
+		// Blocklist button
+		blocklist.init();
 		
 		//gradual_comments
 		if(dataStore['threaded_comments'] == true) {
