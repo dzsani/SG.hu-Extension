@@ -30,11 +30,13 @@
 				<string>js/jquery.js</string>
 				<string>js/json.js</string>
 				<string>js/dom.js</string>
+				<string>js/settings.js</string>
 				<string>js/content.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
 		<array>
+			<string>css/settings.css</string>
 			<string>css/content.css</string>
 		</array>
 	</dict>

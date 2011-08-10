@@ -1,86 +1,140 @@
-body {
-	background-color: #999;
-}
-
-#wrapper {
-	width: 900px;
-	height: 90%;
-	margin: 5% auto;
-	background-color: #FFF;
-	-webkit-box-shadow: #666 0px 0px 10px;
-}
-
-#left {
-	width: 189px;
-	height: 100%;
-	margin-right: 10px;
-	float: left;
-	border-right: 1px solid #999;
-}
-
-#right {
-	width: 690px;
-	height: 100%;
-	padding-right: 10px;
-	float: right;
-}
-
-#left ul {
-	margin: 0px;
-	padding: 0px;
-	list-style: none;
-}
-
-#left ul li {
-	height: 30px;
-	padding-left: 10px;
-	font: normal normal bold 14px/30px Arial, serif;
-	color: #000;
-	cursor: pointer;
-}
-
-#left ul li.active {
+#ext_settings_button {
 	
+	width: 32px;
+	height: 32px;
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	z-index: 11;
+}
+
+#ext_settings_hide_overlay {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background-color: #666;
+	display: none;
+	z-index: 10;
+}
+
+#ext_settings_wrapper {
+
+	width: 900px;
+	position: fixed;
+	top: -9000px;
+	left: 0px;
+
+	z-index: 11;
+	
+	background-color: #ededed;
+	-webkit-box-shadow: #333 0px 0px 15px;
+	overflow: hidden;
+}
+
+#ext_settings_header {
+	height: 65px;
+	padding: 0px;
+	margin: 0px;
+	padding-left: 10px;
+	border-bottom: 1px solid #6c6c6c;
 	background-image: -webkit-gradient(
 		linear,
 		left bottom,
 		left top,
-		color-stop(0, rgb(0,86,147)),
-		color-stop(1, rgb(63,174,254))
+		color-stop(0.21, rgb(179,179,179)),
+		color-stop(0.61, rgb(231,231,231))
 	);
-	color: #FFF;
 }
 
-#right > div {
+#ext_settings_header li {
+	width: 75px;
+	height: 20px;
+	float: left;
+	padding-top: 45px;
+	list-style: none;
+	
+	font: normal normal normal 12px/20px Arial, serif;
+	color: #666;
+	text-shadow: #ddd 1px 1px 1px;
+}
+
+#ext_settings_header li.clear {
+	width: 0px;
+	height: 0px;
+	float: none !important;
+	clear: both;
+}
+
+.settings_page {
 	display: none;
+	padding: 10px;
+	text-align: justify;
 }
 
-#right > div > div {
+#ext_settings_header li:nth-child(1) {
+	background-position: 0px 0px;
+}
+
+#ext_settings_header li:nth-child(2) {
+	background-position: -75px 0px;
+}
+
+#ext_settings_header li:nth-child(3) {
+	background-position: -150px 0px;
+}
+
+#ext_settings_header li:nth-child(4) {
+	background-position: -225px 0px;
+}
+
+
+#ext_settings_header li:nth-child(1).on {
+	background-position: 0px -75px;
+}
+
+#ext_settings_header li:nth-child(2).on {
+	background-position: -75px -75px;
+}
+
+#ext_settings_header li:nth-child(3).on {
+	background-position: -150px -75px;
+}
+
+#ext_settings_header li:nth-child(4).on {
+	background-position: -225px -75px;
+}
+
+/* SETTINGS PANE ELEMENTS */
+
+.settings_page> div {
 	position: relative;
 	padding: 10px 120px 10px 0px;
 	border-bottom: 1px solid #ddd;
 	text-align: justify;
 }
 
-#right > div > div:last-child {
+.settings_page > div:last-child {
 	border: 0px;
 }
 
-#right h3 {
+.settings_page h3 {
 	margin: 0px;
 	padding: 0px;
 	font: normal normal bold 14px/16px Arial, serif;
 	color: #333;
 }
 
-#right p {
+.settings_page p {
 	margin: 0px;
 	margin-top: 5px;
 	font: normal normal normal 12px/14px Arial, serif;
 	color: #999;
 }
 
-#right .button {
+.settings_page .button {
 	width: 100px;
 	height: 25px;
 	position: absolute;
@@ -92,15 +146,15 @@ body {
 	background-image: url(../img/handler.png); 
 }
 
-#right .button.on {
+.settings_page .button.on {
 	background-position-x: 0px;
 }
 
-#right .button.off {
+.settings_page .button.off {
 	background-position-x: -70px; 
 }
 
-#right p.sub {
+.settings_page p.sub {
 	margin-left: 20px;
 }
 

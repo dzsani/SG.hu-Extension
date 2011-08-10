@@ -240,7 +240,7 @@ function blockMessages() {
 		
 		for(var i = 0; i < deletelist.length; i++) {
 			if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
-				$(this).parent().remove();
+				$(this).parent().hide();
 			}
 		}
 	});
@@ -266,7 +266,7 @@ function getBlockedUserNameFromButton(el) {
 	
 			// Remove the comment
 			$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
-				$(this).remove();
+				$(this).hide();
 			})
 		});
 		
@@ -274,7 +274,7 @@ function getBlockedUserNameFromButton(el) {
 		safari.self.tab.dispatchMessage("addToBlocklist", nick);
 		
 		// Add name to blocklist 
-		$('<li class="unblock_user">'+nick+'</li>').appendTo('#ext_settings ul')
+		$('<li><span>'+nick+'</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist')
 		
 		// Remove empty blocklist message
 		$('#ext_empty_blocklist').remove();
@@ -1091,82 +1091,17 @@ var blocks = {
 	}
 };
 
-var blocklist = {
-
-	init : function() {
-		
-		var html = '';
-		
-		// Create settings button
-		html += '<div id="ext_settings">';
-			html += '<ul>';
-				html += '<li class="title">Beállítások</li>';
-				html += '<li id="ext_reset_block_config">Blokkok alaphelyzetben állítása</li>';
-				html += '<li class="title">Felhasználók tiltásának feloldása</li>';
-			html += '</ul>';
-		html += '</div>';
-		
-		// Append to body
-		$(html).appendTo('body');
-
-		// Create blocked user list
-		if(typeof dataStore['block_list'] !=  "undefined" && dataStore['block_list'] != '') {
-			
-			var list = dataStore['block_list'].split(',');
-			
-			for(c = 0; c < list.length; c++) {
-			
-				$('<li class="unblock_user">'+list[c]+'</li>').appendTo('#ext_settings ul');
-			}
-		
-		// Empty list
-		} else {
-			$('<li id="ext_empty_blocklist">Üres a tiltólistád</li>').appendTo('#ext_settings ul');
-		}
-		
-		// Reset blocks event
-		$('#ext_reset_block_config').click(function() {
-		
-			safari.self.tab.dispatchMessage("resetBlocksConfig", true);
-			
-			if(document.location.href.match('forum.php')) {
-				document.location.reload(true);
-			}
-		});
-		
-		// Remove blocked user event
-		$('.unblock_user').live('click', function() {
-			
-			// Get user name
-			var user = $(this).html();
-
-			// Post message
-			safari.self.tab.dispatchMessage("removeUserFromBlocklist", user);
-			
-			// Remove element
-			$(this).remove();
-			
-			// Add default message to the list if it is now empty
-			if($('.unblock_user').length == 0) {
-				$('<li id="ext_empty_blocklist">Üres a tiltólistád</li>').appendTo('#ext_settings ul');
-			}
-		});
-		
-	}
-
-};
 
 function extInit() {
 	
+	// Settings
+	settings.init();
 	
 	// FORUM.PHP
 	if(document.location.href.match('forum.php')) {
 
 		// setPredefinedVars
 		setPredefinedVars();
-
-		// Blocklist button
-		blocklist.init();
 
 		// Custom blocks
 		if(dataStore['custom_blocks'] == true) {
@@ -1208,9 +1143,6 @@ function extInit() {
 		
 		// Monitor the new comments notification
 		monitorNewCommentsNotification();
-		
-		// Blocklist button
-		blocklist.init();
 		
 		//gradual_comments
 		if(dataStore['threaded_comments'] == true) {
@@ -1272,7 +1204,11 @@ function handleMessage(event) {
 		
 		// Add domready event
 		$(document).ready(function() {
-			extInit();
+			
+			// Filter out iframes
+			if (window.top === window) {
+				extInit();
+			}
 		});
 	
 	} else if(event.name == 'getBlockedUserNameFromLink') {
