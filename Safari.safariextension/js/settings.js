@@ -129,6 +129,9 @@ var cp = {
 			cp.tab( $(this).index() );
 		});
 		
+		// Add buttons background image
+		$('.settings_page .button').css({ 'background-image' : 'url('+safari.extension.baseURI+'img/settings/button.png)' });
+		
 		// Select the first tab
 		cp.tab(0);
 		
