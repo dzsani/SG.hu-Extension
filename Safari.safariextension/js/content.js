@@ -289,10 +289,10 @@ var blocklist =  {
 	block : function(el) {
 
 		var nick = '';
-	
+
 		var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
 		var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
-	
+
 		if(anchor.children('img').length > 0) {
 			nick = anchor.children('img').attr('title').replace(" - VIP", "");
 	
@@ -302,7 +302,7 @@ var blocklist =  {
 	
 		if(confirm('Biztos tiltólistára teszed "'+nick+'" nevű felhasználót?')) {
 	
-			$('.topichead a[href='+tmpUrl+']').each(function() {
+			$('.topichead a[href="'+tmpUrl+'"]').each(function() {
 	
 				// Remove the comment
 				$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
