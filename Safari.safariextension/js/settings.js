@@ -54,12 +54,9 @@ var cp = {
 					html += '<div class="button" id="short_comment_marker"></div>';
 				html += '</div>';
 				html += '<div>';
-					html += '<h3>Egyedi listaelemek</h3>';
-					html += '<p class="sub">';
-						html += '<label><input type="checkbox" id="custom_list_styles_merlinw"> MerlinW-féle kiemelés</label>';
-					html += '</p>';
+					html += '<h3>Fórumkategóriák kiemelése</h3>';
 					html += '<p>A fórum főoldalon átalakított, átdizájnolt listákat láthatsz, mely jobban kiemeli többek között a kedvenceknél a fórumkategóriákat is.</p>';
-					html += '<div class="button" id="custom_list_styles"></div>';
+					html += '<div class="button" id="highlight_forum_categories"></div>';
 				html += '</div>';
 				html += '<div>';
 					html += '<h3>Blokkok átrendezése, rejtése</h3>';
@@ -84,14 +81,9 @@ var cp = {
 					html += '<div class="button" id="autoload_next_page"></div>';
 				html += '</div>';
 				html += '<div>';
-					html += '<h3>Oldal tetejére görgető gomb</h3>';
-					html += '<p>A jobb felső sarokban a bővítmény létrehoz egy gombot, melyre ráklikkelve az oldal tetejére görget.</p>';
-					html += '<div class="button" id="scroll_to_page_top"></div>';
-				html += '</div>';
-				html += '<div>';
-					html += '<h3>Animált válaszerre</h3>';
-					html += '<p>A "válasz XY üzenetére" linkre kattintva animáltan nyílnak le a visszaidézett hozzászólások.</p>';
-					html += '<div class="button" id="animated_reply_to"></div>';
+					html += '<h3>Navigációs gombok megjelenítése</h3>';
+					html += '<p>A jobb alsó sarokban egy oldal tetejére görgető gomb, plusz egy vissza a fórum főoldalra gomb jelenik meg</p>';
+					html += '<div class="button" id="show_navigation_buttons"></div>';
 				html += '</div>';
 				html += '<div>';
 					html += '<h3>Overlay kommentmező</h3>';
@@ -154,6 +146,17 @@ var cp = {
 		// Settings change event, saving
 		$('.settings_page .button').click(function() {
 			cp.button(this);
+		});
+		
+		// Set checkboxes
+		$('input:checkbox').click(function() {
+			settings.save(this);
+		})
+		
+		
+		// Reset blocks config
+		$('#reset_blocks_config').click(function() {
+			safari.self.tab.dispatchMessage("setSetting", { key : 'blocks_config', val : ''});
 		});
 	},
 	
@@ -330,13 +333,26 @@ var settings = {
 	},
 	
 	save : function(ele) {
-		
-		if( $(ele).hasClass('on') || $(ele).attr('checked') == true) {
-		
+
+		if( $(ele).hasClass('on') || $(ele).attr('checked') == 'checked') {
+			
+			// Save new settings ...
 			safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : true});
+			
+			// Check for interactive action
+			if( typeof window[$(ele).attr('id')].activated != 'undefined') {
+				window[$(ele).attr('id')].activated();
+			}
 		
 		} else {
+
+			// Save new settings ...
 			safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : false});
+			
+			// Check for interactive action
+			if( typeof window[$(ele).attr('id')].disabled != 'undefined') {
+				window[$(ele).attr('id')].disabled();
+			}
 		}
 	}
 };
