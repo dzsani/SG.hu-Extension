@@ -1,5 +1,5 @@
 #ext_settings_button {
-	
+
 	width: 32px;
 	height: 32px;
 	position: fixed;
@@ -28,10 +28,12 @@
 	left: 0px;
 
 	z-index: 11;
-	
+
 	background-color: #ededed;
 	-webkit-box-shadow: #333 0px 0px 15px;
 	overflow: hidden;
+	border: 1px solid #6c6c6c;
+	border-radius: 4px;
 }
 
 #ext_settings_header {
@@ -47,6 +49,8 @@
 		color-stop(0.21, rgb(179,179,179)),
 		color-stop(0.61, rgb(231,231,231))
 	);
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
 }
 
 #ext_settings_header li {
@@ -55,10 +59,15 @@
 	float: left;
 	padding-top: 45px;
 	list-style: none;
-	
+	text-align: center;
 	font: normal normal normal 12px/20px Arial, serif;
-	color: #666;
-	text-shadow: #ddd 1px 1px 1px;
+	color: #444;
+	text-shadow: #ccc 1px 1px 1px;
+	cursor: pointer;
+}
+
+#ext_settings_header li.on {
+	color: #333;
 }
 
 #ext_settings_header li.clear {
@@ -70,7 +79,7 @@
 
 .settings_page {
 	display: none;
-	padding: 10px;
+	padding: 20px;
 	text-align: justify;
 }
 
@@ -109,53 +118,56 @@
 
 /* SETTINGS PANE ELEMENTS */
 
-.settings_page> div {
+.settings_page > div {
 	position: relative;
-	padding: 10px 120px 10px 0px;
+	padding: 0px 120px 15px 0px;
 	border-bottom: 1px solid #ddd;
+	margin-bottom: 15px;
 	text-align: justify;
 }
 
 .settings_page > div:last-child {
 	border: 0px;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
 }
 
 .settings_page h3 {
 	margin: 0px;
 	padding: 0px;
-	font: normal normal bold 14px/16px Arial, serif;
-	color: #333;
+	font: normal normal bold 13px/normal Arial, serif;
+	color: #000;
 }
 
 .settings_page p {
 	margin: 0px;
 	margin-top: 5px;
-	font: normal normal normal 12px/14px Arial, serif;
-	color: #999;
+	font: normal normal normal 12px/normal Arial, serif;
+	color: #333;
 }
 
 .settings_page .button {
-	width: 100px;
-	height: 25px;
+	width: 60px;
+	height: 20px;
 	position: absolute;
 	top: 10px;
 	right: 0px;
 	overflow: hidden;
 	cursor: pointer;
-	border-radius: 5px;
-	background-image: url(../img/handler.png); 
+	border: 1px solid #999;
+	border-radius: 10px;
+	background-image: url(../img/settings/button.png); 
 }
 
 .settings_page .button.on {
-	background-position-x: 0px;
+	background-position-x: -40px;
 }
 
 .settings_page .button.off {
-	background-position-x: -70px; 
+	background-position-x: 0px; 
 }
 
 .settings_page p.sub {
-	margin-left: 20px;
 }
 
 #blocklist {

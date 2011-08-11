@@ -1,4 +1,4 @@
-var settings = {
+var cp = {
 
 	init : function() {
 		
@@ -9,10 +9,14 @@ var settings = {
 		$('<div id="ext_settings_hide_overlay"></div>').appendTo('body');
 		
 		// Create click event for settings pane
-		$('#ext_settings_button').toggle(
-			function() { settings.show(); },
-			function() { settings.hide(); }
-		);
+		$('#ext_settings_button').click(function() {
+			
+			if($('#ext_settings_wrapper').hasClass('opened')) {
+				cp.hide();
+			} else {
+				cp.show();
+			}
+		});
 		
 		// Inject the html code
 		var html = '';
@@ -27,7 +31,10 @@ var settings = {
 			html += '</ul>';
 			
 			html += '<div class="settings_page">';
-				html += 'valami';
+				html += 'Verzió: 4.0<br>';
+				html += 'Kiadás dátuma: 2011. 08. 11.<br>';
+				html += 'Fejlesztő: Gera János<br>';
+				html += 'Közreműködők: Viszt Péter, Krupa György<br>';
 			html += '</div>';
 			
 			html += '<div class="settings_page">';
@@ -127,14 +134,27 @@ var settings = {
 		// Create tabs event
 		$('#ext_settings_header li').click(function() {
 			
-			settings.tab( $(this).index() );
+			cp.tab( $(this).index() );
 		});
 		
 		// Select the first tab
-		settings.tab(0);
+		cp.tab(0);
 		
 		// Set-up blocklist
-		blocklist.init();
+		blocklist_cp.init();
+		
+		// Close when clicking away
+		$('#ext_settings_hide_overlay').click(function() {
+			cp.hide();
+		});
+		
+		// Restore settings
+		settings.restore();
+		
+		// Settings change event, saving
+		$('.settings_page .button').click(function() {
+			cp.button(this);
+		});
 	},
 	
 	show : function() {
@@ -153,7 +173,10 @@ var settings = {
 		$('#ext_settings_wrapper').css({ left : leftProp, top : '-'+(paneHeight+10)+'px' });
 		
 		// Reveal the panel
-		$('#ext_settings_wrapper').delay(250).animate({ top : 0 }, 350);
+		$('#ext_settings_wrapper').delay(250).animate({ top : 10 }, 250);
+		
+		// Add 'opened' class
+		$('#ext_settings_wrapper').addClass('opened');
 		
 	},
 	
@@ -163,12 +186,18 @@ var settings = {
 		var paneHeight = $('#ext_settings_wrapper').height();
 		
 		// Hide the pane
-		$('#ext_settings_wrapper').animate({ top : '-'+(paneHeight+10)+'px'}, 350, function(){
+		$('#ext_settings_wrapper').animate({ top : '-'+(paneHeight+10)+'px'}, 200, function() {
+			
+			// Hide the settings pane 
+			$(this).css('top', -9000);
 			
 			// Restore the overlay
-			$('#ext_settings_hide_overlay').animate({ opacity : 0 }, 200, function() {
+			$('#ext_settings_hide_overlay').animate({ opacity : 0 }, 100, function() {
 				$(this).css('display', 'none');
 			});
+			
+			// Remove 'opened' class
+			$('#ext_settings_wrapper').removeClass('opened');
 		});
 	},
 	
@@ -181,13 +210,13 @@ var settings = {
 		$('.settings_page').css('display', 'none');
        
 		// Show the selected tab page
-		$('.settings_page').eq(index).css('display', 'block');
+		$('.settings_page').eq(index).fadeIn(250);
        
 		// Get new height of settings pane
 		var newPaneHeight = $('#ext_settings_header').height() + $('.settings_page').eq(index).outerHeight();
 
 		// Animate the resize
-		$('#ext_settings_wrapper').stop().animate({ height : newPaneHeight }, 200, function() {
+		$('#ext_settings_wrapper').stop().animate({ height : newPaneHeight }, 150, function() {
 		
 			// Set auto height
 			$('#ext_settings_wrapper').css({ height : 'auto' });
@@ -198,21 +227,37 @@ var settings = {
 		
 		// Add selected background to the selectad tab button
 		$('#ext_settings_header li').eq(index).addClass('on');
+	},
+	
+	button : function(ele) {
+		
+		if( $(ele).hasClass('on') ) {
+			$(ele).animate({ 'background-position' : '0px 0px' }, 300);
+			$(ele).attr('class', 'button off');
+			
+			settings.save(ele);
+		} else {
+		
+			$(ele).animate({ 'background-position' : '-40px 0px' }, 300);
+			$(ele).attr('class', 'button on');
+			
+			settings.save(ele);
+		}
 	}
 };
 
 
-var blocklist =  {
+var blocklist_cp =  {
 	
 	init : function() {
 		
 		// Create user list
-		blocklist.list();
+		blocklist_cp.list();
 		
 		// Create remove events
 		$('#ext_blocklist a').live('click', function(e) {
 			e.preventDefault();
-			blocklist.remove(this);
+			blocklist_cp.remove(this);
 		})
 	},
 	
@@ -256,27 +301,42 @@ var blocklist =  {
 		}
 		
 		// Restore user comments
-		blocklist.restore(user);
-	},
+		blocklist.unblock(user);
+	}
+};
+
+var settings = {
 	
-	restore : function(user) {
+	restore : function() {
 
-		$(".topichead").each( function() {
-		
-			var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
-				nick = nick.replace(/ - VIP/, "");
+		// Restore settings for buttons
+		$('.settings_page .button').each(function() {
 
-			if(nick.toLowerCase() == user.toLowerCase()) {
-
-				// Show temporary the comment height
-				$(this).closest('center').css({ display : 'block', height : 'auto' });
-				
-				// Get height
-				var height = $(this).closest('center').height();
-				
-				// Set back to invisible, then animate
-				$(this).closest('center').css({ height : 0 }).animate({ opacity : 1, height : height }, 500);
+			if(dataStore[ $(this).attr('id') ] == true) {
+				$(this).addClass('on');
+			
+			} else {
+				$(this).addClass('off');
 			}
 		});
+		
+		// Restore settings for checkboxes
+		$('input:checkbox').each(function() {
+			
+			if(dataStore[ $(this).attr('id') ] == true) {
+				$(this).attr('checked', true);
+			}
+		});
+	},
+	
+	save : function(ele) {
+		
+		if( $(ele).hasClass('on') || $(ele).attr('checked') == true) {
+		
+			safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : true});
+		
+		} else {
+			safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : false});
+		}
 	}
 };

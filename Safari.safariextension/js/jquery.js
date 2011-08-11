@@ -165,3 +165,71 @@ e):f.css(e)}};c.fn.extend({position:function(){if(!this[0])return null;var a=thi
 c.css(a,"position")==="static";)a=a.offsetParent;return a})}});c.each(["Left","Top"],function(a,b){var d="scroll"+b;c.fn[d]=function(e){var f=this[0],h;if(!f)return null;if(e!==B)return this.each(function(){if(h=fa(this))h.scrollTo(!a?e:c(h).scrollLeft(),a?e:c(h).scrollTop());else this[d]=e});else return(h=fa(f))?"pageXOffset"in h?h[a?"pageYOffset":"pageXOffset"]:c.support.boxModel&&h.document.documentElement[d]||h.document.body[d]:f[d]}});c.each(["Height","Width"],function(a,b){var d=b.toLowerCase();
 c.fn["inner"+b]=function(){return this[0]?parseFloat(c.css(this[0],d,"padding")):null};c.fn["outer"+b]=function(e){return this[0]?parseFloat(c.css(this[0],d,e?"margin":"border")):null};c.fn[d]=function(e){var f=this[0];if(!f)return e==null?null:this;if(c.isFunction(e))return this.each(function(l){var k=c(this);k[d](e.call(this,l,k[d]()))});if(c.isWindow(f))return f.document.compatMode==="CSS1Compat"&&f.document.documentElement["client"+b]||f.document.body["client"+b];else if(f.nodeType===9)return Math.max(f.documentElement["client"+
 b],f.body["scroll"+b],f.documentElement["scroll"+b],f.body["offset"+b],f.documentElement["offset"+b]);else if(e===B){f=c.css(f,d);var h=parseFloat(f);return c.isNaN(h)?f:h}else return this.css(d,typeof e==="string"?e:e+"px")}})})(window);
+
+/**
+ * @author Alexander Farkas
+ * v. 1.22
+ */
+
+
+(function($) {
+	if(!document.defaultView || !document.defaultView.getComputedStyle){ // IE6-IE8
+		var oldCurCSS = $.curCSS;
+		$.curCSS = function(elem, name, force){
+			if(name === 'background-position'){
+				name = 'backgroundPosition';
+			}
+			if(name !== 'backgroundPosition' || !elem.currentStyle || elem.currentStyle[ name ]){
+				return oldCurCSS.apply(this, arguments);
+			}
+			var style = elem.style;
+			if ( !force && style && style[ name ] ){
+				return style[ name ];
+			}
+			return oldCurCSS(elem, 'backgroundPositionX', force) +' '+ oldCurCSS(elem, 'backgroundPositionY', force);
+		};
+	}
+	
+	var oldAnim = $.fn.animate;
+	$.fn.animate = function(prop){
+		if('background-position' in prop){
+			prop.backgroundPosition = prop['background-position'];
+			delete prop['background-position'];
+		}
+		if('backgroundPosition' in prop){
+			prop.backgroundPosition = '('+ prop.backgroundPosition;
+		}
+		return oldAnim.apply(this, arguments);
+	};
+	
+	function toArray(strg){
+		strg = strg.replace(/left|top/g,'0px');
+		strg = strg.replace(/right|bottom/g,'100%');
+		strg = strg.replace(/([0-9\.]+)(\s|\)|$)/g,"$1px$2");
+		var res = strg.match(/(-?[0-9\.]+)(px|\%|em|pt)\s(-?[0-9\.]+)(px|\%|em|pt)/);
+		return [parseFloat(res[1],10),res[2],parseFloat(res[3],10),res[4]];
+	}
+	
+	$.fx.step. backgroundPosition = function(fx) {
+		if (!fx.bgPosReady) {
+			var start = $.curCSS(fx.elem,'backgroundPosition');
+			if(!start){//FF2 no inline-style fallback
+				start = '0px 0px';
+			}
+			
+			start = toArray(start);
+			fx.start = [start[0],start[2]];
+			var end = toArray(fx.end);
+			fx.end = [end[0],end[2]];
+			
+			fx.unit = [end[1],end[3]];
+			fx.bgPosReady = true;
+		}
+		//return;
+		var nowPosX = [];
+		nowPosX[0] = ((fx.end[0] - fx.start[0]) * fx.pos) + fx.start[0] + fx.unit[0];
+		nowPosX[1] = ((fx.end[1] - fx.start[1]) * fx.pos) + fx.start[1] + fx.unit[1];           
+		fx.elem.style.backgroundPosition = nowPosX[0]+' '+nowPosX[1];
+
+	};
+})(jQuery);

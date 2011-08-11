@@ -31,10 +31,20 @@ function getUserName() {
 	}
 }
 
-function removeChatWindow() {
+var chat_hide = {
 
-	$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').remove();
-	$('table:eq(3) td:eq(2) br').remove();
+	hide : function() {
+
+		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').hide();
+		$('table:eq(3) td:eq(2) br').hide();
+	},
+	
+	show : function() {
+
+
+		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').show();
+		$('table:eq(3) td:eq(2) br').show();	
+	}
 }
 
 var  jumpLastUnreadedMessage = {
@@ -110,22 +120,7 @@ var  jumpLastUnreadedMessage = {
 
 		// Update the url to avoid re-jump
 		history.replaceState({ page : url }, '', url);
-		
-		/*
-		// Watch offsetTop while the content loads completly
-		var interval = setInterval(function(){
-			// Target offsetTop
-			var targetOffset = $(target).offset().top;
-		
-			// Scroll to target element
-			$('body').animate({ scrollTop : targetOffset}, 200);
-		}, 200, target);
-		
-		// Clear interval when the page loads
-		$(window).load(function() {
-     		clearInterval(interval);
-		});
-		*/
+
 	}
 	
 };
@@ -208,78 +203,104 @@ function shortCommentMarker() {
 	});
 }
 
-function setBlockButton() {
+var blocklist =  {
 	
-	// Create the block buttons
-	$('.topichead a[href*="forummsg.php"]').each(function() {
 	
-		$('<a href="#" class="block_user">letiltás</a> <span>| </span> ').insertBefore(this);
-	});
-	
-	// Create the block evenst
-	$('.block_user').click(function(e) {
-	
-		e.preventDefault();
-		getBlockedUserNameFromButton(this);
-	});
-}
+	init : function() {
 
-function blockMessages() {
-
-	// Return false if theres no blocklist entry
-	if(typeof dataStore['block_list'] == "undefined" || dataStore['block_list'] == '') {
-		return false;
-	}
-	
-	var deletelist = dataStore['block_list'].split(',');
-
-	$(".topichead").each( function() {
-		
-		var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
-			nick = nick.replace(/ - VIP/, "");
-		
-		for(var i = 0; i < deletelist.length; i++) {
-			if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
-				$(this).parent().hide();
-			}
-		}
-	});
-}
-
-function getBlockedUserNameFromButton(el) {
-
-	var nick = '';
-	
-	var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
-	var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
-	
-	if(anchor.children('img').length > 0) {
-		nick = anchor.children('img').attr('title').replace(" - VIP", "");
-	
-	} else {
-		nick = anchor.html().replace(" - VIP", "");
-	}
-	
-	if(confirm('Biztos tiltólistára teszed "'+nick+'" nevű felhasználót?')) {
-	
-		$('.topichead a[href='+tmpUrl+']').each(function() {
-	
-			// Remove the comment
-			$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
-				$(this).hide();
-			})
+		// Create the block buttons
+		$('.topichead a[href*="forummsg.php"]').each(function() {
+			$('<a href="#" class="block_user">letiltás</a> <span>| </span> ').insertBefore(this);
 		});
+	
+		// Create the block evenst
+		$('.block_user').click(function(e) {
+			e.preventDefault();
+			blocklist.block(this);
+		});
+	},
+	
+	hidemessages : function() {
+	
+		// Return false if theres no blocklist entry
+		if(typeof dataStore['block_list'] == "undefined" || dataStore['block_list'] == '') {
+			return false;
+		}
+	
+		var deletelist = dataStore['block_list'].split(',');
+
+		$(".topichead").each( function() {
 		
-		// Post message
-		safari.self.tab.dispatchMessage("addToBlocklist", nick);
+			var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				nick = nick.replace(/ - VIP/, "");
 		
-		// Add name to blocklist 
-		$('<li><span>'+nick+'</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist')
+			for(var i = 0; i < deletelist.length; i++) {
+				if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
+					$(this).parent().hide();
+				}
+			}
+		});
+	},
+	
+	block : function(el) {
+
+		var nick = '';
+	
+		var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
+		var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
+	
+		if(anchor.children('img').length > 0) {
+			nick = anchor.children('img').attr('title').replace(" - VIP", "");
+	
+		} else {
+			nick = anchor.html().replace(" - VIP", "");
+		}
+	
+		if(confirm('Biztos tiltólistára teszed "'+nick+'" nevű felhasználót?')) {
+	
+			$('.topichead a[href='+tmpUrl+']').each(function() {
+	
+				// Remove the comment
+				$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
+					$(this).hide();
+				})
+			});
 		
-		// Remove empty blocklist message
-		$('#ext_empty_blocklist').remove();
+			// Post message
+			safari.self.tab.dispatchMessage("addToBlocklist", nick);
+		
+			// Add name to blocklist 
+			$('<li><span>'+nick+'</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist')
+		
+			// Remove empty blocklist message
+			$('#ext_empty_blocklist').remove();
+		}
+	},
+	
+	unblock : function(user) {
+
+		$(".topichead").each( function() {
+		
+			var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				nick = nick.replace(/ - VIP/, "");
+
+			if(nick.toLowerCase() == user.toLowerCase()) {
+
+				// Show temporary the comment height
+				$(this).closest('center').css({ display : 'block', height : 'auto' });
+				
+				// Get height
+				var height = $(this).closest('center').height();
+				
+				// Set back to invisible, then animate
+				$(this).closest('center').css({ height : 0 }).animate({ opacity : 1, height : height }, 500);
+			}
+		});
 	}
-}
+};
+
+
+
 
 
 
@@ -718,7 +739,7 @@ var showMentionedComment = {
 
 			// Search and replace mentioned comment numbers
 			if( $(this).html().match(/\#\d+/g) ){
-				if( $(this).html().match(/<a[^>]+>\#\d+<\/a>/g) && dataStore['show_mentioned_comments_in_links'] == 'true' ) {
+				if( $(this).html().match(/<a[^>]+>\#\d+<\/a>/g) && dataStore['show_mentioned_comments_in_links'] == true ) {
 					var replaced = $(this).html().replace(/<a[^>]+>(\#\d+)<\/a>/g, "<span class=\"ext_mentioned\">$1</span>");
 				} else if( !$(this).html().match(/<.*\#\d+.*>/g) ) {
 					var replaced = $(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");					
@@ -1095,7 +1116,7 @@ var blocks = {
 function extInit() {
 	
 	// Settings
-	settings.init();
+	cp.init();
 	
 	// FORUM.PHP
 	if(document.location.href.match('forum.php')) {
@@ -1110,7 +1131,7 @@ function extInit() {
 
 		// Remove chat window
 		if(dataStore['chat_hide'] == true) {
-			removeChatWindow();
+			chat_hide.hide();
 		}
 		
 		// Jump the last unreaded message
@@ -1154,13 +1175,13 @@ function extInit() {
 			jumpLastUnreadedMessage.jump();
 		}
 		
+		// Set-up block buttons
+		blocklist.init();
+		
 		// Block users/messages
 		if(dataStore['block_list'] != '') {
-			blockMessages();
+			blocklist.hidemessages();
 		}
-		
-		// setBlockButton
-		setBlockButton();
 		
 		// Load next page when scrolling down
 		if(dataStore['autoload_next_page'] == true) {
@@ -1196,29 +1217,29 @@ function extInit() {
 
 
 function handleMessage(event) {
-	
+
 	if(event.name == 'setSettings') {
-		
+	
 		// Save localStorage data
 		dataStore = event.message;
-		
+	
 		// Add domready event
 		$(document).ready(function() {
-			
-			// Filter out iframes
-			if (window.top === window) {
 				extInit();
-			}
 		});
-	
+
 	} else if(event.name == 'getBlockedUserNameFromLink') {
 		getBlockedUserNameFromLink(event.message);
-	
+
 	} else if(event.name == 'getBlockedUserNameFromImage') {
 		getBlockedUserNameFromImage(event.message);
-	}	
+	}
 }
 
 
 safari.self.addEventListener("message", handleMessage, false);
-safari.self.tab.dispatchMessage("getSettings", true);
+
+// Filter out iframes
+if (window.top === window) {
+	safari.self.tab.dispatchMessage("getSettings", true);
+}
