@@ -839,7 +839,7 @@ var custom_blocks = {
 
 		
 		// Set overlays
-		if(dataStore['hide_blocks_buttons'] == false || typeof dataStore['hide_blocks_buttons'] == 'undefined') {
+		if(dataStore['hide_blocks_buttons'] == 'false' || typeof dataStore['hide_blocks_buttons'] == 'undefined') {
 			custom_blocks.setOverlay();
 		}
 	
