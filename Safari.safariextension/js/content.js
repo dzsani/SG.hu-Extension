@@ -426,18 +426,18 @@ var autoload_next_page = {
 			// Reinit settings
 
 			// threaded comments
-			if(dataStore['threaded_comments'] == 'true') {
-				threadedComments.sort();
+			if(dataStore['threaded_comments'] == true) {
+				threaded_comments.sort();
 			}
 
 			// highlight_comments_for_me
-			if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
-				highlightCommentsForMe();
+			if(dataStore['highlight_comments_for_me'] == true && isLoggedIn()) {
+				highlight_comments_for_me.activated();
 			}
 			
 			// show menitoned comment
-			if(dataStore['show_mentioned_comments'] == 'true') {
-				showMentionedComment.init();
+			if(dataStore['show_mentioned_comments'] == true) {
+				show_mentioned_comments.activated();
 			}
 			
 		});
@@ -510,7 +510,7 @@ var overlay_reply_to = {
 			
 			// Prevent default submission
 			e.preventDefault();
-			
+
 			// Get ref msg ID and comment element
 			var msgno = $(this).attr('href').match(/\d+/g);
 			var entry = $(this).closest('center');
@@ -537,7 +537,7 @@ var overlay_reply_to = {
 		
 		// Set opened status
 		} else {
-			overlay_reply_to = true;
+			overlay_reply_to.opened = true;
 		}
 		
 		// Create the hidden layer
@@ -834,6 +834,7 @@ var custom_blocks = {
 		
 		// Execute config
 		custom_blocks.executeConfig();
+
 		
 		// Set overlays
 		if(dataStore['hide_blocks_buttons'] == false || typeof dataStore['hide_blocks_buttons'] == 'undefined') {
@@ -887,6 +888,9 @@ var custom_blocks = {
 
 		// Store in localStorage
 		safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
+		
+		// Update in dataStore var
+		dataStore['blocks_config'] = JSON.stringify(config);
 	},
 	
 	
@@ -1055,7 +1059,7 @@ var custom_blocks = {
 			custom_blocks.setConfigByKey( id, 'contentHide', false);
 		
 			// Hide the item
-			$('#'+id).children('div:eq(1)').slideDown(200);
+			$('#'+id).children('div:eq(1)').show();
 		
 		} else {
 
@@ -1063,7 +1067,7 @@ var custom_blocks = {
 			custom_blocks.setConfigByKey( id, 'contentHide', true);
 		
 			// Hide the item
-			$('#'+id).children('div:eq(1)').slideUp(200);
+			$('#'+id).children('div:eq(1)').hide();
 		}
 	},
 	
@@ -1230,7 +1234,7 @@ function extInit() {
 		}
 		
 		// Scroll to page top button
-		if(dataStore['scroll_to_page_top'] == true) {
+		if(dataStore['show_navigation_buttons'] == true) {
 			show_navigation_buttons.activated();
 		}
 		

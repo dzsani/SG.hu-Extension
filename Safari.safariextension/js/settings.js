@@ -346,6 +346,9 @@ var settings = {
 			if( typeof window[$(ele).attr('id')].activated != 'undefined') {
 				window[$(ele).attr('id')].activated();
 			}
+			
+			// Set new value to dataStore var
+			dataStore[$(ele).attr('id')] = true;
 		
 		} else {
 
@@ -356,6 +359,9 @@ var settings = {
 			if( typeof window[$(ele).attr('id')].disabled != 'undefined') {
 				window[$(ele).attr('id')].disabled();
 			}
+			
+			// Set new value to dataStore var
+			dataStore[$(ele).attr('id')] = false;
 		}
 	}
 };
