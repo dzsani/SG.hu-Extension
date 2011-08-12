@@ -116,6 +116,12 @@
 	background-position: -225px -75px;
 }
 
+/* ABOUT */
+.settings_page a {
+	font: normal normal normal 12px/14px Arial, serif;
+	color: #999;
+}
+
 /* SETTINGS PANE ELEMENTS */
 
 .settings_page > div {

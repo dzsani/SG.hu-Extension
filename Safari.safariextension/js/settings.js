@@ -31,10 +31,11 @@ var cp = {
 			html += '</ul>';
 			
 			html += '<div class="settings_page">';
-				html += 'Verzió: 4.0<br>';
-				html += 'Kiadás dátuma: 2011. 08. 11.<br>';
-				html += 'Fejlesztő: Gera János<br>';
-				html += 'Közreműködők: Viszt Péter, Krupa György<br>';
+				html += '<h3>SG Fórum+</h3>';
+				html += '<p>Verzió: 4.0<br></p>';
+				html += '<p>Kiadás dátuma: 2011. 08. 12.</p>';
+				html += '<p>Fejlesztő: Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
+				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';
 			
 			html += '<div class="settings_page">';
