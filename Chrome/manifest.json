@@ -3,22 +3,21 @@
 	"version": "0.4.0",
 	"description": "Az sg.hu nemhivatalos Chrome bővítménye.",
 	"background_page": "html/background.html",
-	"options_page": "html/settings.html",
 
 	"page_action": {
-	"default_icon": "img/icon.png",
+	"default_icon": "img/icons/icon.png",
 	"default_title": "SG Fórum+"
 	},
 	
 	"content_scripts": [{
 		"matches" : [ "http://www.sg.hu/*", "http://sg.hu/*" ],
-		"js" : [ "js/jquery.js", "js/json.js", "js/dom.js", "js/content.js" ],
-		"css" : ["css/content.css"],
+		"js" : [ "js/jquery.js", "js/json.js", "js/dom.js", "js/settings.js", "js/content.js" ],
+		"css" : ["css/content.css", "css/settings.css"],
 		"run_at" : "document_start",
 		"all_frames": false
 	}],
 		
-	"icons" : { "16" : "img/icon.png", "48": "img/icon.png", "128": "img/icon.png" },
+	"icons" : { "16" : "img/icons/icon.png", "48": "img/icons/icon.png", "128": "img/icons/icon.png" },
 
-	"permissions": [ "http://www.sg.hu/", "http://sg.hu/", "contextMenus" ]
+	"permissions": [ "http://www.sg.hu/", "http://sg.hu/" ]
 }

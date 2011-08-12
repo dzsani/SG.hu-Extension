@@ -3,63 +3,96 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<script>
 
-		chrome.extension.onConnect.addListener(function(port) {
-			port.onMessage.addListener(function(msg) {
-			
-				if (msg.type == "getStorageData") {
-					port.postMessage({ type : "setStorageData", data : localStorage });
-					chrome.pageAction.show(port.sender.tab.id);
+			// Set properties default values
+			if( typeof localStorage['chat_hide'] 							== 'undefined') localStorage['chat_hide'] 							= 'false';
+			if( typeof localStorage['custom_blocks']						== 'undefined') localStorage['custom_blocks'] 						= 'false';
+			if( typeof localStorage['jump_unreaded_messages']				== 'undefined') localStorage['jump_unreaded_messages']				= 'true';
+			if( typeof localStorage['fav_show_only_unreaded']				== 'undefined') localStorage['fav_show_only_unreaded']				= 'true';
+			if( typeof localStorage['short_comment_marker']					== 'undefined') localStorage['short_comment_marker']				= 'true';
+			if( typeof localStorage['highlight_forum_categories']			== 'undefined') localStorage['custom_list_styles']					= 'false';
+			if( typeof localStorage['threaded_comments']					== 'undefined') localStorage['threaded_comments']					= 'false';
+			if( typeof localStorage['block_list']							== 'undefined') localStorage['block_list']							= '';
+			if( typeof localStorage['autoload_next_page']					== 'undefined') localStorage['autoload_next_page']					= 'true';
+			if( typeof localStorage['overlay_reply_to']						== 'undefined') localStorage['overlay_reply_to']					= 'true';
+			if( typeof localStorage['highlight_comments_for_me']			== 'undefined') localStorage['highlight_comments_for_me']			= 'true';
+			if( typeof localStorage['show_mentioned_comments']				== 'undefined') localStorage['show_mentioned_comments']				= 'true';
+			if( typeof localStorage['show_mentioned_comments_in_links']		== 'undefined') localStorage['show_mentioned_comments_in_links']	= 'true';
+			if( typeof localStorage['blocks_config']						== 'undefined') localStorage['blocks_config']						= '';
+			if( typeof localStorage['hide_blocks_buttons']					== 'undefined') localStorage['hide_blocks_buttons']					= 'false';
+			if( typeof localStorage['show_navigation_buttons']				== 'undefined') localStorage['show_navigation_buttons']				= 'true';
+
+			chrome.extension.onConnect.addListener(function(port) {
+				port.onMessage.addListener(function(event) {
+
+
+					// Send back the settings object
+					if(event.name == 'getSettings') {
+						
+						port.postMessage({ name : "setSettings", message : localStorage });
 				
-				} else if(msg.type == "setBlockedUser") {
-					addToBlockList(msg.data);
-					
-				} else if(msg.type == "setBlocksConfig") {
-					setBlockConfig(msg.data);
-				}
+					// Sets the blocks config
+					} else if(event.name == 'setBlocksConfig') {
+						localStorage['blocks_config'] = event.message;
+				
+					// Add user to blocklist
+					} else if(event.name == 'addToBlocklist') {
 
-			});
+						// If theres in no entry in localStorage
+						if(typeof localStorage['block_list'] == "undefined") {
+							localStorage['block_list'] = '';
+						}
 		
+						// If the blocklist is empty
+						if(localStorage['block_list'] == '') { 
+							localStorage['block_list'] = event.message;
 		
-			// Right-clikk menu
-			chrome.contextMenus.removeAll();
-			chrome.contextMenus.create({ 
-				"type": "normal", "title": "Felhasználó tiltása", "contexts" : ["link"], 
-				"documentUrlPatterns" : ["http://www.sg.hu/listazas.php*"], 
-				"targetUrlPatterns" : ["http://www.sg.hu/forumuserinfo*"], 
-				"onclick" : function(OnClickData) { port.postMessage({ type : "getBlockedUserNameFromLink", data : OnClickData }); }
-				});
-			
-			chrome.contextMenus.create({ 
-				"type": "normal", "title": "Felhasználó tiltása", "contexts" : ["image"], 
-				"documentUrlPatterns" : ["http://www.sg.hu/listazas.php*"], 
-				"targetUrlPatterns" : ["http://www.sg.hu/kep/nicklogok/*"], 
-				"onclick" : function(OnClickData) { port.postMessage({ type : "getBlockedUserNameFromImage", data : OnClickData }); }
-				});
-		
-		});
+						// If the blocklist is not empty
+						} else {
+							var blocklist = new Array();
+								blockList = localStorage['block_list'].split(',');
+								if(blockList.indexOf(event.message) == -1) { 
+									blockList.push(event.message); 
+									localStorage['block_list'] = blockList.join(',');
+								}
+						}
+					// Reset blocks config
+					} else if(event.name == 'resetBlocksConfig') {
+						localStorage['blocks_config'] = '';
+				
+					// Remove user form blocklist
+					} else if(event.name == 'removeUserFromBlocklist') {
 
-	function addToBlockList(name){
 		
-		// If theres in no entry in localStorage
-		if(typeof localStorage['block_list'] == "undefined") {
-			localStorage['block_list'] = '';
-		}
-		
-		// If the blocklist is empty
-		if(localStorage['block_list'] == '') { 
-			localStorage['block_list'] = name;
-		
-		// If the blocklist is not empty
-		} else {
-			var blocklist = new Array();
-				blockList = localStorage['block_list'].split(',');
-				if(blockList.indexOf(name) == -1) { blockList.push(name);  localStorage['block_list'] = blockList; }
-		}
-	}
+						// Get username
+						var user = event.message;
 	
-	function setBlockConfig(data) {
-		localStorage['blocks_config'] = data;
-	}
+						// Get the blocklist array
+						var list = localStorage['block_list'].split(',');
+		
+						// Get the removed user index
+						var index = list.indexOf(user);
+		
+						// Remove user from array
+						list.splice(index, 1);
+					
+						// Save changes in localStorage
+						localStorage['block_list'] = list.join(',');
+				
+					// Save posted settings
+					} else if(event.name == 'setSetting') {
+
+						// Setting name
+						var key = event.key;
+					
+						// Setting value
+						var val = event.val;
+					
+						localStorage[key] = val;
+					}
+
+				});
+			});
+
 		
 		</script>
 	</head>

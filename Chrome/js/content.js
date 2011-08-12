@@ -1,5 +1,7 @@
 // Predefined vars
-var userName, isLoggedIn;
+var userName, isLoggedIn, dataStore;
+
+var port = chrome.extension.connect();
 
 function setPredefinedVars() {
 	userName = getUserName();
@@ -31,15 +33,27 @@ function getUserName() {
 	}
 }
 
-function removeChatWindow() {
 
-	$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').remove();
-	$('table:eq(3) td:eq(2) br').remove();
+var chat_hide = {
+	
+	activated : function() {
+
+		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').hide();
+		$('table:eq(3) td:eq(2) br').hide();
+	},
+	
+	disabled : function() {
+
+		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').show();
+		$('table:eq(3) td:eq(2) br').show();	
+	}
 }
 
-var  jumpLastUnreadedMessage = {
+
+var jump_unreaded_messages = {
 	
-	init : function() {
+	activated : function() {
+	
 		$('.ext_faves').next().find('a').each(function() {
 			
 			// If theres a new message
@@ -55,7 +69,20 @@ var  jumpLastUnreadedMessage = {
 				$(this).attr('href', $(this).attr('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
 			}
 		});
-	}, 
+	},
+	
+	disabled : function() {
+	
+		$('.ext_faves').next().find('a').each(function() {
+			
+			if( $(this).attr('href').indexOf('&order') != -1) {
+				
+				var start = $(this).attr('href').indexOf('&order');
+				
+				$(this).attr('href', $(this).attr('href').substring(0, start));
+			}
+		});
+	},
 	
 	jump : function() {
 	
@@ -110,292 +137,266 @@ var  jumpLastUnreadedMessage = {
 
 		// Update the url to avoid re-jump
 		history.replaceState({ page : url }, '', url);
-		
-		/*
-		// Watch offsetTop while the content loads completly
-		var interval = setInterval(function(){
-			// Target offsetTop
-			var targetOffset = $(target).offset().top;
-		
-			// Scroll to target element
-			$('body').animate({ scrollTop : targetOffset}, 200);
-		}, 200, target);
-		
-		// Clear interval when the page loads
-		$(window).load(function() {
-     		clearInterval(interval);
-		});
-		*/
 	}
 	
 };
 
-function filterOutReadedFaves() {
+var fav_show_only_unreaded = {
+	
+	activated : function() {
+	
+		var counter = 0;
+		var counterAll = 0;
 
-	var counter = 0;
-	var counterAll = 0;
-
-	$($('.ext_faves').next().find('div a').get().reverse()).each(function() {
+		$($('.ext_faves').next().find('div a').get().reverse()).each(function() {
 		
-		// Skip topics that have unreaded messages
-		if( $(this).find('small').length > 0) {
-			counter++;
-			counterAll++;
-			return true;
-		}
-		
-		if( $(this).parent().is('div.std0') ) {
-		
-			if(counter == 0) {
-				$(this).parent().addClass('ext_hidden_fave');
-				return true;
-			} else {
-				counter = 0;
+			// Skip topics that have unreaded messages
+			if( $(this).find('small').length > 0) {
+				counter++;
+				counterAll++;
 				return true;
 			}
-
-		}
 		
-		// Otherwise, add hidden class
-		$(this).parent().addClass('ext_hidden_fave');
-	});
-	
-	// Create an error message if theres no topik with unreaded messages
-	if(counterAll == 0) {
-		$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan topik</p>');
-	}
-	
-	// Set the "show" button
-	$('.ext_faves').append('<div id="ext_show_filtered_faves"></div>');
-	$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
-	
-	// Apply some styles
-	$('#ext_show_filtered_faves_arrow').attr('class', 'show');
-
-	// Set event handling
-	$('#ext_show_filtered_faves').toggle(
-		function() {
-			$('#ext_filtered_faves_error').hide();
-			$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
-			$('.ext_hidden_fave').show();
-		},
-		function() {
-			$('#ext_filtered_faves_error').show();
-			$('#ext_show_filtered_faves_arrow').attr('class', 'show');
-			$('.ext_hidden_fave').hide(); 
-		}
-	);
-}
-
-
-function shortCommentMarker() {
-	
-	$('.ext_faves').next().find('div a').each(function() {
+			if( $(this).parent().is('div.std0') ) {
 		
-		if( $(this).find('small').length > 0) {
-			
-			// Received new messages counter
-			var newMsg = parseInt( $(this).find('small').html().match(/\d+/g) );
-			
-			// Remove the old marker text
-			$(this).find('br').remove();
-			$(this).find('font:last').remove();
-			
-			// Add the new marker after the topic title
-			$(this).html( $(this).html() + ' <span style="color: red;">'+newMsg+'</span>');
-		}
-	
-	});
-}
-
-function setBlockButton() {
-	
-	// Create the block buttons
-	$('.topichead a[href*="forummsg.php"]').each(function() {
-	
-		$('<a href="#" class="block_user">letiltás</a> <span>| </span> ').insertBefore(this);
-	});
-	
-	// Create the block evenst
-	$('.block_user').click(function(e) {
-	
-		e.preventDefault();
-		getBlockedUserNameFromButton(this);
-	});
-}
-
-function blockMessages() {
-	
-	// Return false if theres no blocklist entry
-	if(typeof dataStore['block_list'] == "undefined" || dataStore['block_list'] == '') {
-		return false;
-	}
-	
-	var deletelist = dataStore['block_list'].split(',');
-
-	$(".topichead").each( function() {
-		
-		var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
-			nick = nick.replace(/ - VIP/, "");
-		
-		for(var i = 0; i < deletelist.length; i++) {
-			if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
-				$(this).parent().remove();
+				if(counter == 0) {
+					$(this).parent().addClass('ext_hidden_fave');
+					return true;
+				} else {
+					counter = 0;
+					return true;
+				}
 			}
-		}
-	});
-}
-
-function getBlockedUserNameFromButton(el) {
-
-	var nick = '';
-	
-	var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
-	var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
-	
-	if(anchor.children('img').length > 0) {
-		nick = anchor.children('img').attr('title').replace(" - VIP", "");
-	
-	} else {
-		nick = anchor.html().replace(" - VIP", "");
-	}
-	
-	if(confirm('Biztos tiltólistára teszed "'+nick+'" nevű felhasználót?')) {
-	
-		$('.topichead a[href='+tmpUrl+']').each(function() {
-	
-			// Remove the comment
-			$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
-				$(this).remove();
-			})
+		
+			// Otherwise, add hidden class
+			$(this).parent().addClass('ext_hidden_fave');
 		});
 	
-		if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
+		// Create an error message if theres no topik with unreaded messages
+		if(counterAll == 0) {
+			$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan topik</p>');
+		}
+	
+		// Set the "show" button
+		$('.ext_faves').append('<div id="ext_show_filtered_faves"></div>');
+		$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
+	
+		// Apply some styles
+		$('#ext_show_filtered_faves_arrow').attr('class', 'show');
+
+		// Set event handling
+		$('#ext_show_filtered_faves').toggle(
+			function() {
+				$('#ext_filtered_faves_error').hide();
+				$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
+				$('.ext_hidden_fave').show();
+			},
+			function() {
+				$('#ext_filtered_faves_error').show();
+				$('#ext_show_filtered_faves_arrow').attr('class', 'show');
+				$('.ext_hidden_fave').hide(); 
+			}
+		);
+	},
+	
+	disabled : function() {
+		
+		// Remove hidden class
+		$('.ext_hidden_fave').removeClass('ext_hidden_fave');
+		
+		// Remove toggle button
+		$('#ext_show_filtered_faves').remove();
 	}
-}
+};
 
-function getBlockedUserNameFromLink(data) {
 
-	var nick = '';
-	var tmpUrl = data['linkUrl'].replace('http://www.sg.hu/', '');
+var short_comment_marker = {
 	
-	$('.topichead a[href='+tmpUrl+']').each(function() {
+	activated : function() {
 	
-		// Fetch username
-		nick = $(this).html();
+		$('.ext_faves').next().find('div a').each(function() {
 		
-		// Remove the comment
-		$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
-			$(this).remove();
-		})
-	});
+			if( $(this).find('small').length > 0) {
+			
+				// Received new messages counter
+				var newMsg = parseInt( $(this).find('small').html().match(/\d+/g) );
+			
+				// Remove the old marker text
+				$(this).find('br').hide();
+				$(this).find('font:last').hide();
+			
+				// Add the new marker after the topic title
+				$(this).html( $(this).html() + ' <span class="ext_short_comment_marker" style="color: red;">'+newMsg+'</span>');
+			}
+		});
+	},
 	
-	if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
-}
-
-
-function getBlockedUserNameFromImage(data) {
-
-	var nick = '';
-	var tmpUrl = data['srcUrl'].replace('http://www.sg.hu', '');
+	disabled : function() {
 	
-	$('.topichead img[src='+tmpUrl+']').each(function() {
-	
-		// Fetch the username
-		nick = ($(this).attr('title').replace(' - VIP', ''));
+		$('.ext_faves').next().find('div a').each(function() {
 		
-		// Remove the comment
-		$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
-			$(this).remove();
-		})
-	});
+			if( $(this).find('small').length > 0) {
+						
+				// Remove the old marker text
+				$(this).find('br').show();
+				$(this).find('font:last').show();
+			
+				// Add the new marker after the topic title
+				
+				$(this).find('.ext_short_comment_marker').remove();
+			}
+		});
+	}
+};
+
+var blocklist =  {
 	
-	if(nick != '') { port.postMessage({ type : "setBlockedUser", data : nick }); }
-}
+	
+	init : function() {
+
+		// Create the block buttons
+		$('.topichead a[href*="forummsg.php"]').each(function() {
+			$('<a href="#" class="block_user">letiltás</a> <span>| </span> ').insertBefore(this);
+		});
+	
+		// Create the block evenst
+		$('.block_user').click(function(e) {
+			e.preventDefault();
+			blocklist.block(this);
+		});
+	},
+	
+	hidemessages : function() {
+	
+		// Return false if theres no blocklist entry
+		if(typeof dataStore['block_list'] == "undefined" || dataStore['block_list'] == '') {
+			return false;
+		}
+	
+		var deletelist = dataStore['block_list'].split(',');
+
+		$(".topichead").each( function() {
+		
+			var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				nick = nick.replace(/ - VIP/, "");
+		
+			for(var i = 0; i < deletelist.length; i++) {
+				if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
+					$(this).parent().hide();
+				}
+			}
+		});
+	},
+	
+	block : function(el) {
+
+		var nick = '';
+
+		var anchor = $(el).closest('.topichead').find('a[href*="forumuserinfo.php"]');
+		var tmpUrl = anchor.attr('href').replace('http://www.sg.hu/', '');
+
+		if(anchor.children('img').length > 0) {
+			nick = anchor.children('img').attr('title').replace(" - VIP", "");
+	
+		} else {
+			nick = anchor.html().replace(" - VIP", "");
+		}
+	
+		if(confirm('Biztos tiltólistára teszed "'+nick+'" nevű felhasználót?')) {
+	
+			$('.topichead a[href="'+tmpUrl+'"]').each(function() {
+	
+				// Remove the comment
+				$(this).closest('center').animate({ height : 0, opacity : 0 }, 500, function() {
+					$(this).hide();
+				})
+			});
+		
+			// Post message
+			port.postMessage({ name : "addToBlocklist", message : nick });
+		
+			// Add name to blocklist 
+			$('<li><span>'+nick+'</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist')
+		
+			// Remove empty blocklist message
+			$('#ext_empty_blocklist').remove();
+		}
+	},
+	
+	unblock : function(user) {
+
+		$(".topichead").each( function() {
+		
+			var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+				nick = nick.replace(/ - VIP/, "");
+
+			if(nick.toLowerCase() == user.toLowerCase()) {
+
+				// Show temporary the comment height
+				$(this).closest('center').css({ display : 'block', height : 'auto' });
+				
+				// Get height
+				var height = $(this).closest('center').height();
+				
+				// Set back to invisible, then animate
+				$(this).closest('center').css({ height : 0 }).animate({ opacity : 1, height : height }, 500);
+			}
+		});
+	}
+};
 
 
-function customListStyles() {
+
+
+
+
+var highlight_forum_categories = {
 	
-	// Set the dotted background on left sidebar
-	$('.b-h-o-head').next().each(function() {
-	
-		$(this).css('background', 'transparent url('+chrome.extension.getURL('/img/dotted_left.png')+') repeat-y');
-	});
-	
-	// Set the dotted background on right sidebar
-	$('.b-h-b-head').next().each(function() {
-	
-		$(this).css('background', 'transparent url('+chrome.extension.getURL('/img/dotted_right.png')+') repeat-y');
-	});	
-	
-	// Set flecks for topics
-	$('.cikk-bal-etc2').css('background', 'transparent url('+chrome.extension.getURL('/img/fleck_sub.png')+') no-repeat');
-	
-	// Set flecks for forum cats
-	$('.std0').css({
-		'padding-left' : 15,
-		'background' : 'transparent url('+chrome.extension.getURL('/img/fleck_main.png')+') no-repeat',
-		'margin' : '5px 0px'
-	
-	});
-	
-	if(dataStore['custom_list_styles_merlinw'] == 'true') {
+	activated : function() {
 		$('.std0').find('b').css('color', '#ffffff');
 		$('.std0').find('b').css('background-color', '#6c9ff7');
 		$('.std0').find('b').css('padding', '2px');
-	} else {
-		$('.std0').find('b').css('color', '#f0920a');
+	},
+	
+	disabled : function() {
+		$('.std0').find('b').css('color', '#444');
+		$('.std0').find('b').css('background-color', '#fff');
+		$('.std0').find('b').css('padding', '0px');
 	}
-	
-	// EXCEPTIONS
-	
-	// Hi user
-	if(isLoggedIn()) {
-		$('.b-h-o-head:first').next().css('background', 'none');
-	}
-	
-	// Popular topics
-	if(isLoggedIn()) {
-		$('.b-h-o-head:eq(4)').next().css({ 'background' : 'none', 'padding-left' : 5 });
-	} else {
-		$('.b-h-o-head:eq(2)').next().css({ 'background' : 'none', 'padding-left' : 5 });
-	}
-	
-	// User search
-	$('.b-h-b-head:eq(1)').next().css('background', 'none');
-	
-	// Forum stat
-	$('.b-h-b-head:eq(4)').next().css('background', 'none');
-	$('.b-h-b-head:eq(4)').next().find('.std0').css({ 'background' : 'none', 'padding-left' : 0 });
 }
 
 
-var autoLoadNextPage = {
+var autoload_next_page = {
 	
 	progress : false,
 	currPage : null,
 	maxPage : null,
 	counter : 0,
 	
-	init : function() {
+	activated : function() {
 		
 		// Current page index
-		autoLoadNextPage.currPage = parseInt($('.lapozo:last span.current:first').html());
+		autoload_next_page.currPage = parseInt($('.lapozo:last span.current:first').html());
 		
 		// Get max page number 
-		autoLoadNextPage.maxPage = parseInt($('.lapozo:last a:last').prev().html());
+		autoload_next_page.maxPage = parseInt($('.lapozo:last a:last').prev().html());
 		
 		$(document).scroll(function() {
 			
 			var docHeight = $('body').height();
 			var scrollTop = $('body').scrollTop();
 
-			if(docHeight - scrollTop < 3000 && !autoLoadNextPage.progress && autoLoadNextPage.currPage < autoLoadNextPage.maxPage) {
-				autoLoadNextPage.progress = true;
-				autoLoadNextPage.load();
+			if(docHeight - scrollTop < 3000 && !autoload_next_page.progress && autoload_next_page.currPage < autoload_next_page.maxPage) {
+				autoload_next_page.progress = true;
+				autoload_next_page.load();
 			}
 		});
 		
+	},
+	
+	disabled : function() {
+		
+		$(document).unbind('scroll');
 	},
 	
 	load : function() {
@@ -404,11 +405,11 @@ var autoLoadNextPage = {
 		var url = document.location.href.substring(0, 44);
 		
 		// Make the ajax query
-		$.get(url+'&index='+(autoLoadNextPage.currPage+1)+'', function(data) {
+		$.get(url+'&index='+(autoload_next_page.currPage+1)+'', function(data) {
 			
 			// Create the 'next page' indicator
 			if(dataStore['threaded_comments'] != 'true') {
-				$('<div class="ext_autopager_idicator">'+(autoLoadNextPage.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+				$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
 			}
 			
 			var tmp = $(data);
@@ -420,25 +421,25 @@ var autoLoadNextPage = {
 			
 			});
 			
-			autoLoadNextPage.progress = false;
-			autoLoadNextPage.currPage++;
-			autoLoadNextPage.counter++;
+			autoload_next_page.progress = false;
+			autoload_next_page.currPage++;
+			autoload_next_page.counter++;
 			
 			// Reinit settings
 
 			// threaded comments
 			if(dataStore['threaded_comments'] == 'true') {
-				threadedComments.sort();
+				threaded_comments.sort();
 			}
 
 			// highlight_comments_for_me
 			if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
-				highlightCommentsForMe();
+				highlight_comments_for_me.activated();
 			}
 			
 			// show menitoned comment
 			if(dataStore['show_mentioned_comments'] == 'true') {
-				showMentionedComment.init();
+				show_mentioned_comments.activated();
 			}
 			
 		});
@@ -447,21 +448,32 @@ var autoLoadNextPage = {
 };
 
 
-var scrollToDocumentTop = {
+var show_navigation_buttons = {
 	
-	init : function() {
+	activated : function() {
 		
+		// Create the scrolltop button
 		$('<div id="ext_scrolltop">&#9650;</div>').prependTo('body');	
 		
+		// Add click event to scrolltop button
 		$('#ext_scrolltop').click(function() {
-			scrollToDocumentTop.scroll();
+			$('body').animate({ scrollTop : 0 }, 1000);
+		});
+
+		// Created the back button
+		$('<div id="ext_back">&#9664;</div>').prependTo('body');	
+		
+		// Add event to back button
+		$('#ext_back').click(function() {
+			document.location.href = 'forum.php';
 		});
 	},
 	
-	scroll : function() {
-		$('body').animate({ scrollTop : 0 }, 1000);
-	}
+	disabled : function() {
 	
+		$('#ext_scrolltop').remove();
+		$('#ext_back').remove();
+	}
 };
 
 function replyTo() {
@@ -490,23 +502,30 @@ function ext_valaszmsg(target, id, no, callerid) {
 	else { $('#'+target).slideUp(); }
 }
 
-var overlayReplyTo = {
+var overlay_reply_to = {
 	
 	opened : false,
 	
-	init : function() {
+	activated : function() {
+	
 		$('.topichead a:contains("válasz erre")').live('click', function(e) {
 			
 			// Prevent default submission
 			e.preventDefault();
-			
+
 			// Get ref msg ID and comment element
 			var msgno = $(this).attr('href').match(/\d+/g);
 			var entry = $(this).closest('center');
 
 			// Call show method
-			overlayReplyTo.show(entry, msgno);
+			overlay_reply_to.show(entry, msgno);
 		});
+	},
+	
+	disabled : function() {
+	
+		$('.topichead a:contains("válasz erre")').die('click');
+	
 	},
 	
 	show : function(comment, msgno) {
@@ -515,12 +534,12 @@ var overlayReplyTo = {
 		if(!isLoggedIn()) { alert('Nem vagy bejelentkezve!'); return; }
 		
 		// Prevent multiple instances
-		if(overlayReplyTo.opened) {
+		if(overlay_reply_to.opened) {
 			return false;
 		
 		// Set opened status
 		} else {
-			overlayReplyTo.opened = true;
+			overlay_reply_to.opened = true;
 		}
 		
 		// Create the hidden layer
@@ -573,7 +592,7 @@ var overlayReplyTo = {
 		textarea_clone.find('textarea').focus();
 		
 		// Add close button
-		var close_btm = $('<img src="'+chrome.extension.getURL('img/overlay_close.png')+'" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
+		var close_btm = $('<img src="'+chrome.extension.getURL('/img/content/overlay_close.png')+'" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
 		
 
 		// Add Close event
@@ -587,7 +606,7 @@ var overlayReplyTo = {
 						$('form[name=tmp]:first').attr('name', 'newmessage');
 						
 						// Set back opened status
-						overlayReplyTo.opened = false;
+						overlay_reply_to.opened = false;
 					});
 				});
 			});
@@ -596,37 +615,45 @@ var overlayReplyTo = {
 };
 
 
-function highlightCommentsForMe() {
+var highlight_comments_for_me = {
 	
-	// Return false when no username set
-	if(userName == '') {
-		return false;
-	}
 	
-	// Get the proper domnodes
-	var comments = $('.msg-replyto a:contains("'+userName+'")').closest('center');
+	activated : function() {
 	
-	// Iterate over them
-	comments.each(function() {
-		
-		if($(this).find('.ext_comments_for_me_indicator').length == 0) {
-		
-			$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('img/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+		// Return false when no username set
+		if(userName == '') {
+			return false;
 		}
-	});
 	
-}
+		// Get the proper domnodes
+		var comments = $('.msg-replyto a:contains("'+userName+'")').closest('center');
+	
+		// Iterate over them
+		comments.each(function() {
+		
+			if($(this).find('.ext_comments_for_me_indicator').length == 0) {
+			
+				$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('/img/content/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+			}
+		});
+	},
+	
+	disabled : function() {
+	
+		$('.ext_comments_for_me_indicator').remove();
+	}	
+};
 
 
-var threadedComments = {
+var threaded_comments = {
 	
-	init : function() {
+	activated : function() {
 		// New message counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
 
 		// Mark new messages if any
 		if(typeof newMsg != "undefined" && newMsg != '') {
-			$('.topichead:lt('+newMsg+')').find('a:last').after( $('<span> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>') );
+			$('.topichead:lt('+newMsg+')').find('a:last').after( $('<span class="thread_sep"> | </span> <span class="ext_new_comment" style="color: red;">ÚJ</span>') );
 		}
 	
 		// Set prev and next button if any new messages
@@ -637,17 +664,18 @@ var threadedComments = {
 			
 			// Bind events
 			$('.thread_prev').live('click', function() {
-				threadedComments.prev(this);
+				threaded_comments.prev(this);
 			});
 
 			$('.thread_next').live('click', function() {
-				threadedComments.next(this);
+				threaded_comments.next(this);
 			});
 		}
 		
 		// Sort comments to thread
-		threadedComments.sort();
+		threaded_comments.sort();
 	},
+
 
 	prev : function(ele) {
 		
@@ -703,12 +731,12 @@ var threadedComments = {
 				// Add checked class
 				$(this).find('.topichead:first').addClass('checked');
 				
-				// Return true
+				// Return 'true'
 				return true;
 			}
 		
 			// Get answered comment numer
-			var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g)
+			var commentNum = $(this).find('.msg-replyto a').html().split('#')[1].match(/\d+/g);
 			
 			
 			// Seach for parent node via comment number
@@ -717,7 +745,7 @@ var threadedComments = {
 			// Set style settings
 			$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
 			$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
-			$(this).find('.msg-replyto').remove();
+			$(this).find('.msg-replyto').hide();
 			
 			// Add checked class
 			$(this).find('.topichead:first').addClass('checked');
@@ -741,9 +769,9 @@ function monitorNewCommentsNotification() {
 	}, 1000);
 }
 
-var showMentionedComment = {
+var show_mentioned_comments = {
 
-	init : function() {
+	activated : function() {
 		
 		$('.maskwindow:not(.checked)').each(function() {
 
@@ -773,7 +801,7 @@ var showMentionedComment = {
 			e.preventDefault();
 			
 			// Call the show method
-			showMentionedComment.show(this);
+			show_mentioned_comments.show(this);
 		});
 	},
 	
@@ -794,26 +822,32 @@ var showMentionedComment = {
 };
 
 
-var blocks = {
+var custom_blocks = {
 	
-	init : function() {
-		
+	activated : function() {
+	
 		// Set blocks IDs
-		blocks.setIDs();
+		custom_blocks.setIDs();
 		
 		// Check localStorage for config
-		if( typeof dataStore['blocks_config'] == 'undefined') {
-			blocks.buildConfig();
+		if( typeof dataStore['blocks_config'] == 'undefined' || dataStore['blocks_config'] == '') {
+			custom_blocks.buildConfig();
 		}
 		
 		// Execute config
-		blocks.executeConfig();
+		custom_blocks.executeConfig();
+
 		
 		// Set overlays
-		if(dataStore['hide_blocks_buttons'] == 'false') {
-			blocks.setOverlay();
+		if(dataStore['hide_blocks_buttons'] == false || typeof dataStore['hide_blocks_buttons'] == 'undefined') {
+			custom_blocks.setOverlay();
 		}
 	
+	},
+	
+	disabled : function() {
+	
+		$('.ext_blocks_buttons').remove();
 	},
 	
 	setIDs : function() {
@@ -853,9 +887,12 @@ var blocks = {
 			
 		});
 
-		
+
 		// Store in localStorage
-		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(config) });
+		port.postMessage({ name : "setBlocksConfig", message : JSON.stringify(config) });
+		
+		// Update in dataStore var
+		dataStore['blocks_config'] = JSON.stringify(config);
 	},
 	
 	
@@ -871,7 +908,7 @@ var blocks = {
 		}
 	
 		// Store in localStorage
-		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(config) });
+		port.postMessage({ name : "setBlocksConfig", message : JSON.stringify(config) });
 	},
 	
 	getConfigValByKey : function(id, key) {
@@ -898,8 +935,8 @@ var blocks = {
 			var tmp = {
 				
 				id 			: $(this).attr('id'),
-				visibility	: blocks.getConfigValByKey($(this).attr('id'), 'visibility'),
-				contentHide	: blocks.getConfigValByKey($(this).attr('id'), 'contentHide'),
+				visibility	: custom_blocks.getConfigValByKey($(this).attr('id'), 'visibility'),
+				contentHide	: custom_blocks.getConfigValByKey($(this).attr('id'), 'contentHide'),
 				side		: $(this).find('.b-h-o-head').length > 0 ? 'left' : 'right',
 				index 		: index
 			};
@@ -910,11 +947,11 @@ var blocks = {
 
 		
 		// Store in localStorage
-		port.postMessage({ type : "setBlocksConfig", data : JSON.stringify(_config) });
+		port.postMessage({ name : "setBlocksConfig", message : JSON.stringify(_config) });
 	},
 	
 	executeConfig : function() {
-		
+
 		var config = JSON.parse(dataStore['blocks_config']);
 			config = config.reverse();
 			
@@ -922,12 +959,12 @@ var blocks = {
 
 			// Visibility
 			if( config[c]['visibility'] == false ) {
-				blocks.hide(config[c]['id'], false);
+				custom_blocks.hide(config[c]['id'], false);
 			}
 
 			// ContentHide
 			if( config[c]['contentHide'] == true ) {
-				blocks.contentHide(config[c]['id'], false);
+				custom_blocks.contentHide(config[c]['id'], false);
 			}
 			
 			// Side and pos
@@ -954,45 +991,45 @@ var blocks = {
 	},
 	
 	setOverlay : function() {
-		
+
 		$('.ext_block').each(function() {
 			
 			var item = $('<p class="ext_blocks_buttons"></p>').prependTo(this);
 
 			// Contenthide
-			$('<img src="'+chrome.extension.getURL('img/blocks/minimalize.png')+'" class="ext_block_button_right">').prependTo(item).click(function(e) {
+			$('<img src="'+chrome.extension.getURL('/img/blocks/minimalize.png')+'" class="ext_block_button_right">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				blocks.contentHide( $(this).closest('div').attr('id'), true );
+				custom_blocks.contentHide( $(this).closest('div').attr('id'), true );
 			});
 
 			// Hide
-			$('<img src="'+chrome.extension.getURL('img/blocks/close.png')+'" class="ext_block_button_right">').prependTo(item).click(function(e) {
+			$('<img src="'+chrome.extension.getURL('/img/blocks/close.png')+'" class="ext_block_button_right">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				blocks.hide( $(this).closest('div').attr('id'), true );
+				custom_blocks.hide( $(this).closest('div').attr('id'), true );
 			});
 			
 
 			// Down
-			$('<img src="'+chrome.extension.getURL('img/blocks/down.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="'+chrome.extension.getURL('/img/blocks/down.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				blocks.down( $(this).closest('div').attr('id'), true );
+				custom_blocks.down( $(this).closest('div').attr('id'), true );
 			});
 
 			// Up
-			$('<img src="'+chrome.extension.getURL('img/blocks/up.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="'+chrome.extension.getURL('/img/blocks/up.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				blocks.up( $(this).closest('div').attr('id'), true );
+				custom_blocks.up( $(this).closest('div').attr('id'), true );
 			});						
 
 			// Right
-			$('<img src="'+chrome.extension.getURL('img/blocks/right.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="'+chrome.extension.getURL('/img/blocks/right.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				blocks.right( $(this).closest('div').attr('id'), true );
+				custom_blocks.right( $(this).closest('div').attr('id'), true );
 			});			
 			// Left
-			$('<img src="'+chrome.extension.getURL('img/blocks/left.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="'+chrome.extension.getURL('/img/blocks/left.png')+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
-				blocks.left( $(this).closest('div').attr('id'), true );
+				custom_blocks.left( $(this).closest('div').attr('id'), true );
 			});
 
 		});
@@ -1002,7 +1039,7 @@ var blocks = {
 		
 		if(clicked == true) {
 			// Change the config
-			blocks.setConfigByKey( id, 'visibility', false);
+			custom_blocks.setConfigByKey( id, 'visibility', false);
 		
 			// Hide the item
 			$('#'+id).slideUp(200);
@@ -1021,18 +1058,18 @@ var blocks = {
 		if( $('#'+id).children('div:eq(1)').css('display') == 'none' ) {
 		
 			// Change the config
-			blocks.setConfigByKey( id, 'contentHide', false);
+			custom_blocks.setConfigByKey( id, 'contentHide', false);
 		
 			// Hide the item
-			$('#'+id).children('div:eq(1)').slideDown(200);
+			$('#'+id).children('div:eq(1)').show();
 		
 		} else {
 
 			// Change the config
-			blocks.setConfigByKey( id, 'contentHide', true);
+			custom_blocks.setConfigByKey( id, 'contentHide', true);
 		
 			// Hide the item
-			$('#'+id).children('div:eq(1)').slideUp(200);
+			$('#'+id).children('div:eq(1)').hide();
 		}
 	},
 	
@@ -1050,7 +1087,7 @@ var blocks = {
 			$('#ext_left_sidebar').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
 		
 			// Store data in localStorage
-			blocks.reindexOrderConfig();
+			custom_blocks.reindexOrderConfig();
 		}
 	},
 
@@ -1068,7 +1105,7 @@ var blocks = {
 			$('#ext_right_sidebar').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
 	
 			// Store data in localStorage
-			blocks.reindexOrderConfig();
+			custom_blocks.reindexOrderConfig();
 		}
 	},
 	
@@ -1096,7 +1133,7 @@ var blocks = {
 		$('#'+id).insertBefore('.ext_block:eq('+(index-1)+')');		
 
 		// Store data in localStorage
-		blocks.reindexOrderConfig();
+		custom_blocks.reindexOrderConfig();
 	},
 	
 	down : function(id) {
@@ -1118,46 +1155,50 @@ var blocks = {
 		$('#'+id).insertAfter('.ext_block:eq('+(index+1)+')');
 
 		// Store data in localStorage
-		blocks.reindexOrderConfig();
+		custom_blocks.reindexOrderConfig();
 	}
 };
 
-function extInit() {
 
+function extInit() {
+	
+	// Settings
+	cp.init();
+	
 	// FORUM.PHP
 	if(document.location.href.match('forum.php')) {
 
 		// setPredefinedVars
 		setPredefinedVars();
-		
+
 		// Custom blocks
 		if(dataStore['custom_blocks'] == 'true') {
-			blocks.init();
+			custom_blocks.activated();
 		}
-		
+
 		// Remove chat window
 		if(dataStore['chat_hide'] == 'true') {
-			removeChatWindow();
+			chat_hide.activated();
 		}
 		
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn() ) {
-			jumpLastUnreadedMessage.init();
+			jump_unreaded_messages.activated();
 		}
 		
 		// Faves: show only with unreaded messages
 		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
-			filterOutReadedFaves();
+			fav_show_only_unreaded.activated();
 		}
 
 		// Faves: short comment marker
 		if(dataStore['short_comment_marker'] == 'true'&& isLoggedIn() ) {
-			shortCommentMarker();
+			short_comment_marker.activated();
 		}
 
 		// Custom list styles
-		if(dataStore['custom_list_styles'] == 'true') {
-			customListStyles();
+		if(dataStore['highlight_forum_categories'] == 'true') {
+			highlight_forum_categories.activated();
 		}
 
 	}
@@ -1173,77 +1214,69 @@ function extInit() {
 		
 		//gradual_comments
 		if(dataStore['threaded_comments'] == 'true') {
-			threadedComments.init();
+			threaded_comments.activated();
 		}
 		
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
-			jumpLastUnreadedMessage.jump();
+			jump_unreaded_messages.jump();
 		}
+		
+		// Set-up block buttons
+		blocklist.init();
 		
 		// Block users/messages
 		if(dataStore['block_list'] != '') {
-			blockMessages();
+			blocklist.hidemessages();
 		}
-		
-		// setBlockButton
-		setBlockButton();
 		
 		// Load next page when scrolling down
 		if(dataStore['autoload_next_page'] == 'true') {
-			autoLoadNextPage.init();
+			autoload_next_page.activated();
 		}
 		
 		// Scroll to page top button
-		if(dataStore['scroll_to_page_top'] == 'true') {
-			scrollToDocumentTop.init();
+		if(dataStore['show_navigation_buttons'] == 'true') {
+			show_navigation_buttons.activated();
 		}
 		
 		// Animated replyto
-		if(dataStore['animated_reply_to'] == 'true') {
-			replyTo();
-		}
-		
+		replyTo();
+
 		// Overlay reply-to
 		if(dataStore['overlay_reply_to'] == 'true') {
-			overlayReplyTo.init();
+			overlay_reply_to.activated();
 		}
 		
 		// highlight_comments_for_me
 		if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
-			highlightCommentsForMe();
+			highlight_comments_for_me.activated();
 		}
 		
 		// show menitoned comment
 		if(dataStore['show_mentioned_comments'] == 'true') {
-			showMentionedComment.init();
+			show_mentioned_comments.activated();
 		}
 	}
 }
 
+// Filter out iframes
+// Request settings object
+if (window.top === window) {
+	port.postMessage({ name : "getSettings" });
+}
 
-var dataStore;
-var port = chrome.extension.connect();
+port.onMessage.addListener(function(event) {
 
-
-port.postMessage({ type : "getStorageData" });
-
-port.onMessage.addListener(function(response) {
-
-	if(response.type == 'setStorageData') {
-		
+	if(event.name == 'setSettings') {
+	
 		// Save localStorage data
-		dataStore = response.data;
-		
+		dataStore = event.message;
+	
 		// Add domready event
 		$(document).ready(function() {
 			extInit();
 		});
-	
-	} else if(response.type == 'getBlockedUserNameFromLink') {
-		getBlockedUserNameFromLink(response.data);
-	
-	} else if(response.type == 'getBlockedUserNameFromImage') {
-		getBlockedUserNameFromImage(response.data);
-	}	
+	}
 });
+

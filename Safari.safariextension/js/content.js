@@ -406,7 +406,7 @@ var autoload_next_page = {
 		$.get(url+'&index='+(autoload_next_page.currPage+1)+'', function(data) {
 			
 			// Create the 'next page' indicator
-			if(dataStore['threaded_comments'] != 'true') {
+			if(dataStore['threaded_comments'] != true) {
 				$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
 			}
 			
@@ -1270,12 +1270,6 @@ function handleMessage(event) {
 		$(document).ready(function() {
 				extInit();
 		});
-
-	} else if(event.name == 'getBlockedUserNameFromLink') {
-		getBlockedUserNameFromLink(event.message);
-
-	} else if(event.name == 'getBlockedUserNameFromImage') {
-		getBlockedUserNameFromImage(event.message);
 	}
 }
 
