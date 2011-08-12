@@ -11,7 +11,7 @@
 		
 		<license href="http://www.opensource.org/licenses/mit-license.php">Licensed under the MIT license</license>
 		
-		<icon src="img/logo.png"/>
+		<icon src="img/icons/logo.png"/>
 		
 		<content src="index.html" type="text/html" encoding="utf-8"/>
 		

@@ -1,101 +1,175 @@
-body {
-	background-color: #999;
+#ext_settings_button {
+
+	width: 32px;
+	height: 32px;
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	z-index: 11;
 }
 
-#wrapper {
+#ext_settings_hide_overlay {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	background-color: #666;
+	display: none;
+	z-index: 10;
+}
+
+#ext_settings_wrapper {
+
 	width: 900px;
-	height: 90%;
-	margin: 5% auto;
-	background-color: #FFF;
-	box-shadow: #666 0px 0px 10px;
+	position: fixed;
+	top: -9000px;
+	left: 0px;
+
+	z-index: 11;
+
+	background-color: #ededed;
+	-webkit-box-shadow: #333 0px 0px 15px;
+	overflow: hidden;
+	border: 1px solid #6c6c6c;
+	border-radius: 4px;
 }
 
-#left {
-	width: 189px;
-	height: 100%;
-	margin-right: 10px;
-	float: left;
-	border-right: 1px solid #999;
-}
-
-#right {
-	width: 690px;
-	height: 100%;
-	padding-right: 10px;
-	float: right;
-}
-
-#left ul {
-	margin: 0px;
+#ext_settings_header {
+	height: 65px;
 	padding: 0px;
-	list-style: none;
+	margin: 0px;
+	padding-left: 10px;
+	border-bottom: 1px solid #6c6c6c;
+	background-image: -o-linear-gradient(
+		rgb(231,231,231),
+		rgb(179,179,179)
+	);
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
 }
 
-#left ul li {
-	height: 30px;
-	padding-left: 10px;
-	font: normal normal bold 14px/30px Arial, serif;
-	color: #000;
+#ext_settings_header li {
+	width: 75px;
+	height: 20px;
+	float: left;
+	padding-top: 45px;
+	list-style: none;
+	text-align: center;
+	font: normal normal normal 12px/20px Arial, serif;
+	color: #444;
+	text-shadow: #ccc 1px 1px 1px;
 	cursor: pointer;
 }
 
-#left ul li.active {
-	
-	background-image: -o-linear-gradient(rgb(0,86,147),rgb(63,174,254));
-	color: #FFF;
-}
-
-#right > div {
-	display: none;
-}
-
-#right > div > div {
-	position: relative;
-	padding: 10px 120px 10px 0px;
-	border-bottom: 1px solid #ddd;
-	text-align: justify;
-}
-
-#right > div > div:last-child {
-	border: 0px;
-}
-
-#right h3 {
-	margin: 0px;
-	padding: 0px;
-	font: normal normal bold 14px/16px Arial, serif;
+#ext_settings_header li.on {
 	color: #333;
 }
 
-#right p {
-	margin: 0px;
-	margin-top: 5px;
+#ext_settings_header li.clear {
+	width: 0px;
+	height: 0px;
+	float: none !important;
+	clear: both;
+}
+
+.settings_page {
+	display: none;
+	padding: 20px;
+	text-align: justify;
+}
+
+#ext_settings_header li:nth-child(1) {
+	background-position: 0px 0px;
+}
+
+#ext_settings_header li:nth-child(2) {
+	background-position: -75px 0px;
+}
+
+#ext_settings_header li:nth-child(3) {
+	background-position: -150px 0px;
+}
+
+#ext_settings_header li:nth-child(4) {
+	background-position: -225px 0px;
+}
+
+
+#ext_settings_header li:nth-child(1).on {
+	background-position: 0px -75px;
+}
+
+#ext_settings_header li:nth-child(2).on {
+	background-position: -75px -75px;
+}
+
+#ext_settings_header li:nth-child(3).on {
+	background-position: -150px -75px;
+}
+
+#ext_settings_header li:nth-child(4).on {
+	background-position: -225px -75px;
+}
+
+/* ABOUT */
+.settings_page a {
 	font: normal normal normal 12px/14px Arial, serif;
 	color: #999;
 }
 
-#right .button {
-	width: 100px;
-	height: 25px;
+/* SETTINGS PANE ELEMENTS */
+
+.settings_page > div {
+	position: relative;
+	padding: 0px 120px 15px 0px;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 15px;
+	text-align: justify;
+}
+
+.settings_page > div:last-child {
+	border: 0px;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
+.settings_page h3 {
+	margin: 0px;
+	padding: 0px;
+	font: normal normal bold 13px/normal Arial, serif;
+	color: #000;
+}
+
+.settings_page p {
+	margin: 0px;
+	margin-top: 5px;
+	font: normal normal normal 12px/normal Arial, serif;
+	color: #333;
+}
+
+.settings_page .button {
+	width: 60px;
+	height: 20px;
 	position: absolute;
 	top: 10px;
 	right: 0px;
 	overflow: hidden;
 	cursor: pointer;
-	border-radius: 5px;
-	background-image: url(../img/handler.png); 
+	border: 1px solid #999;
+	border-radius: 10px;
 }
 
-#right .button.on {
-	background-position: 0px 0px;
+.settings_page .button.on {
+	background-position: -40px 0px;
 }
 
-#right .button.off {
-	background-position: -70px 0px; 
+.settings_page .button.off {
+	background-position: 0px 0px; 
 }
 
-#right p.sub {
-	margin-left: 20px;
+.settings_page p.sub {
 }
 
 #blocklist {

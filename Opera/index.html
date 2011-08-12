@@ -3,7 +3,23 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<script>
 
-
+			// Set properties default values
+			if( typeof widget.preferences.chat_hide 							== 'undefined') widget.preferences.chat_hide 							= 'false';
+			if( typeof widget.preferences.custom_blocks							== 'undefined') widget.preferences.custom_blocks 						= 'false';
+			if( typeof widget.preferences.jump_unreaded_messages				== 'undefined') widget.preferences.jump_unreaded_messages				= 'true';
+			if( typeof widget.preferences.fav_show_only_unreaded				== 'undefined') widget.preferences.fav_show_only_unreaded				= 'true';
+			if( typeof widget.preferences.short_comment_marker					== 'undefined') widget.preferences.short_comment_marker					= 'true';
+			if( typeof widget.preferences.highlight_forum_categories			== 'undefined') widget.preferences.custom_list_styles					= 'false';
+			if( typeof widget.preferences.threaded_comments						== 'undefined') widget.preferences.threaded_comments					= 'false';
+			if( typeof widget.preferences.block_list							== 'undefined') widget.preferences.block_list							= '';
+			if( typeof widget.preferences.autoload_next_page					== 'undefined') widget.preferences.autoload_next_page					= 'true';
+			if( typeof widget.preferences.overlay_reply_to						== 'undefined') widget.preferences.overlay_reply_to						= 'true';
+			if( typeof widget.preferences.highlight_comments_for_me				== 'undefined') widget.preferences.highlight_comments_for_me			= 'true';
+			if( typeof widget.preferences.show_mentioned_comments				== 'undefined') widget.preferences.show_mentioned_comments				= 'true';
+			if( typeof widget.preferences.show_mentioned_comments_in_links		== 'undefined') widget.preferences.show_mentioned_comments_in_links		= 'true';
+			if( typeof widget.preferences.blocks_config							== 'undefined') widget.preferences.blocks_config						= '';
+			if( typeof widget.preferences.hide_blocks_buttons					== 'undefined') widget.preferences.hide_blocks_buttons					= 'false';
+			if( typeof widget.preferences.show_navigation_buttons				== 'undefined') widget.preferences.show_navigation_buttons				= 'true';
 		
 			window.addEventListener("load", setupConnection, false);
 			
@@ -13,14 +29,67 @@
 				
 					msg = event.data;
 					
-					if (msg.topic == 'LoadInjectedCSS') {
-						loadInjectedCSS(event, msg.data);
-					
-					} else if(msg.type == "setBlockedUser") {
-						addToBlockList(msg.data);
+					if (msg.name == 'LoadInjectedCSS') {
+						loadInjectedCSS(event, msg.message);
+
+					// Sets the blocks config
+					} else if(msg.name == 'setBlocksConfig') {
+						widget.preferences.blocks_config = msg.message;
+				
+					// Add user to blocklist
+					} else if(msg.name == 'addToBlocklist') {
+
+						// If theres in no entry in localStorage
+						if(typeof widget.preferences.block_list == "undefined") {
+							widget.preferences.block_list = '';
+						}
+		
+						// If the blocklist is empty
+						if(widget.preferences.block_list == '') { 
+							widget.preferences.block_list = msg.message;
+		
+						// If the blocklist is not empty
+						} else {
+							var blocklist = new Array();
+								blockList = widget.preferences.block_list.split(',');
+								if(blockList.indexOf(msg.message) == -1) { 
+									blockList.push(msg.message); 
+									widget.preferences.block_list = blockList.join(',');
+								}
+						}
+					// Reset blocks config
+					} else if(msg.name == 'resetBlocksConfig') {
+						widget.preferences.blocks_config = '';
+				
+					// Remove user form blocklist
+					} else if(msg.name == 'removeUserFromBlocklist') {
+
+		
+						// Get username
+						var user = msg.message;
 	
-					} else if(msg.type == "setBlocksConfig") {
-						setBlockConfig(msg.data);
+						// Get the blocklist array
+						var list = widget.preferences.block_list.split(',');
+		
+						// Get the removed user index
+						var index = list.indexOf(user);
+		
+						// Remove user from array
+						list.splice(index, 1);
+					
+						// Save changes in localStorage
+						widget.preferences.block_list = list.join(',');
+				
+					// Save posted settings
+					} else if(msg.name == 'setSetting') {
+
+						// Setting name
+						var key = msg.key;
+					
+						// Setting value
+						var val = msg.val;
+					
+						widget.preferences[key] = val;
 					}
 				}
 			}
@@ -39,8 +108,8 @@
     
 				// Send the contents of the stylesheet to the injected script.
 				event.source.postMessage({
-					topic: 'LoadedInjectedCSS',
-					data: {
+					name: 'LoadedInjectedCSS',
+					message: {
 						css: req.responseText,
 						path: path
 					}

@@ -1,13 +1,3 @@
-// ==UserScript==
-// @include http://sg.hu/*
-// @include https://sg.hu/*
-// @include http://www.sg.hu/*
-// @include https://www.sg.hu/*
-// @include http://*.sg.hu/*
-// @include https://*.sg.hu/*
-// ==/UserScript==
-
-
 /*
     http://www.JSON.org/json2.js
     2011-02-23
