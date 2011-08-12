@@ -319,7 +319,7 @@ var settings = {
 		// Restore settings for buttons
 		$('.settings_page .button').each(function() {
 
-			if(dataStore[ $(this).attr('id') ] == true) {
+			if(dataStore[ $(this).attr('id') ] == 'true') {
 				$(this).addClass('on');
 			
 			} else {
@@ -330,7 +330,7 @@ var settings = {
 		// Restore settings for checkboxes
 		$('input:checkbox').each(function() {
 			
-			if(dataStore[ $(this).attr('id') ] == true) {
+			if(dataStore[ $(this).attr('id') ] == 'true') {
 				$(this).attr('checked', true);
 			}
 		});
@@ -341,7 +341,7 @@ var settings = {
 		if( $(ele).hasClass('on') || $(ele).attr('checked') == 'checked') {
 			
 			// Save new settings ...
-			port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : true });
+			port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : 'true' });
 			
 			// Check for interactive action
 			if( typeof window[$(ele).attr('id')].activated != 'undefined') {
@@ -349,12 +349,12 @@ var settings = {
 			}
 			
 			// Set new value to dataStore var
-			dataStore[$(ele).attr('id')] = true;
+			dataStore[$(ele).attr('id')] = 'true';
 		
 		} else {
 
 			// Save new settings ...
-			port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : false });
+			port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : 'false' });
 			
 			// Check for interactive action
 			if( typeof window[$(ele).attr('id')].disabled != 'undefined') {
@@ -362,7 +362,7 @@ var settings = {
 			}
 			
 			// Set new value to dataStore var
-			dataStore[$(ele).attr('id')] = false;
+			dataStore[$(ele).attr('id')] = 'false';
 		}
 	}
 };
