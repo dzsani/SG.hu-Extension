@@ -1,3 +1,12 @@
+// ==UserScript==
+// @include http://sg.hu/*
+// @include https://sg.hu/*
+// @include http://www.sg.hu/*
+// @include https://www.sg.hu/*
+// @include http://*.sg.hu/*
+// @include https://*.sg.hu/*
+// ==/UserScript==
+
 /*!
  * jQuery JavaScript Library v1.6.2
  * http://jquery.com/
