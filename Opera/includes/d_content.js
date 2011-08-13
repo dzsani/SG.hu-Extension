@@ -27,7 +27,6 @@ function isLoggedIn() {
 	} else if(document.location.href.match(/listazas.php3\?id/gi)) {
 		return ( window.$('.std1').length > 1) ? true : false;
 	}
-	
 }
 
 function getUserName() {
@@ -42,7 +41,6 @@ function getUserName() {
 	}
 }
 
-
 var chat_hide = {
 	
 	activated : function() {
@@ -56,7 +54,7 @@ var chat_hide = {
 		window.$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').show();
 		window.$('table:eq(3) td:eq(2) br').show();	
 	}
-}
+};
 
 
 var jump_unreaded_messages = {
