@@ -348,9 +348,9 @@ var settings = {
 	},
 	
 	save : function(ele) {
-
-		if( window.$(ele).hasClass('on') || window.$(ele).attr('checked') == 'checked') {
-			
+		
+		if( window.$(ele).hasClass('on') || window.$(ele).attr('checked') == 'checked' || window.$(ele).attr('checked') == true) {
+	
 			// Save new settings ...
 			opera.extension.postMessage({ name : "setSetting", key : window.$(ele).attr('id'), val : 'true' });
 			

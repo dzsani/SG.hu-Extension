@@ -140,10 +140,10 @@ var jump_unreaded_messages = {
 		}, 1000, target);
 
 		// Url to rewrite
-		var url = document.location.href.substring(0, 44);
+		//var url = document.location.href.substring(0, 44);
 
 		// Update the url to avoid re-jump
-		history.replaceState({ page : url }, '', url);
+		//history.replaceState({ page : url }, '', url);
 	}
 	
 };

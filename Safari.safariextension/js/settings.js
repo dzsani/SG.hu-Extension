@@ -338,7 +338,7 @@ var settings = {
 	
 	save : function(ele) {
 
-		if( $(ele).hasClass('on') || $(ele).attr('checked') == 'checked') {
+		if( $(ele).hasClass('on') || $(ele).attr('checked') == 'checked' || $(ele).attr('checked') == true) {
 			
 			// Save new settings ...
 			safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : true});
