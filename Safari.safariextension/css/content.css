@@ -170,7 +170,8 @@
 }
 
 #ext_right_sidebar .ext_block {
-	padding-left: 0px !important;
+	width: 100% !important;
+	padding-left: 10px !important;
 }
 
 .ext_block {
