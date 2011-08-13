@@ -506,6 +506,11 @@ var overlay_reply_to = {
 	
 	activated : function() {
 	
+		// Change tabindexes for suit the overlay textarea
+		$('textarea:first').attr('tabindex', '3');
+		$('textarea:first').closest('div').find('a:last').attr('tabindex', '4');
+		
+		// Change the behavior the replyto button
 		$('.topichead a:contains("válasz erre")').live('click', function(e) {
 			
 			// Prevent default submission
@@ -585,7 +590,11 @@ var overlay_reply_to = {
 			var scT = textBottom - $(window).height() + 50;
 			$('body').animate( { scrollTop : scT }, 500);
 		}
-		
+
+		// Set the right tabindex
+		textarea_clone.find('textarea').attr('tabindex', '1');
+		textarea_clone.find('a:last').attr('tabindex', '2');
+
 		// Set the textarea focus
 		textarea_clone.find('textarea').focus();
 		
