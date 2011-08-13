@@ -1,11 +1,20 @@
-Az sg.hu nemhivatalos Chrome bővítménye.
+Az sg.hu nemhivatalos Chrome és Opera bővítménye.
 
-Használati útmutató:
-	A Google Extension Gallery-ből letöltött bővítmény telepítése ugyan úgy zajlik mint bármelyik másiknál.
-	A kicsomagolt developer verzió telepítését a Csavarkulcs -> Eszközök -> Bővítmények alatt található 
-	Developer mode 'Load unpacked extension'-nel kell elvégezni, itt egyszerűen kitallózzuk a letöltött 
-	bövítmény mappáját.
+Telepítés:
 
+	Chrome:
+		A kicsomagolt developer verzió telepítését a Csavarkulcs -> Eszközök -> Bővítmények alatt található 
+		Developer mode 'Load unpacked extension'-nel kell elvégezni, itt egyszerűen kitallózzuk a letöltött 
+		bövítmény mappáját.
+	
+	Opera:
+		A config.xml-t ráhúzzátok az Operában megnyitott Extension Manager oldalra, vagy pedig az Opera ikonjára.
+
+	Safari:
+		Engedélyezd a developer módot a beállításokban, majd Develop -> Show Extension Builder. Jobb alsó 
+		sarokban Plusz ikon -> Add Extension -> Kitallózod a Safari.safariextension mappát.
+		
+		
 A bővítmény funkciói:
 	- Chat elrejtése
 	- 'Ugrás az utolsó olvasatlan üzenethez' több oldalon keresztül
@@ -19,13 +28,8 @@ A bővítmény funkciói:
 	- Overlay commentbox
 	- Nekem érkező üzenetek kiemelése
 	- Üzenetek szálonkénti elrendezése
-	- Említett kommentek beidézése 
-
-Egyéb megjegyzések:
-	- Tiltólista:
-		Egy topikban a választott felhasználó nevén vagy logóján jobb klikkel érhetjük el a 
-		"Felhasználó kitiltása" opciót. Ezután globálisan, egyetlen topikban sem fogjuk látni 
-		a felhasználó kommentjeit. Visszavonásra a beállításokban van lehetőség.
+	- Említett kommentek beidézése
+	- Oldalsáv blokkok átrendezése, rejtése
 
 Credits:
 	Fejlesztő: Gera János "dzsani", http://kreaturamedia.com

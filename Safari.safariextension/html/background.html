@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<script>
+						
+			// Set properties default values
+			if( typeof safari.extension.settings.chat_hide 							== 'undefined') safari.extension.settings.chat_hide 						= false;
+			if( typeof safari.extension.settings.custom_blocks						== 'undefined') safari.extension.settings.custom_blocks 					= false;
+			if( typeof safari.extension.settings.jump_unreaded_messages				== 'undefined') safari.extension.settings.jump_unreaded_messages			= true;
+			if( typeof safari.extension.settings.fav_show_only_unreaded				== 'undefined') safari.extension.settings.fav_show_only_unreaded			= true;
+			if( typeof safari.extension.settings.short_comment_marker				== 'undefined') safari.extension.settings.short_comment_marker				= true;
+			if( typeof safari.extension.settings.highlight_forum_categories			== 'undefined') safari.extension.settings.custom_list_styles				= false;
+			if( typeof safari.extension.settings.threaded_comments					== 'undefined') safari.extension.settings.threaded_comments					= false;
+			if( typeof safari.extension.settings.block_list							== 'undefined') safari.extension.settings.block_list						= '';
+			if( typeof safari.extension.settings.autoload_next_page					== 'undefined') safari.extension.settings.autoload_next_page				= true;
+			if( typeof safari.extension.settings.overlay_reply_to					== 'undefined') safari.extension.settings.overlay_reply_to					= true;
+			if( typeof safari.extension.settings.highlight_comments_for_me			== 'undefined') safari.extension.settings.highlight_comments_for_me			= true;
+			if( typeof safari.extension.settings.show_mentioned_comments			== 'undefined') safari.extension.settings.show_mentioned_comments			= true;
+			if( typeof safari.extension.settings.show_mentioned_comments_in_links	== 'undefined') safari.extension.settings.show_mentioned_comments_in_links	= true;
+			if( typeof safari.extension.settings.blocks_config						== 'undefined') safari.extension.settings.blocks_config						= '';
+			if( typeof safari.extension.settings.hide_blocks_buttons				== 'undefined') safari.extension.settings.hide_blocks_buttons				= false;
+			if( typeof safari.extension.settings.show_navigation_buttons			== 'undefined') safari.extension.settings.show_navigation_buttons			= true;
+			
+		
+			function respondToMessage(event) {
+
+				// Send back the settings object
+				if(event.name == 'getSettings') {
+					
+					event.target.page.dispatchMessage("setSettings", safari.extension.settings);
+				
+				// Sets the blocks config
+				} else if(event.name == 'setBlocksConfig') {
+					safari.extension.settings.blocks_config = event.message;
+				
+				// Add user to blocklist
+				} else if(event.name == 'addToBlocklist') {
+
+					// If theres in no entry in localStorage
+					if(typeof safari.extension.settings.block_list == "undefined") {
+						safari.extension.settings.block_list = '';
+					}
+		
+					// If the blocklist is empty
+					if(safari.extension.settings.block_list == '') { 
+						safari.extension.settings.block_list = event.message;
+		
+					// If the blocklist is not empty
+					} else {
+						var blocklist = new Array();
+							blockList = safari.extension.settings.block_list.split(',');
+							if(blockList.indexOf(event.message) == -1) { 
+								blockList.push(event.message); 
+								safari.extension.settings.block_list = blockList.join(',');
+							}
+					}
+				// Reset blocks config
+				} else if(event.name == 'resetBlocksConfig') {
+					safari.extension.settings.blocks_config = '';
+				
+				// Remove user form blocklist
+				} else if(event.name == 'removeUserFromBlocklist') {
+
+		
+					// Get username
+					var user = event.message;
+	
+					// Get the blocklist array
+					var list = safari.extension.settings.block_list.split(',');
+		
+					// Get the removed user index
+					var index = list.indexOf(user);
+		
+					// Remove user from array
+					list.splice(index, 1);
+					
+					// Save changes in localStorage
+					safari.extension.settings.block_list = list.join(',');
+				
+				// Save posted settings
+				} else if(event.name == 'setSetting') {
+
+					// Setting name
+					var key = event.message.key;
+					
+					// Setting value
+					var val = event.message.val;
+					
+					safari.extension.settings[key] = val;
+				}
+
+			}
+			
+			safari.application.addEventListener("message", respondToMessage, false);
+		</script>
+	</head>
+</html>
