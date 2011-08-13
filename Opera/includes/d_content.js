@@ -134,7 +134,7 @@ var jump_unreaded_messages = {
 			var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 			// Scroll to target element
-			window.$('body').animate({ scrollTop : targetOffset}, 500);
+			window.$('html').animate({ scrollTop : targetOffset}, 500);
 			
 			// Remove original HR tag
 			window.$('a[name=pirosvonal]').remove();
@@ -393,7 +393,7 @@ var autoload_next_page = {
 		window.$(document).scroll(function() {
 			
 			var docHeight = window.$('body').height();
-			var scrollTop = window.$('body').scrollTop();
+			var scrollTop = window.$('html').scrollTop();
 
 			if(docHeight - scrollTop < 3000 && !autoload_next_page.progress && autoload_next_page.currPage < autoload_next_page.maxPage) {
 				autoload_next_page.progress = true;
@@ -414,46 +414,49 @@ var autoload_next_page = {
 		var url = document.location.href.substring(0, 44);
 		
 		// Make the ajax query
-		window.$.get(url+'&index='+(autoload_next_page.currPage+1)+'', function(data) {
+		window.$.ajax({
 			
-			// Create the 'next page' indicator
-			if(dataStore['threaded_comments'] != 'true') {
-				window.$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
-			}
+			url : url+'&index='+(autoload_next_page.currPage+1)+'', 
+			mimeType : 'text/html;charset=iso-8859-2',
+			success : function(data) {
 			
-			var tmp = window.$(data);
-			var tmp = tmp.find('.topichead');
+				// Create the 'next page' indicator
+				if(dataStore['threaded_comments'] != 'true') {
+					window.$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+				}
 			
-			tmp.each(function() {
+				var tmp = window.$(data);
+				var tmp = tmp.find('.topichead');
+			
+				tmp.each(function() {
 				
-				window.$(this).closest('center').insertBefore('.std1:last');
+					window.$(this).closest('center').insertBefore('.std1:last');
 			
-			});
+				});
 			
-			autoload_next_page.progress = false;
-			autoload_next_page.currPage++;
-			autoload_next_page.counter++;
+				autoload_next_page.progress = false;
+				autoload_next_page.currPage++;
+				autoload_next_page.counter++;
 			
-			// Reinit settings
+				// Reinit settings
 
-			// threaded comments
-			if(dataStore['threaded_comments'] == 'true') {
-				threaded_comments.sort();
-			}
+				// threaded comments
+				if(dataStore['threaded_comments'] == 'true') {
+					threaded_comments.sort();
+				}
 
-			// highlight_comments_for_me
-			if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
-				highlight_comments_for_me.activated();
-			}
+				// highlight_comments_for_me
+				if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
+					highlight_comments_for_me.activated();
+				}
 			
-			// show menitoned comment
-			if(dataStore['show_mentioned_comments'] == 'true') {
-				show_mentioned_comments.activated();
+				// show menitoned comment
+				if(dataStore['show_mentioned_comments'] == 'true') {
+					show_mentioned_comments.activated();
+				}
 			}
-			
 		});
 	}
-
 };
 
 
@@ -466,7 +469,7 @@ var show_navigation_buttons = {
 		
 		// Add click event to scrolltop button
 		window.$('#ext_scrolltop').click(function() {
-			window.$('body').animate({ scrollTop : 0 }, 1000);
+			window.$('html').animate({ scrollTop : 0 }, 1000);
 		});
 
 		// Created the back button
@@ -594,7 +597,7 @@ var overlay_reply_to = {
 
 		if(textBottom > pageBottom) { 
 			var scT = textBottom - window.$(window).height() + 50;
-			window.$('body').animate( { scrollTop : scT }, 500);
+			window.$('html').animate( { scrollTop : scT }, 500);
 		}
 		
 		// Set the textarea focus
@@ -709,7 +712,7 @@ var threaded_comments = {
 		var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 		// Scroll to target element
-		window.$('body').animate({ scrollTop : targetOffset}, 500);
+		window.$('html').animate({ scrollTop : targetOffset}, 500);
 	},
 	
 	next : function(ele) {
@@ -731,7 +734,7 @@ var threaded_comments = {
 		var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 		// Scroll to target element
-		window.$('body').animate({ scrollTop : targetOffset}, 500);
+		window.$('html').animate({ scrollTop : targetOffset}, 500);
 	},
 	
 	sort : function() {
@@ -791,9 +794,9 @@ var show_mentioned_comments = {
 			// Search and replace mentioned comment numbers
 			if( window.$(this).html().match(/\#\d+/g) ){
 				if( window.$(this).html().match(/<a[^>]+>\#\d+<\/a>/g) && dataStore['show_mentioned_comments_in_links'] == 'true' ) {
-					var replaced = window.$(this).html().replace(/<a[^>]+>(\#\d+)<\/a>/g, "<span class=\"ext_mentioned\">window.$1</span>");
+					var replaced = window.$(this).html().replace(/<a[^>]+>(\#\d+)<\/a>/g, "<span class=\"ext_mentioned\">$1</span>");
 				} else if( !window.$(this).html().match(/<.*\#\d+.*>/g) ) {
-					var replaced = window.$(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">window.$1</span>");					
+					var replaced = window.$(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");					
 				}
 				
 				// Change the text in the original comment
