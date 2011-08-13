@@ -173,7 +173,7 @@
 #ext_right_sidebar .ext_block {
 	width: 100% !important;
 	padding-left: 10px !important;
-	margin-top: 10px;
+	padding-bottom: 10px;
 }
 
 .hasab-head-b {
@@ -186,7 +186,7 @@
 }
 
 .ext_blocks_buttons {
-	width: 165px;
+	width: 100%;
 	height: 20px;
 	display: none;
 	position: absolute;
