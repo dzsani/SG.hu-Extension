@@ -923,6 +923,9 @@ var custom_blocks = {
 	
 		// Store in localStorage
 		opera.extension.postMessage({ name : "setBlocksConfig", message : JSON.stringify(config) });
+
+		// Update dataStore var
+		dataStore['blocks_config'] = JSON.stringify(config);
 	},
 	
 	getConfigValByKey : function(id, key) {

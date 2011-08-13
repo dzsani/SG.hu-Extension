@@ -909,6 +909,9 @@ var custom_blocks = {
 	
 		// Store in localStorage
 		port.postMessage({ name : "setBlocksConfig", message : JSON.stringify(config) });
+		
+		// Update dataStore var
+		dataStore['blocks_config'] = JSON.stringify(config);
 	},
 	
 	getConfigValByKey : function(id, key) {

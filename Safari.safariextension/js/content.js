@@ -907,6 +907,9 @@ var custom_blocks = {
 	
 		// Store in localStorage
 		safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
+		
+		// Update dataStore var
+		dataStore['blocks_config'] = JSON.stringify(config);
 	},
 	
 	getConfigValByKey : function(id, key) {
@@ -1036,9 +1039,10 @@ var custom_blocks = {
 	hide : function(id, clicked) {
 		
 		if(clicked == true) {
+		
 			// Change the config
 			custom_blocks.setConfigByKey( id, 'visibility', false);
-		
+			
 			// Hide the item
 			$('#'+id).slideUp(200);
 		} else {
