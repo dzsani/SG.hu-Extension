@@ -12,7 +12,7 @@
  	position: absolute;
  	right: 0px;
  	top: 0px;
- 	background-image: -webkit-linear-gradient(top, #fbd859, #f5b85e);
+ 	background-image: -o-linear-gradient(#fbd859, #f5b85e);
  	border-radius: 2px;
  	cursor: pointer;
 }
@@ -171,7 +171,7 @@
 }
 
 #ext_right_sidebar .ext_block {
-	width: 100% !important;
+	width: 160px !important;
 	padding-left: 10px !important;
 	padding-bottom: 10px;
 }

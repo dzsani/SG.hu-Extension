@@ -41,9 +41,9 @@ var chat_hide = {
 	},
 	
 	disabled : function() {
-
+	
 		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').show();
-		$('table:eq(3) td:eq(2) br').show();	
+		$('table:eq(3) td:eq(2) br').show();
 	}
 }
 
