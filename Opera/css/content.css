@@ -165,6 +165,15 @@
 }
 
 /* BLOCKS */
+
+#ext_left_sidebar .ext_block {
+	padding-left: 5px !important;
+}
+
+#ext_right_sidebar .ext_block {
+	padding-left: 0px !important;
+}
+
 .ext_block {
 	position: relative;
 	text-align: left !important;
