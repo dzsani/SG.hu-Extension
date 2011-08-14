@@ -681,7 +681,9 @@ var make_read_all_faves = {
 					if(dataStore['fav_show_only_unreaded'] == 'true') {
 					
 						// Add 'no unreaded topics' message
-						window.$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
+						if( window.$('#ext_filtered_faves_error').length == 0) {
+							window.$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
+						}
 						
 						// Hide all remaining topics
 						if(dataStore['fav_show_only_unreaded'] == 'true') {
