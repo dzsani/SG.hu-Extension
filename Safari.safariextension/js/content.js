@@ -523,10 +523,22 @@ var update_fave_list = {
 	
 	refresh : function() {
 		
+		// Set 'in progress' icon
+		$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh_waiting.png');
+		
+		
 		$.ajax({
 			url : 'forum.php',
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
+				
+				// Set 'completed' icon
+				$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh_done.png');
+				
+				// Set back the normal icon in 1 sec
+				setTimeout(function() {
+					$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh.png');
+				}, 2000);
 				
 				// Get new fave list
 				var tmp = $(data);

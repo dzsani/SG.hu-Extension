@@ -509,7 +509,7 @@ var update_fave_list = {
 		$('.ext_faves').append('<div id="ext_refresh_faves"></div>');
 	
 		// Set refresh image
-		$('<img src="'+safari.extension.baseURI+'img/content/refresh.png">').appendTo('#ext_refresh_faves');
+		$('<img src="'+chrome.extension.getURL('/img/content/refresh.png')+'">').appendTo('#ext_refresh_faves');
 		
 		// Add click event
 		$('#ext_refresh_faves').click(function() {
@@ -525,10 +525,22 @@ var update_fave_list = {
 	
 	refresh : function() {
 		
+		// Set 'in progress' icon
+		$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png') );
+		
+		
 		$.ajax({
 			url : 'forum.php',
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
+				
+				// Set 'completed' icon
+				$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_done.png') );
+				
+				// Set back the normal icon in 1 sec
+				setTimeout(function() {
+					$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh.png') );
+				}, 2000);
 				
 				// Get new fave list
 				var tmp = $(data);
@@ -1300,6 +1312,9 @@ function extInit() {
 		if(dataStore['highlight_forum_categories'] == 'true') {
 			highlight_forum_categories.activated();
 		}
+		
+		// Refresh faves
+		update_fave_list.activated();
 
 	}
 	
