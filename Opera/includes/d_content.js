@@ -514,6 +514,69 @@ var show_navigation_buttons = {
 	}
 };
 
+var update_fave_list = {
+
+	activated : function() {
+		
+		// Create refhref button
+		$('.ext_faves').append('<div id="ext_refresh_faves"></div>');
+	
+		// Set refresh image
+		$('<img src="'+safari.extension.baseURI+'img/content/refresh.png">').appendTo('#ext_refresh_faves');
+		
+		// Add click event
+		$('#ext_refresh_faves').click(function() {
+			update_fave_list.refresh();
+		});
+		
+		// Set auto refresh
+		setInterval(function() {
+			update_fave_list.refresh();
+		}, 30000);
+		
+	},
+	
+	refresh : function() {
+		
+		window.$.ajax({
+			url : 'forum.php',
+			mimeType : 'text/html;charset=iso-8859-2',
+			success : function(data) {
+				
+				// Get new fave list
+				var tmp = window.$(data);
+					tmp = tmp.find('.b-h-o-head:eq(2)').next().html();
+				
+				// Append new fave list
+				window.$('.ext_faves:first').next().html(tmp);
+				
+				// Faves: show only with unreaded messages
+				if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+					fav_show_only_unreaded.activated();
+				}
+
+				// Faves: short comment marker
+				if(dataStore['short_comment_marker'] == 'true' && isLoggedIn() ) {
+					short_comment_marker.activated();
+				}
+			}
+		});
+	}
+};
+
+
+var make_read_all_faves = {
+	
+	activated : function() {
+	
+	},
+	
+	makeread : function() {
+	
+	
+	}
+};
+
 function replyTo() {
 	window.$('.msg-replyto a').live('click', function(e) {
 	
