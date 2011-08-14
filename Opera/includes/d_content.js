@@ -578,6 +578,11 @@ var update_fave_list = {
 				if(dataStore['short_comment_marker'] == 'true' && isLoggedIn() ) {
 					short_comment_marker.activated();
 				}
+
+				// Custom list styles
+				if(dataStore['highlight_forum_categories'] == 'true') {
+					highlight_forum_categories.activated();
+				}
 			}
 		});
 	}
