@@ -172,7 +172,7 @@ var fav_show_only_unreaded = {
 	
 		// Create an error message if theres no topik with unreaded messages
 		if(counterAll == 0) {
-			$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan topik</p>');
+			$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
 		}
 	
 		// Set the "show" button
@@ -565,11 +565,103 @@ var update_fave_list = {
 var make_read_all_faves = {
 	
 	activated : function() {
-	
+
+		// Create the 'read them all' button
+		$('.ext_faves').append('<div id="ext_read_faves"><div>');
+		
+		// Append the image
+		$('<img src="'+safari.extension.baseURI+'img/content/makereaded.png">').appendTo('#ext_read_faves');
+		
+		// Add click event
+		$('#ext_read_faves').click(function() {
+			make_read_all_faves.makeread();
+		});
 	},
 	
 	makeread : function() {
-	
+		
+		if(confirm('Biztos olvasottnak jelölöd az összes kedvenced?')) {
+			
+			// Set 'in progress' icon
+			$('#ext_read_faves img').attr('src', safari.extension.baseURI+'img/content/makereaded_waiting.png');
+			
+			var count = 0;
+			var counter = 0;
+			
+			// Get unreaded topics count
+			$('.ext_faves').next().find('div a').each(function() {
+				
+				// Dont bother the forum categories
+				if( $(this).parent().is('.std0') ) {
+					return true;
+				}
+				
+				// Also dont bother readed topics
+				if( $(this).find('font').length == 0) {
+					return true;
+				}
+				
+				count++;
+			});
+			
+			// Iterate over all faves
+			$('.ext_faves').next().find('div a').each(function() {
+				
+				// Dont bother the forum categories
+				if( $(this).parent().is('.std0') ) {
+					return true;
+				}
+				
+				// Also dont bother readed topics
+				if( $(this).find('font').length == 0) {
+					return true;
+				}
+				
+				var ele = $(this);
+				
+				// Make an ajax query to refresh last readed time
+				$.get( $(this).attr('href'), function() {
+					
+					$(ele).find('font').remove();
+					$(ele).find('.ext_short_comment_marker').remove();
+					
+					if(dataStore['fav_show_only_unreaded'] == true) {
+						$(ele).parent().addClass('ext_hidden_fave');
+					}
+					
+					counter++;
+				});
+			});
+			
+			var interval = setInterval(function() {
+				
+				if(count == counter) {
+					
+					// Set 'completed' icon
+					$('#ext_read_faves img').attr('src', safari.extension.baseURI+'img/content/makereaded_done.png');
+			
+					// Set normal icon
+					setTimeout(function() {
+						$('#ext_read_faves img').attr('src', safari.extension.baseURI+'img/content/makereaded.png');
+					}, 2000);
+					
+					if(dataStore['fav_show_only_unreaded'] == true) {
+					
+						// Add 'no unreaded topics' message
+						$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
+						
+						// Hide all remaining topics
+						if(dataStore['fav_show_only_unreaded'] == true) {
+							$('.ext_faves').next().find('div').addClass('ext_hidden_fave');
+						}
+					}
+					
+					clearInterval(interval);
+				}
+				
+			}, 100);
+			
+		}
 	
 	}
 };
@@ -1273,11 +1365,11 @@ var custom_blocks = {
 
 function extInit() {
 	
-	// Settings
-	cp.init();
-	
 	// FORUM.PHP
 	if(document.location.href.match('forum.php')) {
+
+		// Settings
+		cp.init();
 
 		// setPredefinedVars
 		setPredefinedVars();
@@ -1314,12 +1406,18 @@ function extInit() {
 		
 		// Refresh faves
 		update_fave_list.activated();
+		
+		// Make readed all faves
+		make_read_all_faves.activated();
 
 	}
 	
 	// LISTAZAS.PHP
 	else if(document.location.href.match(/listazas.php3\?id/gi)) {
-		
+
+		// Settings
+		cp.init();
+
 		// setPredefinedVars
 		setPredefinedVars();
 		

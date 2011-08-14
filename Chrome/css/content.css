@@ -91,6 +91,31 @@
  	cursor: pointer;
 }
 
+
+/* Make readed all faves */
+
+#ext_left_sidebar #ext_read_faves {
+	width: 18px;
+	height: 18px;
+ 	position: absolute;
+ 	right: 36px;
+ 	top: 0px;
+ 	background-image: -webkit-linear-gradient(top, #fbd859, #f5b85e);
+ 	border-radius: 2px;
+ 	cursor: pointer;
+}
+
+#ext_right_sidebar #ext_read_faves {
+	width: 18px;
+	height: 18px;
+ 	position: absolute;
+ 	right: 36px;
+ 	top: 0px;
+ 	background-image: -webkit-linear-gradient(top, #4b90f4, #8ab8f8);
+ 	border-radius: 2px;
+ 	cursor: pointer;
+}
+
 /* General style settings */
 
 #ext_unreaded_hr {
