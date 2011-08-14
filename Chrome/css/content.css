@@ -13,7 +13,7 @@
  	right: 0px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #fbd859, #f5b85e);
- 	border-radius: 2px;
+ 	border-top-right-radius: 2px;
  	cursor: pointer;
 }
 
@@ -23,7 +23,7 @@
  	right: 0px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #4b90f4, #8ab8f8);
- 	border-radius: 2px;
+ 	border-top-right-radius: 2px;
  	cursor: pointer;
 }
 
@@ -76,7 +76,6 @@
  	right: 18px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #fbd859, #f5b85e);
- 	border-radius: 2px;
  	cursor: pointer;
 }
 
@@ -87,7 +86,6 @@
  	right: 18px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #4b90f4, #8ab8f8);
- 	border-radius: 2px;
  	cursor: pointer;
 }
 
@@ -101,7 +99,7 @@
  	right: 36px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #fbd859, #f5b85e);
- 	border-radius: 2px;
+ 	border-top-left-radius: 2px;
  	cursor: pointer;
 }
 
@@ -112,7 +110,7 @@
  	right: 36px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #4b90f4, #8ab8f8);
- 	border-radius: 2px;
+ 	border-top-left-radius: 2px;
  	cursor: pointer;
 }
 
