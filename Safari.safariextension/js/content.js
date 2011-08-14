@@ -465,12 +465,37 @@ var show_navigation_buttons = {
 		$('#ext_back').click(function() {
 			document.location.href = 'forum.php';
 		});
+		
+		// Create search button
+		$('<div id="ext_search"></div>').prependTo('body');
+		
+		// Place search icon background
+		$('#ext_search').css('background-image', 'url('+safari.extension.baseURI+'img/content/search.png)');
+		
+		// Create the search event
+		$('#ext_search').toggle(
+			function() { show_navigation_buttons.showSearch(); },
+			function() { show_navigation_buttons.hideSearch(); }	
+		);
 	},
 	
 	disabled : function() {
 	
 		$('#ext_scrolltop').remove();
 		$('#ext_back').remove();
+	},
+	
+	showSearch : function() {
+		
+		// Clone and append the original search form to body
+		var clone = $('.lapozo:last').next().next().clone().appendTo('body');
+		
+		// Add class
+		clone.attr('id', 'ext_overlay_search');
+	},
+	
+	hideSearch : function() {
+		$('#ext_overlay_search').remove();
 	}
 };
 
