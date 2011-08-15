@@ -142,7 +142,11 @@ var jump_unreaded_messages = {
 var fav_show_only_unreaded = {
 	
 	activated : function() {
-	
+		
+		// Move the button away to place toggle button
+		$('#ext_refresh_faves').css('right', 18);
+		$('#ext_read_faves').css('right', 36);
+		
 		var counter = 0;
 		var counterAll = 0;
 
@@ -174,8 +178,11 @@ var fav_show_only_unreaded = {
 		if(counterAll == 0) {
 			$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
 		}
-	
-		// Set the "show" button
+		
+		// Remove old toggle button if any
+		$('#ext_show_filtered_faves').remove();
+		
+		// Set the toggle button
 		$('.ext_faves').append('<div id="ext_show_filtered_faves"></div>');
 		$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
@@ -204,6 +211,10 @@ var fav_show_only_unreaded = {
 		
 		// Remove toggle button
 		$('#ext_show_filtered_faves').remove();
+		
+		// Put back the buttons to the right side
+		$('#ext_refresh_faves').css('right', 0);
+		$('#ext_read_faves').css('right', 18);
 	}
 };
 
@@ -505,7 +516,12 @@ var update_fave_list = {
 		
 		// Create refhref button
 		$('.ext_faves').append('<div id="ext_refresh_faves"></div>');
-	
+		
+		// Move the button away if unreaded faves is on
+		if(dataStore['fav_show_only_unreaded'] == true && isLoggedIn() ) {
+			$('#ext_refresh_faves').css('right', 18);
+		}
+		
 		// Set refresh image
 		$('<img src="'+safari.extension.baseURI+'img/content/refresh.png">').appendTo('#ext_refresh_faves');
 		
@@ -561,6 +577,11 @@ var update_fave_list = {
 				if(dataStore['highlight_forum_categories'] == true) {
 					highlight_forum_categories.activated();
 				}
+				
+				// Jump the last unreaded message
+				if(dataStore['jump_unreaded_messages'] == true && isLoggedIn() ) {
+					jump_unreaded_messages.activated();
+				}
 			}
 		});
 	}
@@ -573,6 +594,11 @@ var make_read_all_faves = {
 
 		// Create the 'read them all' button
 		$('.ext_faves').append('<div id="ext_read_faves"><div>');
+
+		// Move the button away if unreaded faves is on
+		if(dataStore['fav_show_only_unreaded'] == true && isLoggedIn() ) {
+			$('#ext_read_faves').css('right', 36);
+		}
 		
 		// Append the image
 		$('<img src="'+safari.extension.baseURI+'img/content/makereaded.png">').appendTo('#ext_read_faves');
@@ -766,7 +792,7 @@ var overlay_reply_to = {
 		comment_clone.find('center').parent('div').remove();
 		
 		// Create textarea clone
-		var textarea_clone = $('textarea:first').closest('div').clone().prependTo('body').addClass('ext_clone_textarea');
+		var textarea_clone = $('textarea:first').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 		
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
@@ -796,6 +822,28 @@ var overlay_reply_to = {
 
 		// Set the textarea focus
 		textarea_clone.find('textarea').focus();
+
+		// Block default tab action
+		$('body').keydown(function(event) {
+			if (event.keyCode == '9') {
+    			 event.preventDefault();
+    			 textarea_clone.find('a:last').focus();
+   			}
+		});
+		
+		// Thickbox
+		textarea_clone.find('a.thickbox').each(function() {
+			
+			// Get the title and other stuff
+			var t = $(this).attr('title') || $(this).attr('name') || null;
+			var g = $(this).attr('rel') || false;
+			var h = $(this).attr('href');
+			
+			$(this).attr('href', 'javascript:TB_show(\''+t+'\',\''+h+'\','+g+');');
+			
+			$(this).blur();
+		});
+	
 		
 		// Add close button
 		var close_btm = $('<img src="'+safari.extension.baseURI+'img/content/overlay_close.png" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
@@ -813,6 +861,9 @@ var overlay_reply_to = {
 						
 						// Set back opened status
 						overlay_reply_to.opened = false;
+						
+						// Remove keydown event
+						$('body').unbind('keydown');
 					});
 				});
 			});
@@ -1376,7 +1427,7 @@ function extInit() {
 	if(document.location.href.match('forum.php')) {
 
 		// Settings
-		cp.init();
+		cp.init(1);
 
 		// setPredefinedVars
 		setPredefinedVars();
@@ -1423,7 +1474,7 @@ function extInit() {
 	else if(document.location.href.match(/listazas.php3\?id/gi)) {
 
 		// Settings
-		cp.init();
+		cp.init(2);
 
 		// setPredefinedVars
 		setPredefinedVars();

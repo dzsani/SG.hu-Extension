@@ -73,7 +73,7 @@
 	width: 18px;
 	height: 18px;
  	position: absolute;
- 	right: 18px;
+ 	right: 0px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #fbd859, #f5b85e);
  	cursor: pointer;
@@ -83,7 +83,7 @@
 	width: 18px;
 	height: 18px;
  	position: absolute;
- 	right: 18px;
+ 	right: 0px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #4b90f4, #8ab8f8);
  	cursor: pointer;
@@ -96,7 +96,7 @@
 	width: 18px;
 	height: 18px;
  	position: absolute;
- 	right: 36px;
+ 	right: 18px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #fbd859, #f5b85e);
  	border-top-left-radius: 2px;
@@ -107,7 +107,7 @@
 	width: 18px;
 	height: 18px;
  	position: absolute;
- 	right: 36px;
+ 	right: 18px;
  	top: 0px;
  	background-image: -webkit-linear-gradient(top, #4b90f4, #8ab8f8);
  	border-top-left-radius: 2px;
@@ -201,12 +201,12 @@
 	position: fixed;
 	opacity: 0.9;
 	background-color: #999;
-	z-index: 301;
+	z-index: 50;
 }
 
 .ext_highlighted_comment {
 	position: absolute !important;
-	z-index: 302;
+	z-index: 51;
 }
 
 .ext_clone_textarea {
@@ -214,7 +214,7 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	z-index: 303;
+	z-index: 52;
 	text-align: center;
 	-webkit-box-shadow: #333 0px 0px 10px;
 }

@@ -1,6 +1,6 @@
 var cp = {
 
-	init : function() {
+	init : function(page) {
 		
 		// Create the settings button
 		$('<div id="ext_settings_button"><img src="'+safari.extension.baseURI+'img/settings/icon.png" alt=""></div>').appendTo('body');
@@ -133,8 +133,11 @@ var cp = {
 		// Add buttons background image
 		$('.settings_page .button').css({ 'background-image' : 'url('+safari.extension.baseURI+'img/settings/button.png)' });
 		
-		// Select the first tab
-		cp.tab(0);
+		// Get the requested page number
+		var page  = typeof page == "undefined" ? 0 : page;
+		
+		// Select the right page
+		cp.tab(page);
 		
 		// Set-up blocklist
 		blocklist_cp.init();

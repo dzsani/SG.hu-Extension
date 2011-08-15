@@ -151,7 +151,11 @@ var jump_unreaded_messages = {
 var fav_show_only_unreaded = {
 	
 	activated : function() {
-	
+
+		// Move the button away to place toggle button
+		window.$('#ext_refresh_faves').css('right', 18);
+		window.$('#ext_read_faves').css('right', 36);
+
 		var counter = 0;
 		var counterAll = 0;
 
@@ -184,7 +188,10 @@ var fav_show_only_unreaded = {
 			window.$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
 		}
 	
-		// Set the "show" button
+		// Remove old toggle button if any
+		window.$('#ext_show_filtered_faves').remove();
+		
+		// Set the toggle button
 		window.$('.ext_faves').append('<div id="ext_show_filtered_faves"></div>');
 		window.$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
@@ -213,6 +220,10 @@ var fav_show_only_unreaded = {
 		
 		// Remove toggle button
 		window.$('#ext_show_filtered_faves').remove();
+
+		// Put back the buttons to the right side
+		window.$('#ext_refresh_faves').css('right', 0);
+		window.$('#ext_read_faves').css('right', 18);
 	}
 };
 
@@ -523,6 +534,11 @@ var update_fave_list = {
 		
 		// Create refhref button
 		window.$('.ext_faves').append('<div id="ext_refresh_faves"></div>');
+
+		// Move the button away if unreaded faves is on
+		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+			window.$('#ext_refresh_faves').css('right', 18);
+		}
 	
 		// Set refresh image
 		window.$('<img src="data:image/png;base64,'+refreshImg+'">').appendTo('#ext_refresh_faves');
@@ -583,6 +599,11 @@ var update_fave_list = {
 				if(dataStore['highlight_forum_categories'] == 'true') {
 					highlight_forum_categories.activated();
 				}
+
+				// Jump the last unreaded message
+				if(dataStore['jump_unreaded_messages'] == 'true' && isLoggedIn() ) {
+					jump_unreaded_messages.activated();
+				}
 			}
 		});
 	}
@@ -597,7 +618,12 @@ var make_read_all_faves = {
 		
 		// Create the 'read them all' button
 		window.$('.ext_faves').append('<div id="ext_read_faves"><div>');
-		
+
+		// Move the button away if unreaded faves is on
+		if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+			window.$('#ext_read_faves').css('right', 36);
+		}
+
 		// Append the image
 		window.$('<img src="data:image/png;base64,'+makereadedImg+'">').appendTo('#ext_read_faves');
 		
@@ -825,7 +851,28 @@ var overlay_reply_to = {
 
 		// Set the textarea focus
 		textarea_clone.find('textarea').focus();
-		
+
+		// Block default tab action
+		window.$('body').keydown(function(event) {
+			if (event.keyCode == '9') {
+    			 event.preventDefault();
+    			 textarea_clone.find('a:last').focus();
+   			}
+		});
+
+		// Thickbox
+		textarea_clone.find('a.thickbox').each(function() {
+			
+			// Get the title and other stuff
+			var t = window.$(this).attr('title') || window.$(this).attr('name') || null;
+			var g = window.$(this).attr('rel') || false;
+			var h = window.$(this).attr('href');
+			
+			window.$(this).attr('href', 'javascript:TB_show(\''+t+'\',\''+h+'\','+g+');');
+			
+			window.$(this).blur();
+		});
+
 		var img = "iVBORw0KGgoAAAANSUhEUgAAACMAAAAiCAYAAADVhWD8AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABW1JREFUeNqkmP1LZFUYx493x9kZs/Fl1XHX1VZWpSVsDcnFzc1dSXBzy7RAKgxLfxEEhWCjXwTpt/6FflAwydAMTdMUQVACxajVigSh1KzcMMeX9X08fZ/hOcPxzr3joA98mOHec+/53ufc87zcKCmlsLEo5gLjZC5qRPM5A9CN/OAIHIB9jQM+TuePeWyIOcIIMfg8CXCBp0y4NUFKjBKyB3bAE7DN/3dYmC7qVDEGo4vwgHiQwL/Z4BZIAok8jmyVJ/0Z/ADWwDrwgQ2wBXZZVIiXokzLZGhLEsMiLvGkV0A5uMuCTjPy0G/gK/AreMzifOytPfZSUJAuRhcSyxOmgMvgPnidvSDm5+fF5OSkmJ6eFgsLC2JjYyNwg9zcXJGamipKS0tFSUmJuq+fvdQGfmfvkahNFnQYXDISA0iUA8SAFPAsuAveA+OSbWxsTFZXV0t+krBkZGTItrY2qdlj0ALKwQvgKvAAJzACTmExF4ALXALZoBh8AObVnZqamiISYQbekuPjwefZAZ+yoJvgCohlR0Qpr0SDOHANFIK3wU909eLioiwqKjqTEIXL5ZJdXV1K0Bb4CJSCGyAZuMkhyiu0PKmstgJ8Hbhqa0vm5OScS4hOb2+vEvQXe/4lkMmOiBbslXiQBe6Bh2CfrrB7P9xut4yNjbWdNDk52fJ4QkKCnJqaUoK+A2+wA7zkHcEuIq/kgTdBYDS51U7I0NCQnJiYsBRUWFgY8GhjY6Pl9WVlZUoMPXATeJm94yExT/O7codPHtJIevGshIyMjAS3h1mQEqKsoaHBUlBfX58aMgReA8+BJBKTwFv5PuihETTYSghtbbMpQWYh4QSVl5er06vgHfAi7SyDc8tFjrg3KPb09PSEhFO/3y92d3dDjmOnCWxdAY8JiAq5Znt7O+SawcFBsbS0JDioZnCecwre66TsXbBOcjMzMy3d63Q65cDAgIzEjo6OZE1Nje1L3t/fr4Z+xts829CyMyW7OJK7vLxsnWwODkRVVZUYHh4Om5TII/X19aKjo8N2DKURtlRVihhaTiIfR62vrws8lX32g6CKiopAbrKz5uZm0d7eHlawz+dTf2NUTWTwAWlX8FhZQUGByMvLsz2P+BTy/pxiUmXqY+YJBybhcDhsr6IXFnEm7GSRjImPD1YhO0qDoZWKe1wAifT09DNPEunYrKws9fcfLiP8gkuGmxx9Z+n1rq2ttSwJrOIIGUVbispWZhWziJWVFTXkIUfha3rQozj9JZ2l7Wt1g9bW1pDJ6urqTqQJ3dbW1mR+fn7IfSorK9WQv/Wgp9LBM6CIHlKlA6ubmAWZPagLshNCaLHqG/BATwcuzpq0VFXgexrV3d1tG7BIkNVSKkGdnZ22QrRUsMcPf0dPlKqEuM4V3odckdkmurPi9Xrl7OysEvMt107P6yWEKq68fIKy6OfqivNWeTbLswjeB7e5YggWV6rspOI4A9yiukoV4oiUAdeeR4TH49GrPB97/xXeOEn8qhiqIDf4QCJXfLSONeCRukNLS8uZhBQXF8uZmRm9/v2EyxVahcvmgtzcqlCBnMN7n7bdsF672L24Vl0BbQLN/gQfg1e5qgxpVfQmTjX5qrahVjaZm7h74C2uP8Tq6qqAMDE6OhpInHNzc4HmLS0tTSA4CngjEIHZKLpPgC/AH9zE/cet7okmzq69jdba20Rub1O4vb0NrkaQ/FTPTZUa1Qv/cie5we3tfrj21tz4R5sa/zhueeNZTD64zrWQlyfY5F76F/Aj/1dsao2/+kQiwzX+Vp9ElKgYm08iDvam3ScRxR5741CrFE5OGsHHIl2U/rHIafGx6NjmY9GhSYTlpP8LMABrw9+qClj5kgAAAABJRU5ErkJggg==";
 		
 		// Add close button
@@ -844,6 +891,9 @@ var overlay_reply_to = {
 						
 						// Set back opened status
 						overlay_reply_to.opened = false;
+
+						// Remove keydown event
+						window.$('body').unbind('keydown');
 					});
 				});
 			});
@@ -1415,7 +1465,7 @@ function extInit() {
 	if(document.location.href.match('forum.php')) {
 
 		// Settings
-		cp.init();
+		cp.init(1);
 
 		// setPredefinedVars
 		setPredefinedVars();
@@ -1461,7 +1511,7 @@ function extInit() {
 	else if(document.location.href.match(/listazas.php3\?id/gi)) {
 
 		// Settings
-		cp.init();
+		cp.init(2);
 
 		// setPredefinedVars
 		setPredefinedVars();
