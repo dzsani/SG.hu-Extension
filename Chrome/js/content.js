@@ -127,7 +127,10 @@ var jump_unreaded_messages = {
 			// Scroll to target element
 			$('body').animate({ scrollTop : targetOffset}, 500);
 			
-			// Remove original HR tag
+			// Append hr tag content if any
+			var content = $('a[name=pirosvonal]').find('center').inertBefore('a[name=pirosvonal]');
+			
+			// Remove original hr tag
 			$('a[name=pirosvonal]').remove();
 			
 		}, 1000, target);
