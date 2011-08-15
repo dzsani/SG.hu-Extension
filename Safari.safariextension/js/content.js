@@ -705,6 +705,11 @@ var make_read_all_faves = {
 						fav_show_only_unreaded.activated();
 					}
 					
+					// Reset faves newmsg vars
+					if(dataStore['jump_unreaded_messages'] == true && isLoggedIn() ) {
+						jump_unreaded_messages.activated();
+					}
+					
 					clearInterval(interval);
 				}
 				
