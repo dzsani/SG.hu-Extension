@@ -22,13 +22,13 @@
 
     // Define the defaults used for all new cleditor instances
     defaultOptions: {
-      width:        500, // width not including margins, borders or padding
-      height:       250, // height not including margins, borders or padding
+      width:        600, // width not including margins, borders or padding
+      height:       145, // height not including margins, borders or padding
       controls:     // controls to add to the toolbar
-                    "bold italic underline strikethrough subscript superscript | font size " +
-                    "style | color highlight removeformat | bullets numbering | outdent " +
-                    "indent | alignleft center alignright justify | undo redo | " +
-                    "rule image link unlink | cut copy paste pastetext | print source",
+                    "bold italic underline | size " +
+                    " | color removeformat | " +
+                    "alignleft center alignright | undo redo | " +
+                    "image link unlink | source",
       colors:       // colors in the color popup
                     "FFF FCC FC9 FF9 FFC 9F9 9FF CFF CCF FCF " +
                     "CCC F66 F96 FF6 FF3 6F9 3FF 6FF 99F F9F " +
@@ -41,7 +41,7 @@
                     "Arial,Arial Black,Comic Sans MS,Courier New,Narrow,Garamond," +
                     "Georgia,Impact,Sans Serif,Serif,Tahoma,Trebuchet MS,Verdana",
       sizes:        // sizes in the font size popup
-                    "1,2,3,4,5,6,7",
+                    "1,2,3,4",
       styles:       // styles in the style popup
                     [["Paragraph", "<p>"], ["Header 1", "<h1>"], ["Header 2", "<h2>"],
                     ["Header 3", "<h3>"],  ["Header 4","<h4>"],  ["Header 5","<h5>"],
@@ -782,9 +782,13 @@
 
   // imagesPath - returns the path to the images folder
   function imagesPath() {
-    var cssFile = "jquery.cleditor.css",
+   
+   var cssFile = "jquery.cleditor.css",
         href = $("link[href$='" + cssFile +"']").attr("href");
     return href.substr(0, href.length - cssFile.length) + "images/";
+
+
+    //return safari.extension.baseURI+'img/cleditor/';
   }
 
   // imageUrl - Returns the css url string for a filemane

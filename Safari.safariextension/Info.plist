@@ -32,12 +32,15 @@
 				<string>js/dom.js</string>
 				<string>js/settings.js</string>
 				<string>js/content.js</string>
+				<string>js/jquery.cleditor.js</string>
+				<string>js/cleditor.bbcode.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
 		<array>
 			<string>css/settings.css</string>
 			<string>css/content.css</string>
+			<string>css/jquery.cleditor.css</string>
 		</array>
 	</dict>
 	<key>Description</key>
