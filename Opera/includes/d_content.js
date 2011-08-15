@@ -698,8 +698,8 @@ var make_read_all_faves = {
 					window.$(ele).find('font').remove();
 					window.$(ele).find('.ext_short_comment_marker').remove();
 					
-					if(dataStore['fav_show_only_unreaded'] == 'true') {
-						window.$(ele).parent().addClass('ext_hidden_fave');
+					if(dataStore['fav_show_only_unreaded'] == 'true' && fav_show_only_unreaded.opened == false) {
+						$(ele).parent().addClass('ext_hidden_fave');
 					}
 					
 					counter++;
@@ -718,17 +718,9 @@ var make_read_all_faves = {
 						window.$('#ext_read_faves img').attr('src', 'data:image/png;base64,'+makereadedImg);
 					}, 2000);
 					
-					if(dataStore['fav_show_only_unreaded'] == 'true') {
-					
-						// Add 'no unreaded topics' message
-						if( window.$('#ext_filtered_faves_error').length == 0) {
-							window.$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
-						}
-						
-						// Hide all remaining topics
-						if(dataStore['fav_show_only_unreaded'] == 'true') {
-							window.$('.ext_faves').next().find('div').addClass('ext_hidden_fave');
-						}
+					// Faves: show only with unreaded messages
+					if(dataStore['fav_show_only_unreaded'] == 'true' && isLoggedIn() ) {
+						fav_show_only_unreaded.activated();
 					}
 					
 					clearInterval(interval);
