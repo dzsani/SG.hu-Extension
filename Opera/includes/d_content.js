@@ -74,6 +74,13 @@ var jump_unreaded_messages = {
 				
 				// Rewrite the url
 				window.$(this).attr('href', window.$(this).attr('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
+
+			// Remove newmsg var from link
+			} else if( window.$(this).attr('href').indexOf('&order') != -1) {
+				
+				var start = window.$(this).attr('href').indexOf('&order');
+				
+				window.$(this).attr('href', window.$(this).attr('href').substring(0, start));
 			}
 		});
 	},
