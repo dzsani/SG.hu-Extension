@@ -142,7 +142,9 @@ var jump_unreaded_messages = {
 };
 
 var fav_show_only_unreaded = {
-	
+
+	opened : false,
+
 	activated : function() {
 
 		// Move the button away to place toggle button
@@ -177,7 +179,7 @@ var fav_show_only_unreaded = {
 		});
 	
 		// Create an error message if theres no topik with unreaded messages
-		if(counterAll == 0) {
+		if(counterAll == 0 && $('#ext_filtered_faves_error').length == 0) {
 			$('.ext_faves').next().find('div:last').after('<p id="ext_filtered_faves_error">Nincs olvasatlan téma</p>');
 		}
 	
@@ -192,18 +194,30 @@ var fav_show_only_unreaded = {
 		$('#ext_show_filtered_faves_arrow').attr('class', 'show');
 
 		// Set event handling
-		$('#ext_show_filtered_faves').toggle(
-			function() {
+		$('#ext_show_filtered_faves').click(function() {
+		
+			if(fav_show_only_unreaded.opened == false) {
 				$('#ext_filtered_faves_error').hide();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
 				$('.ext_hidden_fave').show();
-			},
-			function() {
+				
+				fav_show_only_unreaded.opened = true;
+			
+			} else {
 				$('#ext_filtered_faves_error').show();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'show');
-				$('.ext_hidden_fave').hide(); 
+				$('.ext_hidden_fave').hide();
+				
+				fav_show_only_unreaded.opened = false;
 			}
-		);
+		});
+
+		// Check opened status
+		if(fav_show_only_unreaded.opened == true) {
+			$('#ext_filtered_faves_error').hide();
+			$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
+			$('.ext_hidden_fave').show();
+		}
 	},
 	
 	disabled : function() {
