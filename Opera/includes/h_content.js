@@ -1585,6 +1585,11 @@ function extInit() {
 		if(dataStore['show_mentioned_comments'] == 'true') {
 			show_mentioned_comments.activated();
 		}
+
+		// CLEditor init
+		if(dataStore['wysiwyg_editor'] == true) {
+			$("textarea:first").cleditor();
+		}
 		
 	}
 }
