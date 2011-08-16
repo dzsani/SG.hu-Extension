@@ -1492,13 +1492,10 @@ nicEditors.registerPlugin(nicXHTML);
 var nicBBCode = bkClass.extend({
 	construct : function(nicEditor) {
 		this.ne = nicEditor;
- 		//if(this.ne.options.bbCode) {
+ 		if(this.ne.options.bbCode) {
  			
 			nicEditor.addEvent('get',this.bbGet.closure(this));
 			nicEditor.addEvent('set',this.bbSet.closure(this));
-	
-	
-			alert(typeof bkElement);
 			
 			var loadedPlugins = this.ne.loadedPlugins;
 			for(itm in loadedPlugins) {
@@ -1506,7 +1503,7 @@ var nicBBCode = bkClass.extend({
 					this.xhtml = loadedPlugins[itm];
 				}
 			}
-		//}
+		}
 	},
 	
 	bbGet : function(ni) {

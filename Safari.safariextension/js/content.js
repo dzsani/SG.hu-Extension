@@ -1551,7 +1551,12 @@ function extInit() {
 		
 		// CLEditor init
 		if(dataStore['wysiwyg_editor'] == true) {
-			nicEditors.allTextAreas();
+		
+			// Set the first textarea id
+			$('textarea:first').attr('id', 'area1');
+			
+			// nicEdit init
+			new nicEditor({bbCode : true}).panelInstance('area1');
 		}
 	}
 }
