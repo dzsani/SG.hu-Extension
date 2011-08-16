@@ -1548,16 +1548,6 @@ function extInit() {
 		if(dataStore['show_mentioned_comments'] == true) {
 			show_mentioned_comments.activated();
 		}
-		
-		// CLEditor init
-		if(dataStore['wysiwyg_editor'] == true) {
-		
-			// Set the first textarea id
-			$('textarea:first').attr('id', 'area1');
-			
-			// nicEdit init
-			new nicEditor({bbCode : true}).panelInstance('area1');
-		}
 	}
 }
 

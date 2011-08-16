@@ -109,11 +109,6 @@ var cp = {
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';
 					html += '<div class="button" id="show_mentioned_comments"></div>';
 				html += '</div>';
-				html += '<div>';
-					html += '<h3>WYSIWYG Editor</h3>';
-					html += '<p>Topik kommentírós mezőjében Office szerű formázógombok, élő előnézettel.</p>';
-					html += '<div class="button" id="wysiwyg_editor"></div>';
-				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';
