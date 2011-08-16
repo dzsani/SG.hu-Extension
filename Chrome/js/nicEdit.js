@@ -233,6 +233,7 @@ function __(s) {
 }
 
 Function.prototype.closure = function() {
+
   var __method = this, args = bkLib.toArray(arguments), obj = args.shift();
   return function() { if(typeof(bkLib) != 'undefined') { return __method.apply(obj,args.concat(bkLib.toArray(arguments))); } };
 }
@@ -251,13 +252,13 @@ Function.prototype.closureListener = function() {
 
 var nicEditorConfig = bkClass.extend({
 	buttons : {
-		'bold' : {name : __('Click to Bold'), command : 'Bold', tags : ['B','STRONG'], css : {'font-weight' : 'bold'}, key : 'b'},
-		'italic' : {name : __('Click to Italic'), command : 'Italic', tags : ['EM','I'], css : {'font-style' : 'italic'}, key : 'i'},
-		'underline' : {name : __('Click to Underline'), command : 'Underline', tags : ['U'], css : {'text-decoration' : 'underline'}, key : 'u'},
-		'left' : {name : __('Left Align'), command : 'justifyleft', noActive : true},
-		'center' : {name : __('Center Align'), command : 'justifycenter', noActive : true},
-		'right' : {name : __('Right Align'), command : 'justifyright', noActive : true},
-		'justify' : {name : __('Justify Align'), command : 'justifyfull', noActive : true},
+		'bold' : {name : __('Félkövér'), command : 'Bold', tags : ['B','STRONG'], css : {'font-weight' : 'bold'}, key : 'b'},
+		'italic' : {name : __('Dőlt'), command : 'Italic', tags : ['EM','I'], css : {'font-style' : 'italic'}, key : 'i'},
+		'underline' : {name : __('Aláhúzott'), command : 'Underline', tags : ['U'], css : {'text-decoration' : 'underline'}, key : 'u'},
+		'left' : {name : __('Balra igazítás'), command : 'justifyleft', noActive : true},
+		'center' : {name : __('Középre igazítás'), command : 'justifycenter', noActive : true},
+		'right' : {name : __('Jobbra igazítás'), command : 'justifyright', noActive : true},
+		'justify' : {name : __('Sorkizárt'), command : 'justifyfull', noActive : true},
 		'ol' : {name : __('Insert Ordered List'), command : 'insertorderedlist', tags : ['OL']},
 		'ul' : 	{name : __('Insert Unordered List'), command : 'insertunorderedlist', tags : ['UL']},
 		'subscript' : {name : __('Click to Subscript'), command : 'subscript', tags : ['SUB']},
@@ -269,7 +270,7 @@ var nicEditorConfig = bkClass.extend({
 		'hr' : {name : __('Horizontal Rule'), command : 'insertHorizontalRule', noActive : true}
 	},
 	iconsPath : chrome.extension.getURL('/img/nicedit/nicEditorIcons.gif'),
-	buttonList : ['save','bold','italic','underline','left','center','right','justify','ol','ul','fontSize','fontFamily','fontFormat','indent','outdent','image','upload','link','unlink','forecolor','bgcolor','xhtml'],
+	buttonList : ['bold','italic','underline','left','center','right','fontSize','image','link','unlink','forecolor','xhtml'],
 	iconList : {"xhtml":1,"bgcolor":2,"forecolor":3,"bold":4,"center":5,"hr":6,"indent":7,"italic":8,"justify":9,"left":10,"ol":11,"outdent":12,"removeformat":13,"right":14,"save":25,"strikethrough":16,"subscript":17,"superscript":18,"ul":19,"underline":20,"image":21,"link":22,"unlink":23,"close":24,"arrow":26}
 	
 });
@@ -1141,7 +1142,7 @@ var nicEditorSelect = bkClass.extend({
 });
 
 var nicEditorFontSizeSelect = nicEditorSelect.extend({
-	sel : {1 : '1&nbsp;(8pt)', 2 : '2&nbsp;(10pt)', 3 : '3&nbsp;(12pt)', 4 : '4&nbsp;(14pt)', 5 : '5&nbsp;(18pt)', 6 : '6&nbsp;(24pt)'},
+	sel : {1 : 'apró', 2 : 'normál', 4 : 'nagy', 5 : 'hatalmas', 6 : 'brutálnagy'},
 	init : function() {
 		this.setDisplay('Font&nbsp;Size...');
 		for(itm in this.sel) {
@@ -1180,8 +1181,8 @@ nicEditors.registerPlugin(nicPlugin,nicSelectOptions);
 /* START CONFIG */
 var nicLinkOptions = {
 	buttons : {
-		'link' : {name : 'Add Link', type : 'nicLinkButton', tags : ['A']},
-		'unlink' : {name : 'Remove Link',  command : 'unlink', noActive : true}
+		'link' : {name : 'Link beszúrása', type : 'nicLinkButton', tags : ['A']},
+		'unlink' : {name : 'Link eltávolítása',  command : 'unlink', noActive : true}
 	}
 };
 /* END CONFIG */
@@ -1190,10 +1191,8 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
 	addPane : function() {
 		this.ln = this.ne.selectedInstance.selElm().parentTag('A');
 		this.addForm({
-			'' : {type : 'title', txt : 'Add/Edit Link'},
-			'href' : {type : 'text', txt : 'URL', value : 'http://', style : {width: '150px'}},
-			'title' : {type : 'text', txt : 'Title'},
-			'target' : {type : 'select', txt : 'Open In', options : {'' : 'Current Window', '_blank' : 'New Window'},style : {width : '100px'}}
+			'' : {type : 'title', txt : 'Link hozzáadása/szerkesztése'},
+			'href' : {type : 'text', txt : 'URL', value : 'http://', style : {width: '150px'}}
 		},this.ln);
 	},
 	
@@ -1212,9 +1211,7 @@ var nicLinkButton = nicEditorAdvancedButton.extend({
 		}
 		if(this.ln) {
 			this.ln.setAttributes({
-				href : this.inputs['href'].value,
-				title : this.inputs['title'].value,
-				target : this.inputs['target'].options[this.inputs['target'].selectedIndex].value
+				href : this.inputs['href'].value
 			});
 		}
 	}
@@ -1227,7 +1224,7 @@ nicEditors.registerPlugin(nicPlugin,nicLinkOptions);
 /* START CONFIG */
 var nicColorOptions = {
 	buttons : {
-		'forecolor' : {name : __('Change Text Color'), type : 'nicEditorColorButton', noClose : true},
+		'forecolor' : {name : __('Betűszín változtatása'), type : 'nicEditorColorButton', noClose : true},
 		'bgcolor' : {name : __('Change Background Color'), type : 'nicEditorBgColorButton', noClose : true}
 	}
 };
@@ -1235,8 +1232,8 @@ var nicColorOptions = {
 
 var nicEditorColorButton = nicEditorAdvancedButton.extend({	
 	addPane : function() {
-			var colorList = {0 : '00',1 : '33',2 : '66',3 :'99',4 : 'CC',5 : 'FF'};
-			var colorItems = new bkElement('DIV').setStyle({width: '270px'});
+			var colorList = {0 : '00',1 : 'FF'};
+			var colorItems = new bkElement('DIV').setStyle({width: '120px'});
 			
 			for(var r in colorList) {
 				for(var b in colorList) {
@@ -1285,7 +1282,7 @@ nicEditors.registerPlugin(nicPlugin,nicColorOptions);
 /* START CONFIG */
 var nicImageOptions = {
 	buttons : {
-		'image' : {name : 'Add Image', type : 'nicImageButton', tags : ['IMG']}
+		'image' : {name : 'Kép beszúrása', type : 'nicImageButton', tags : ['IMG']}
 	}
 	
 };
@@ -1295,10 +1292,8 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 	addPane : function() {
 		this.im = this.ne.selectedInstance.selElm().parentTag('IMG');
 		this.addForm({
-			'' : {type : 'title', txt : 'Add/Edit Image'},
-			'src' : {type : 'text', txt : 'URL', 'value' : 'http://', style : {width: '150px'}},
-			'alt' : {type : 'text', txt : 'Alt Text', style : {width: '100px'}},
-			'align' : {type : 'select', txt : 'Align', options : {none : 'Default','left' : 'Left', 'right' : 'Right'}}
+			'' : {type : 'title', txt : 'Kép hozzáadása/szerkesztése'},
+			'src' : {type : 'text', txt : 'URL', 'value' : 'http://', style : {width: '150px'}}
 		},this.im);
 	},
 	
@@ -1317,9 +1312,7 @@ var nicImageButton = nicEditorAdvancedButton.extend({
 		}
 		if(this.im) {
 			this.im.setAttributes({
-				src : this.inputs['src'].value,
-				alt : this.inputs['alt'].value,
-				align : this.inputs['align'].value
+				src : this.inputs['src'].value
 			});
 		}
 	}
@@ -1499,7 +1492,8 @@ nicEditors.registerPlugin(nicXHTML);
 var nicBBCode = bkClass.extend({
 	construct : function(nicEditor) {
 		this.ne = nicEditor;
-		if(this.ne.options.bbCode) {
+ 		//if(this.ne.options.bbCode) {
+ 			
 			nicEditor.addEvent('get',this.bbGet.closure(this));
 			nicEditor.addEvent('set',this.bbSet.closure(this));
 			
@@ -1509,15 +1503,17 @@ var nicBBCode = bkClass.extend({
 					this.xhtml = loadedPlugins[itm];
 				}
 			}
-		}
+		//}
 	},
 	
 	bbGet : function(ni) {
+
 		var xhtml = this.xhtml.toXHTML(ni.getElm());
 		ni.content = this.toBBCode(xhtml);
 	},
 	
 	bbSet : function(ni) {
+		alert('a');
 		ni.content = this.fromBBCode(ni.content);
 	},
 	
@@ -1526,17 +1522,40 @@ var nicBBCode = bkClass.extend({
 			xhtml = xhtml.replace(r,m);
 		}
 		
-		rp(/\n/gi,"");
+
+		rp(/<b>(.*?)<\/b>/gi,"[b]$1[/b]");
+		rp(/<i>(.*?)<\/i>/gi,"[i]$1[/i]");
+		rp(/<u>(.*?)<\/u>/gi,"[u]$1[/u]");
+		
 		rp(/<strong>(.*?)<\/strong>/gi,"[b]$1[/b]");
 		rp(/<em>(.*?)<\/em>/gi,"[i]$1[/i]");
-		rp(/<span.*?style="text-decoration:underline;">(.*?)<\/span>/gi,"[u]$1[/u]");
-		rp(/<ul>(.*?)<\/ul>/gi,"[list]$1[/list]");
-		rp(/<li>(.*?)<\/li>/gi,"[*]$1[/*]");
-		rp(/<ol>(.*?)<\/ol>/gi,"[list=1]$1[/list]");
+
+			
 		rp(/<img.*?src="(.*?)".*?>/gi,"[img]$1[/img]");
 		rp(/<a.*?href="(.*?)".*?>(.*?)<\/a>/gi,"[url=$1]$2[/url]");
 		rp(/<br.*?>/gi,"\n");
-		rp(/<.*?>.*?<\/.*?>/gi,"");
+
+		rp(/<div style="text-align:left;">([\s\S]*?)<\/div>/img, "$1");
+		rp(/<div style="text-align:center;">([\s\S]*?)<\/div>/img, "[center]$1[/center]");
+		rp(/<div style="text-align:right;">([\s\S]*?)<\/div>/img, "[right]$1[/right]");
+		rp(/<span style="font-size:xx-small;">([\s\S]*?)<\/span>/img, "[apro]$1[/apro]");
+		rp(/<span style="font-size:x-small;">([\s\S]*?)<\/span>/img, "$1");
+		rp(/<span style="font-size:medium;">([\s\S]*?)<\/span>/img, "[nagy]$1[/nagy]");
+		rp(/<span style="font-size:large;">([\s\S]*?)<\/span>/img, "[hatalmas]$1[/hatalmas]");
+		rp(/<span style="font-size:x-large;">([\s\S]*?)<\/span>/img, "[brutalnagy]$1[/brutalnagy]");
+		
+		rp(/<span color="#0000ff">([\s\S]*?)<\/span>/img, "[szin=blue]$1[/szin]");
+		rp(/<span color="#ff0000">([\s\S]*?)<\/span>/img, "[szin=red]$1[/szin]");
+		rp(/<span color="#00ff00">([\s\S]*?)<\/span>/img, "[szin=green]$1[/szin]");
+		rp(/<span color="#ffff00">([\s\S]*?)<\/span>/img, "[szin=yellow]$1[/szin]");
+		rp(/<span color="#ff00ff">([\s\S]*?)<\/span>/img, "[szin=pink]$1[/szin]");
+		rp(/<span color="#00ffff">([\s\S]*?)<\/span>/img, "[szin=skyblue]$1[/szin]");
+		rp(/<span color="#ffffff">([\s\S]*?)<\/span>/img, "[szin=white]$1[/szin]");
+		
+		rp(/<div><\/div>/g,"\n");
+		rp(/<div>([\s\S]*?)<\/div>/g,"\n$1");
+
+		//rp(/<.*?>(.*?)<\/.*?>/g,"$1");
 		
 		return xhtml;
 	},
@@ -1545,16 +1564,30 @@ var nicBBCode = bkClass.extend({
 		function rp(r,m) {
 			bbCode = bbCode.replace(r,m);
 		}		
-		
+
 		rp(/\[b\](.*?)\[\/b\]/gi,"<strong>$1</strong>");
 		rp(/\[i\](.*?)\[\/i\]/gi,"<em>$1</em>");
-		rp(/\[u\](.*?)\[\/u\]/gi,"<span style=\"text-decoration:underline;\">$1</span>");
-		rp(/\[list\](.*?)\[\/list\]/gi,"<ul>$1</ul>");
-		rp(/\[list=1\](.*?)\[\/list\]/gi,"<ol>$1</ol>");
-		rp(/\[\*\](.*?)\[\/\*\]/gi,"<li>$1</li>");
+		rp(/\[u\](.*?)\[\/u\]/gi,"<u>$1</u>");
+		
 		rp(/\[img\](.*?)\[\/img\]/gi,"<img src=\"$1\" />");
 		rp(/\[url=(.*?)\](.*?)\[\/url\]/gi,"<a href=\"$1\">$2</a>");
 		rp(/\n/gi,"<br />");
+
+		rp(/\[center\]([\s\S]*?)\[\/center\]/gim, '<div style="text-align:center;">>$1</div>');
+		rp(/\[right\]([\s\S]*?)\[\/right\]/gim, '<div style="text-align:right;">$1</div>');
+		rp(/\[apro\]([\s\S]*?)\[\/apro\]/gim, '<span style="font-size:xx-small;"$1</span>');
+		rp(/\[nagy\]([\s\S]*?)\[\/nagy\]/gim, '<span style="font-size:medium;">$1</span>');
+		rp(/\[hatalmas\]([\s\S]*?)\[\/hatalmas\]/gim, '<span style="font-size:large;">$1</span>');
+		rp(/\[brutalnagy\]([\s\S]*?)\[\/brutalnagy\]/gim, '<span style="font-size:x-large;">$1</span>');
+		
+		rp(/\[szin=blue\]([\s\S]*?)\[\/szin\]/gim, '<span color="#0000ff">$1</span>');
+		rp(/\[szin=red\]([\s\S]*?)\[\/szin\]/gim, '<span color="#ff0000">$1</span>');
+		rp(/\[szin=green\]([\s\S]*?)\[\/szin\]/gim, '<span color="#00ff00">$1</span>');
+		rp(/\[szin=yellow\]([\s\S]*?)\[\/szin\]/gim, '<span color="#ffff00">$1</span>');
+		rp(/\[szin=pink\]([\s\S]*?)\[\/szin\]/gim, '<span color="#ff00ff">$1</span>');
+		rp(/\[szin=skyblue\]([\s\S]*?)\[\/szin\]/gim, '<span color="#00ffff">$1</span>');
+		rp(/\[szin=white\]([\s\S]*?)\[\/szin\]/gim, '<span color="#ffffff">$1</span>');
+		
 		//rp(/\[.*?\](.*?)\[\/.*?\]/gi,"$1");
 		
 		return bbCode;
@@ -1569,7 +1602,7 @@ nicEditors.registerPlugin(nicBBCode);
 /* START CONFIG */
 var nicCodeOptions = {
 	buttons : {
-		'xhtml' : {name : 'Edit HTML', type : 'nicCodeButton'}
+		'xhtml' : {name : 'Forrás megtekintése', type : 'nicCodeButton'}
 	}
 	
 };

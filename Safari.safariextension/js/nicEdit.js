@@ -1496,7 +1496,9 @@ var nicBBCode = bkClass.extend({
  			
 			nicEditor.addEvent('get',this.bbGet.closure(this));
 			nicEditor.addEvent('set',this.bbSet.closure(this));
-
+	
+	
+			alert(typeof bkElement);
 			
 			var loadedPlugins = this.ne.loadedPlugins;
 			for(itm in loadedPlugins) {
