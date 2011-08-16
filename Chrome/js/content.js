@@ -1552,7 +1552,7 @@ function extInit() {
 
 		// CLEditor init
 		if(dataStore['wysiwyg_editor'] == 'true') {
-			$("textarea:first").cleditor();
+			nicEditors.allTextAreas();
 		}
 	}
 }

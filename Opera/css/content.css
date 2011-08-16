@@ -289,3 +289,9 @@
 .ext_block_button_right {
 	float: right;
 }
+
+/* WYSIWYG Editor */
+.nicEdit-main {
+	text-align: left !important;
+	font: normal normal normal 13px/14px Arial, serif;
+}
