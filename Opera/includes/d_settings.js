@@ -16,15 +16,15 @@ var cp = {
 		var buttonsImg	= "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";
 		
 		// Create the settings button
-		window.$('<div id="ext_settings_button"><img src="data:image/png;base64,'+iconImg+'" alt=""></div>').appendTo('body');
+		$('<div id="ext_settings_button"><img src="data:image/png;base64,'+iconImg+'" alt=""></div>').appendTo('body');
 		
 		// Create the hiding overlay
-		window.$('<div id="ext_settings_hide_overlay"></div>').appendTo('body');
+		$('<div id="ext_settings_hide_overlay"></div>').appendTo('body');
 		
 		// Create click event for settings pane
-		window.$('#ext_settings_button').click(function() {
+		$('#ext_settings_button').click(function() {
 			
-			if(window.$('#ext_settings_wrapper').hasClass('opened')) {
+			if($('#ext_settings_wrapper').hasClass('opened')) {
 				cp.hide();
 			} else {
 				cp.show();
@@ -137,19 +137,19 @@ var cp = {
 		html += '</div>';
 		
 		// Append settings pane html to body
-		window.$(html).appendTo('body');
+		$(html).appendTo('body');
 		
 		// Set header list backgrounds
-		window.$('#ext_settings_header li').css({ 'background-image' : 'url(data:image/png;base64,'+iconsImg+')' });
+		$('#ext_settings_header li').css({ 'background-image' : 'url(data:image/png;base64,'+iconsImg+')' });
 		
 		// Create tabs event
-		window.$('#ext_settings_header li').click(function() {
+		$('#ext_settings_header li').click(function() {
 			
-			cp.tab( window.$(this).index() );
+			cp.tab( $(this).index() );
 		});
 		
 		// Add buttons background image
-		window.$('.settings_page .button').css({ 'background-image' : 'url(data:image/png;base64,'+buttonsImg+')' });
+		$('.settings_page .button').css({ 'background-image' : 'url(data:image/png;base64,'+buttonsImg+')' });
 		
 		// Get the requested page number
 		var page  = typeof page == "undefined" ? 0 : page;
@@ -161,7 +161,7 @@ var cp = {
 		blocklist_cp.init();
 		
 		// Close when clicking away
-		window.$('#ext_settings_hide_overlay').click(function() {
+		$('#ext_settings_hide_overlay').click(function() {
 			cp.hide();
 		});
 		
@@ -169,18 +169,18 @@ var cp = {
 		settings.restore();
 		
 		// Settings change event, saving
-		window.$('.settings_page .button').click(function() {
+		$('.settings_page .button').click(function() {
 			cp.button(this);
 		});
 		
 		// Set checkboxes
-		window.$('input:checkbox').click(function() {
+		$('input:checkbox').click(function() {
 			settings.save(this);
 		})
 		
 		
 		// Reset blocks config
-		window.$('#reset_blocks_config').click(function() {
+		$('#reset_blocks_config').click(function() {
 			opera.extension.postMessage({ name : "setSetting", key : 'blocks_config', val : '' });
 		});
 	},
@@ -188,84 +188,84 @@ var cp = {
 	show : function() {
 		
 		// Set the overlay
-		window.$('#ext_settings_hide_overlay').css({ display : 'block', opacity : 0 });
-		window.$('#ext_settings_hide_overlay').animate({ opacity : 0.6 }, 200);
+		$('#ext_settings_hide_overlay').css({ display : 'block', opacity : 0 });
+		$('#ext_settings_hide_overlay').animate({ opacity : 0.6 }, 200);
 		
 		// Get the viewport and panel dimensions
-		var viewWidth	= window.$(window).width();
-		var paneWidth	= window.$('#ext_settings_wrapper').width();
-		var paneHeight	= window.$('#ext_settings_wrapper').height();
+		var viewWidth	= $(window).width();
+		var paneWidth	= $('#ext_settings_wrapper').width();
+		var paneHeight	= $('#ext_settings_wrapper').height();
 		var leftProp	= viewWidth / 2 - paneWidth / 2;
 
 		// Apply calculated CSS settings to the panel
-		window.$('#ext_settings_wrapper').css({ left : leftProp, top : '-'+(paneHeight+10)+'px' });
+		$('#ext_settings_wrapper').css({ left : leftProp, top : '-'+(paneHeight+10)+'px' });
 		
 		// Reveal the panel
-		window.$('#ext_settings_wrapper').delay(250).animate({ top : 10 }, 250);
+		$('#ext_settings_wrapper').delay(250).animate({ top : 10 }, 250);
 		
 		// Add 'opened' class
-		window.$('#ext_settings_wrapper').addClass('opened');
+		$('#ext_settings_wrapper').addClass('opened');
 		
 	},
 	
 	hide : function() {
 		
 		// Get the settings pane height
-		var paneHeight = window.$('#ext_settings_wrapper').height();
+		var paneHeight = $('#ext_settings_wrapper').height();
 		
 		// Hide the pane
-		window.$('#ext_settings_wrapper').animate({ top : '-'+(paneHeight+10)+'px'}, 200, function() {
+		$('#ext_settings_wrapper').animate({ top : '-'+(paneHeight+10)+'px'}, 200, function() {
 			
 			// Hide the settings pane 
-			window.$(this).css('top', -9000);
+			$(this).css('top', -9000);
 			
 			// Restore the overlay
-			window.$('#ext_settings_hide_overlay').animate({ opacity : 0 }, 100, function() {
-				window.$(this).css('display', 'none');
+			$('#ext_settings_hide_overlay').animate({ opacity : 0 }, 100, function() {
+				$(this).css('display', 'none');
 			});
 			
 			// Remove 'opened' class
-			window.$('#ext_settings_wrapper').removeClass('opened');
+			$('#ext_settings_wrapper').removeClass('opened');
 		});
 	},
 	
 	tab : function(index) {
 		
 		// Set the current height to prevent resize
-		window.$('#ext_settings_wrapper').css({ height : window.$('#ext_settings_wrapper').height() });
+		$('#ext_settings_wrapper').css({ height : $('#ext_settings_wrapper').height() });
        
 		// Hide all tab pages
-		window.$('.settings_page').css('display', 'none');
+		$('.settings_page').css('display', 'none');
        
 		// Show the selected tab page
-		window.$('.settings_page').eq(index).fadeIn(250);
+		$('.settings_page').eq(index).fadeIn(250);
        
 		// Get new height of settings pane
-		var newPaneHeight = window.$('#ext_settings_header').height() + window.$('.settings_page').eq(index).outerHeight();
+		var newPaneHeight = $('#ext_settings_header').height() + $('.settings_page').eq(index).outerHeight();
 
 		// Animate the resize
-		window.$('#ext_settings_wrapper').stop().animate({ height : newPaneHeight }, 150, function() {
+		$('#ext_settings_wrapper').stop().animate({ height : newPaneHeight }, 150, function() {
 		
 			// Set auto height
-			window.$('#ext_settings_wrapper').css({ height : 'auto' });
+			$('#ext_settings_wrapper').css({ height : 'auto' });
 		});
 		
 		// Remove all selected background in the header
-		window.$('#ext_settings_header li').removeClass('on');
+		$('#ext_settings_header li').removeClass('on');
 		
 		// Add selected background to the selectad tab button
-		window.$('#ext_settings_header li').eq(index).addClass('on');
+		$('#ext_settings_header li').eq(index).addClass('on');
 	},
 	
 	button : function(ele) {
 
-		if( window.$(ele).hasClass('on') ) {
-			window.$(ele).attr('class', 'button off');
+		if( $(ele).hasClass('on') ) {
+			$(ele).attr('class', 'button off');
 			
 			settings.save(ele);
 		} else {
 		
-			window.$(ele).attr('class', 'button on');
+			$(ele).attr('class', 'button on');
 			
 			settings.save(ele);
 		}
@@ -281,7 +281,7 @@ var blocklist_cp =  {
 		blocklist_cp.list();
 		
 		// Create remove events
-		window.$('#ext_blocklist a').live('click', function(e) {
+		$('#ext_blocklist a').live('click', function(e) {
 			e.preventDefault();
 			blocklist_cp.remove(this);
 		})
@@ -299,31 +299,31 @@ var blocklist_cp =  {
 		}
 	
 		// Everything is OK, remove the default message
-		window.$('#ext_blocklist').html('');
+		$('#ext_blocklist').html('');
 	
 		// Fetch the userlist into an array
 		var users = dataStore['block_list'].split(',').sort();
 	
 		// Iterate over, add users to the list
 		for(c = 0; c < users.length; c++) {
-			window.$('#ext_blocklist').append('<li><span>'+users[c]+'</span> <a href="#">töröl</a></li>');
+			$('#ext_blocklist').append('<li><span>'+users[c]+'</span> <a href="#">töröl</a></li>');
 		}
 	},
 	
 	remove : function(el) {
 		
 		// Get username
-		var user = window.$(el).prev().html();
+		var user = $(el).prev().html();
 				
 		// Remove user from the list
-		window.$(el).closest('li').remove();
+		$(el).closest('li').remove();
 		
 		// Remove user from preferences
 		opera.extension.postMessage({ name : "removeUserFromBlocklist", message : user });
 		
 		// Add default message to the list if it is now empty
-		if(window.$('#ext_blocklist li').length == 0) {
-			window.$('<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>').appendTo('#ext_blocklist');
+		if($('#ext_blocklist li').length == 0) {
+			$('<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>').appendTo('#ext_blocklist');
 		}
 		
 		// Restore user comments
@@ -336,52 +336,52 @@ var settings = {
 	restore : function() {
 
 		// Restore settings for buttons
-		window.$('.settings_page .button').each(function() {
+		$('.settings_page .button').each(function() {
 
-			if(dataStore[ window.$(this).attr('id') ] == 'true') {
-				window.$(this).addClass('on');
+			if(dataStore[ $(this).attr('id') ] == 'true') {
+				$(this).addClass('on');
 			
 			} else {
-				window.$(this).addClass('off');
+				$(this).addClass('off');
 			}
 		});
 		
 		// Restore settings for checkboxes
-		window.$('input:checkbox').each(function() {
+		$('input:checkbox').each(function() {
 			
-			if(dataStore[ window.$(this).attr('id') ] == 'true') {
-				window.$(this).attr('checked', true);
+			if(dataStore[ $(this).attr('id') ] == 'true') {
+				$(this).attr('checked', true);
 			}
 		});
 	},
 	
 	save : function(ele) {
 		
-		if( window.$(ele).hasClass('on') || window.$(ele).attr('checked') == 'checked' || window.$(ele).attr('checked') == true) {
+		if( $(ele).hasClass('on') || $(ele).attr('checked') == 'checked' || $(ele).attr('checked') == true) {
 	
 			// Save new settings ...
-			opera.extension.postMessage({ name : "setSetting", key : window.$(ele).attr('id'), val : 'true' });
+			opera.extension.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : 'true' });
 			
 			// Check for interactive action
-			if( typeof window[window.$(ele).attr('id')].activated != 'undefined') {
-				window[window.$(ele).attr('id')].activated();
+			if( typeof window[$(ele).attr('id')].activated != 'undefined') {
+				window[$(ele).attr('id')].activated();
 			}
 			
 			// Set new value to dataStore var
-			dataStore[window.$(ele).attr('id')] = 'true';
+			dataStore[$(ele).attr('id')] = 'true';
 		
 		} else {
 
 			// Save new settings ...
-			opera.extension.postMessage({ name : "setSetting", key : window.$(ele).attr('id'), val : 'false' });
+			opera.extension.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : 'false' });
 			
 			// Check for interactive action
-			if( typeof window[window.$(ele).attr('id')].disabled != 'undefined') {
-				window[window.$(ele).attr('id')].disabled();
+			if( typeof window[$(ele).attr('id')].disabled != 'undefined') {
+				window[$(ele).attr('id')].disabled();
 			}
 			
 			// Set new value to dataStore var
-			dataStore[window.$(ele).attr('id')] = 'false';
+			dataStore[$(ele).attr('id')] = 'false';
 		}
 	}
 };
