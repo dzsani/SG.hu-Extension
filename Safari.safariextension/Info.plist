@@ -31,13 +31,15 @@
 				<string>js/json.js</string>
 				<string>js/dom.js</string>
 				<string>js/settings.js</string>
-				<string>js/nicEdit.js</string>
+				<string>js/cleditor.js</string>
+				<string>js/cleditor_bbcode.js</string>
 				<string>js/content.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
 		<array>
 			<string>css/settings.css</string>
+			<string>css/cleditor.css</string>
 			<string>css/content.css</string>
 		</array>
 	</dict>
