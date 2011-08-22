@@ -124,7 +124,7 @@ var cp = {
 				html += '</div>';
 				html += '<div>';
 					html += '<h3>WYSIWYG Editor</h3>';
-					html += '<p>Topik kommentírós mezőjében Office szerű formázógombok, élő előnézettel.</p>';
+					html += '<p>A kommentíró szövegmezőben Office szerű formázógombokkal és élő előnézettel tudod formázni a begépelt szöveget.</p>';
 					html += '<div class="button" id="wysiwyg_editor"></div>';
 				html += '</div>';
 			html += '</div>';
