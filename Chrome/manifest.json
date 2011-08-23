@@ -11,8 +11,8 @@
 	
 	"content_scripts": [{
 		"matches" : [ "http://www.sg.hu/*", "http://sg.hu/*" ],
-		"js" : [ "js/jquery.js", "js/json.js", "js/dom.js", "js/settings.js", "js/cleditor.js", "cleditor_bbcode.js", "js/content.js" ],
-		"css" : ["css/content.css", "cleditor.css", "css/settings.css"],
+		"js" : [ "js/jquery.js", "js/json.js", "js/dom.js", "js/settings.js", "js/cleditor.js", "js/cleditor_bbcode.js", "js/content.js" ],
+		"css" : ["css/content.css", "css/cleditor.css", "css/settings.css"],
 		"run_at" : "document_start",
 		"all_frames": false
 	}],

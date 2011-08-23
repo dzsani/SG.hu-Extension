@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://sgforumplus/skin/settings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://sgforumplus/skin/content.css" type="text/css"?>
+
+<!DOCTYPE linktargetfinder SYSTEM "chrome://linktargetfinder/locale/translations.dtd">
+<overlay id="sample" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+		<script src="jquery.js" />
+		<script src="json.js" />
+		<script src="dom.js" />
+		<script src="settings.js" />
+		<script src="content.js" />
+		
+</overlay>
