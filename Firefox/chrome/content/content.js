@@ -1445,13 +1445,13 @@ var custom_blocks = {
 
 
 function extInit() {
-	alert('ext_init');
+
 	// FORUM.PHP
 	if(content.document.location.href.match('forum.php')) {
-		alert('forum.php');
+
 		// Settings
 		cp.init(1);
-
+		alert('a');
 		// setPredefinedVars
 		setPredefinedVars();
 
@@ -1461,6 +1461,7 @@ function extInit() {
 		}
 
 		// Remove chat window
+
 		if(prefManager.getBoolPref("extensions.sgforumplus.chat_hide") == true) {
 			alert('chat_hide');
 			chat_hide.activated();
@@ -1556,10 +1557,49 @@ function extInit() {
 
 
 
+function loadCSS(file) {
+
+	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
+                .getService(Components.interfaces.nsIStyleSheetService);
+	var ios = Components.classes["@mozilla.org/network/io-service;1"]
+                .getService(Components.interfaces.nsIIOService);
+	var uri = ios.newURI(file, null, null);
+
+	if(!sss.sheetRegistered(uri, sss.USER_SHEET))
+		sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
+}
+
+var jq = {
+
+	loadjQuery : function(context){
+
+		var loader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
+        	    .getService(Components.interfaces.mozIJSSubScriptLoader);
+            
+			loader.loadSubScript("chrome://sgforumplus/content/jquery.js",context);
+
+		var jQuery = window.jQuery.noConflict(true);
+	
+		if( typeof(jQuery.fn._init) == 'undefined') { jQuery.fn._init = jQuery.fn.init; }
+    
+		jq.jQuery = jQuery;
+	}
+}
+
+
 gBrowser.addEventListener("DOMContentLoaded", function() {
 
-	// Filter out iframes
+	// Filter out iframes and other webpages
 	if ( content.window.top === content.window && content.document.location.href.match('sg.hu') ) {
+			
+		// Load jQuery
+		jq.loadjQuery(jq);
+			
+		// Load CSS
+		loadCSS('resource://content.css/');
+		loadCSS('resource://settings.css/');
+		
+
 		extInit();
 	}
-}, false);
+}, true);

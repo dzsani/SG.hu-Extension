@@ -1,10 +1,18 @@
 var cp = {
 
 	init : function(page) {
-		
+
+var jQuery = jq.jQuery;
+var $ = function(selector,context){
+   return new  jQuery.fn.init(selector,context||window._content.document);
+};
+$.fn = $.prototype = jQuery.fn;
+jq.env=window._content.document;
+
+
 		// Create the settings button
-		$('<div id="ext_settings_button"><img src="'+safari.extension.baseURI+'img/settings/icon.png" alt=""></div>').appendTo('body');
-		
+		$('<div id="ext_settings_button"><img src="chrome://sgforumplus/skin/img/settings/icon.png" alt=""></div>').appendTo( $('body', jq.env) );
+
 		// Create the hiding overlay
 		$('<div id="ext_settings_hide_overlay"></div>').appendTo('body');
 		
@@ -17,7 +25,7 @@ var cp = {
 				cp.show();
 			}
 		});
-		
+
 		// Inject the html code
 		var html = '';
 		
@@ -124,31 +132,31 @@ var cp = {
 		html += '</div>';
 		
 		// Append settings pane html to body
-		$(html).appendTo('body');
+		$(html).appendTo( $('body', content.document) );
 		
 		// Set header list backgrounds
-		$('#ext_settings_header li').css({ 'background-image' : 'url('+safari.extension.baseURI+'img/settings/icons.png)' });
+		$('#ext_settings_header li', content.document).css({ 'background-image' : 'url(/img/settings/icons.png)' });
 		
 		// Create tabs event
-		$('#ext_settings_header li').click(function() {
+		$('#ext_settings_header li', content.document).click(function() {
 			
 			cp.tab( $(this).index() );
 		});
 		
 		// Add buttons background image
-		$('.settings_page .button').css({ 'background-image' : 'url('+safari.extension.baseURI+'img/settings/button.png)' });
+		$('.settings_page .button', content.document).css({ 'background-image' : 'url(/img/settings/button.png)' });
 		
 		// Get the requested page number
 		var page  = typeof page == "undefined" ? 0 : page;
 		
 		// Select the right page
-		cp.tab(page);
+		//cp.tab(page);
 		
 		// Set-up blocklist
 		blocklist_cp.init();
 		
 		// Close when clicking away
-		$('#ext_settings_hide_overlay').click(function() {
+		$('#ext_settings_hide_overlay', content.document).click(function() {
 			cp.hide();
 		});
 		
@@ -156,19 +164,19 @@ var cp = {
 		settings.restore();
 		
 		// Settings change event, saving
-		$('.settings_page .button').click(function() {
+		$('.settings_page .button', content.document).click(function() {
 			cp.button(this);
 		});
 		
 		// Set checkboxes
-		$('input:checkbox').click(function() {
+		$('.settings_page input:checkbox', content.document).click(function() {
 			settings.save(this);
 		})
 		
 		
 		// Reset blocks config
-		$('#reset_blocks_config').click(function() {
-			safari.self.tab.dispatchMessage("setSetting", { key : 'blocks_config', val : ''});
+		$('#reset_blocks_config', content.document).click(function() {
+			prefManager.setCharPref("extensions.sgforumplus.blocks_config", '');
 		});
 	},
 	
@@ -308,7 +316,7 @@ var blocklist_cp =  {
 		$(el).closest('li').remove();
 		
 		// Remove user from preferences
-		safari.self.tab.dispatchMessage("removeUserFromBlocklist", user);
+		//safari.self.tab.dispatchMessage("removeUserFromBlocklist", user);
 		
 		// Add default message to the list if it is now empty
 		if($('#ext_blocklist li').length == 0) {
@@ -349,7 +357,7 @@ var settings = {
 		if( $(ele).hasClass('on') || $(ele).attr('checked') == 'checked' || $(ele).attr('checked') == true) {
 			
 			// Save new settings ...
-			safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : true});
+			//safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : true});
 			
 			// Check for interactive action
 			if( typeof window[$(ele).attr('id')].activated != 'undefined') {
@@ -362,7 +370,7 @@ var settings = {
 		} else {
 
 			// Save new settings ...
-			safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : false});
+			//safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : false});
 			
 			// Check for interactive action
 			if( typeof window[$(ele).attr('id')].disabled != 'undefined') {
