@@ -1548,11 +1548,6 @@ function extInit() {
 		if(dataStore['show_mentioned_comments'] == true) {
 			show_mentioned_comments.activated();
 		}
-		
-		// WYSIWYG Editor
-		if(dataStore['wysiwyg_editor'] == true) {
-			$('textarea:first').cleditor();
-		}
 
 	}
 }
