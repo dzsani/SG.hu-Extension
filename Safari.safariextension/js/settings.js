@@ -113,7 +113,7 @@ var cp = {
 				html += '<div>';
 					html += '<h3>Komment-fejléc linkek csoportba rendezése</h3>';
 					html += '<p>A hozzászólások fejlécében található linkek besűrítése egy dropdown menübe.</p>';
-					html += '<div class="button" id="threaded_comments"></div>';
+					html += '<div class="button" id="group_comment_header_links"></div>';
 				html += '</div>';
 			html += '</div>';
 
