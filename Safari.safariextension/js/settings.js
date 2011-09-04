@@ -26,6 +26,7 @@ var cp = {
 				html += '<li>Névjegy</li>';
 				html += '<li>Főoldal</li>';
 				html += '<li>Topik</li>';
+				html += '<li>Egyéb</li>';
 				html += '<li>Tiltólista</li>';
 				html += '<li class="clear"></li>';
 			html += '</ul>';
@@ -108,6 +109,14 @@ var cp = {
 					html += '</p>';
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';
 					html += '<div class="button" id="show_mentioned_comments"></div>';
+				html += '</div>';
+			html += '</div>';
+
+			html += '<div class="settings_page">';
+				html += '<div>';
+					html += '<h3>Reklámok blokkolása</h3>';
+					html += '<p>Ezzel az opcióval eltávolítható az összes reklám az sg.hu-n.</p>';
+					html += '<div class="button" id="remove_adds"></div>';
 				html += '</div>';
 			html += '</div>';
 

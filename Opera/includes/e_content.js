@@ -13,8 +13,12 @@ var userName, isLoggedIn, dataStore;
 dataStore = widget.preferences;
 
 function setPredefinedVars() {
-	userName = getUserName();
+	
 	loggedIn = isLoggedIn();
+	
+	if(loggedIn) {
+		userName = getUserName();
+	}
 }
 
 function isLoggedIn() {
@@ -1480,6 +1484,44 @@ var custom_blocks = {
 	}
 };
 
+var remove_adds = {
+
+	activated : function() {
+		
+		// Page top
+		$('img[src*="hirdetes.gif"]').parent().remove();
+		
+		// Home sidebar
+		$('.std0:contains("Hirdetés")').parent().css({ display : 'block', width : 122 });
+		$('.std0:contains("Hirdetés")').remove();
+		
+		// Save init time in unix timestamp
+		var time = Math.round(new Date().getTime() / 1000)
+
+		// Text ads
+		var interval = setInterval(function() {
+
+			var newTime = Math.round(new Date().getTime() / 1000);
+			
+			if($('.etargetintext').length > 0) {
+
+				$('.etargetintext').each(function() {
+					
+					$('<span>'+$(this).html()+'</span>').insertAfter(this);
+					$(this).remove();
+				});
+
+				clearInterval(interval);
+			}
+			
+			// Break the cycle in 5 sec
+			if( (time+5) < newTime ) {
+				clearInterval(interval);
+			}
+		}, 500, interval);
+		
+	},
+};
 
 function extInit() {
 	
@@ -1588,6 +1630,13 @@ function extInit() {
 		}
 		
 	}
+
+	// GLOBAL SCRIPTS
+
+		// remove adverts
+		if(dataStore['remove_adds'] == 'true') {
+			remove_adds.activated();
+		}
 }
 
 // extInit

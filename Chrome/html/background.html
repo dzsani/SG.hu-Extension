@@ -20,6 +20,7 @@
 			if( typeof localStorage['blocks_config']						== 'undefined') localStorage['blocks_config']						= '';
 			if( typeof localStorage['hide_blocks_buttons']					== 'undefined') localStorage['hide_blocks_buttons']					= 'false';
 			if( typeof localStorage['show_navigation_buttons']				== 'undefined') localStorage['show_navigation_buttons']				= 'true';
+			if( typeof localStorage['remove_adds']							== 'undefined') localStorage['remove_adds']							= 'true';
 
 			
 			chrome.extension.onConnect.addListener(function(port) {

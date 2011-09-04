@@ -125,6 +125,14 @@ var cp = {
 			html += '</div>';
 
 			html += '<div class="settings_page">';
+				html += '<div>';
+					html += '<h3>Reklámok blokkolása</h3>';
+					html += '<p>Ezzel az opcióval eltávolítható az összes reklám az sg.hu-n.</p>';
+					html += '<div class="button" id="remove_adds"></div>';
+				html += '</div>';
+			html += '</div>';
+
+			html += '<div class="settings_page">';
 				html += '<ul id="ext_blocklist">';
 					html += '<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>';
 				html += '</ul>';
