@@ -1450,7 +1450,7 @@ var custom_blocks = {
 var remove_adds = {
 
 	activated : function() {
-		
+
 		// Page top
 		$('img[src*="hirdetes.gif"]').parent().remove();
 		
