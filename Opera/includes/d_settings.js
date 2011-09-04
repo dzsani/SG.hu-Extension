@@ -39,6 +39,7 @@ var cp = {
 				html += '<li>Névjegy</li>';
 				html += '<li>Főoldal</li>';
 				html += '<li>Topik</li>';
+				html += '<li>Egyéb</li>';
 				html += '<li>Tiltólista</li>';
 				html += '<li class="clear"></li>';
 			html += '</ul>';

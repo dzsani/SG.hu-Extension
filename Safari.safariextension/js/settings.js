@@ -110,6 +110,11 @@ var cp = {
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';
 					html += '<div class="button" id="show_mentioned_comments"></div>';
 				html += '</div>';
+				html += '<div>';
+					html += '<h3>Komment-fejléc linkek csoportba rendezése</h3>';
+					html += '<p>A hozzászólások fejlécében található linkek besűrítése egy dropdown menübe.</p>';
+					html += '<div class="button" id="threaded_comments"></div>';
+				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';
