@@ -96,6 +96,10 @@
 	background-position: -225px 0px;
 }
 
+#ext_settings_header li:nth-child(5) {
+	background-position: -300px 0px;
+}
+
 
 #ext_settings_header li:nth-child(1).on {
 	background-position: 0px -75px;
@@ -111,6 +115,10 @@
 
 #ext_settings_header li:nth-child(4).on {
 	background-position: -225px -75px;
+}
+
+#ext_settings_header li:nth-child(5).on {
+	background-position: -300px -75px;
 }
 
 /* ABOUT */
