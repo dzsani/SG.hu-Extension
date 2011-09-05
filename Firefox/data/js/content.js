@@ -1607,7 +1607,7 @@ function extInit() {
 self.on("message", function(event) {
 
 	if(event.name == 'setSettings') {
-
+		alert('settings');
 		// Save localStorage data
 		dataStore = event.message;
 
@@ -1615,6 +1615,9 @@ self.on("message", function(event) {
 		$(document).ready(function() {
 			extInit();
 		});
+	
+	} else if(event.name == 'setCSS') {
+		$('<link href="'+event.message+'" rel="stylesheet" type="text/css">').appendTo('head');
 	}
 });
 
@@ -1622,4 +1625,6 @@ self.on("message", function(event) {
 // Filter out iframes
 if (window.top === window) {
 	self.postMessage({ name : "getSettings", message : true });
+	self.postMessage({ name : "getCSS", message : 'css/settings.css' });
+	self.postMessage({ name : "getCSS", message : 'css/content.css' });
 }

@@ -18,6 +18,10 @@ pageMod.PageMod({
 			if(event.name == 'getSettings') {
 					
 				worker.postMessage({ name : "setSettings", message : ss.storage });
+			
+			} else if(event.name == 'getCSS') {
+
+				worker.postMessage({ name : "setCSS", message : data.url(event.message) });
 				
 			// Sets the blocks config
 			} else if(event.name == 'setBlocksConfig') {
