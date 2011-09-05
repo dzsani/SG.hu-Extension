@@ -1,11 +1,13 @@
 // Predefined vars
-var userName, isLoggedIn;
-var prefManager = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-
+var userName, isLoggedIn, dataStore;
 
 function setPredefinedVars() {
-	userName = getUserName();
+	
 	loggedIn = isLoggedIn();
+	
+	if(loggedIn) {
+		userName = getUserName();
+	}
 }
 
 function isLoggedIn() {
@@ -37,9 +39,9 @@ function getUserName() {
 var chat_hide = {
 	
 	activated : function() {
-		alert('megy');
-		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)', content.document).hide();
-		$('table:eq(3) td:eq(2) br', content.document).hide();
+
+		$('table:eq(3) td:eq(2) center:eq(0) *:lt(2)').hide();
+		$('table:eq(3) td:eq(2) br').hide();
 	},
 	
 	disabled : function() {
@@ -295,7 +297,7 @@ var blocklist =  {
 		});
 	
 		// Create the block evenst
-		$('.block_user').click(function(e) {
+		$('.block_user').live('click', function(e) {
 			e.preventDefault();
 			blocklist.block(this);
 		});
@@ -348,7 +350,7 @@ var blocklist =  {
 			});
 		
 			// Post message
-			safari.self.tab.dispatchMessage("addToBlocklist", nick);
+			//safari.self.tab.dispatchMessage("addToBlocklist", nick);
 		
 			// Add name to blocklist 
 			$('<li><span>'+nick+'</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist')
@@ -507,7 +509,7 @@ var show_navigation_buttons = {
 		$('<div id="ext_search"></div>').prependTo('body');
 		
 		// Place search icon background
-		$('#ext_search').css('background-image', 'url('+safari.extension.baseURI+'img/content/search.png)');
+		$('#ext_search').css('background-image', 'url(/img/content/search.png)');
 		
 		// Create the search event
 		$('#ext_search').toggle(
@@ -520,6 +522,7 @@ var show_navigation_buttons = {
 	
 		$('#ext_scrolltop').remove();
 		$('#ext_back').remove();
+		$('#ext_search').remove();
 	},
 	
 	showSearch : function() {
@@ -549,7 +552,7 @@ var update_fave_list = {
 		}
 		
 		// Set refresh image
-		$('<img src="'+safari.extension.baseURI+'img/content/refresh.png">').appendTo('#ext_refresh_faves');
+		$('<img src="/img/content/refresh.png">').appendTo('#ext_refresh_faves');
 		
 		// Add click event
 		$('#ext_refresh_faves').click(function() {
@@ -566,7 +569,7 @@ var update_fave_list = {
 	refresh : function() {
 		
 		// Set 'in progress' icon
-		$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh_waiting.png');
+		$('#ext_refresh_faves img').attr('src', '/img/content/refresh_waiting.png');
 		
 		
 		$.ajax({
@@ -575,11 +578,11 @@ var update_fave_list = {
 			success : function(data) {
 				
 				// Set 'completed' icon
-				$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh_done.png');
+				$('#ext_refresh_faves img').attr('src', '/img/content/refresh_done.png');
 				
 				// Set back the normal icon in 1 sec
 				setTimeout(function() {
-					$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh.png');
+					$('#ext_refresh_faves img').attr('src', '/img/content/refresh.png');
 				}, 2000);
 				
 				// Get new fave list
@@ -592,7 +595,7 @@ var update_fave_list = {
 				// Faves: show only with unreaded messages
 				if(dataStore['fav_show_only_unreaded'] == true && isLoggedIn() ) {
 					fav_show_only_unreaded.activated();
-				}
+				} 
 
 				// Faves: short comment marker
 				if(dataStore['short_comment_marker'] == true && isLoggedIn() ) {
@@ -627,7 +630,7 @@ var make_read_all_faves = {
 		}
 		
 		// Append the image
-		$('<img src="'+safari.extension.baseURI+'img/content/makereaded.png">').appendTo('#ext_read_faves');
+		$('<img src="/img/content/makereaded.png">').appendTo('#ext_read_faves');
 		
 		// Add click event
 		$('#ext_read_faves').click(function() {
@@ -640,7 +643,7 @@ var make_read_all_faves = {
 		if(confirm('Biztos olvasottnak jelölöd az összes kedvenced?')) {
 			
 			// Set 'in progress' icon
-			$('#ext_read_faves img').attr('src', safari.extension.baseURI+'img/content/makereaded_waiting.png');
+			$('#ext_read_faves img').attr('src', '/img/content/makereaded_waiting.png');
 			
 			var count = 0;
 			var counter = 0;
@@ -695,11 +698,11 @@ var make_read_all_faves = {
 				if(count == counter) {
 					
 					// Set 'completed' icon
-					$('#ext_read_faves img').attr('src', safari.extension.baseURI+'img/content/makereaded_done.png');
+					$('#ext_read_faves img').attr('src', '/img/content/makereaded_done.png');
 			
 					// Set normal icon
 					setTimeout(function() {
-						$('#ext_read_faves img').attr('src', safari.extension.baseURI+'img/content/makereaded.png');
+						$('#ext_read_faves img').attr('src', '/img/content/makereaded.png');
 					}, 2000);
 					
 					// Faves: show only with unreaded messages
@@ -869,7 +872,7 @@ var overlay_reply_to = {
 	
 		
 		// Add close button
-		var close_btm = $('<img src="'+safari.extension.baseURI+'img/content/overlay_close.png" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
+		var close_btm = $('<img src="/img/content/overlay_close.png" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
 		
 
 		// Add Close event
@@ -913,7 +916,7 @@ var highlight_comments_for_me = {
 		
 			if($(this).find('.ext_comments_for_me_indicator').length == 0) {
 			
-				$(this).css('position', 'relative').append('<img src="'+safari.extension.baseURI+'img/content/comments_for_me_indicator.png" class="ext_comments_for_me_indicator">');
+				$(this).css('position', 'relative').append('<img src="/img/content/comments_for_me_indicator.png" class="ext_comments_for_me_indicator">');
 			}
 		});
 	},
@@ -1169,7 +1172,7 @@ var custom_blocks = {
 
 
 		// Store in localStorage
-		safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
+		//safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
 		
 		// Update in dataStore var
 		dataStore['blocks_config'] = JSON.stringify(config);
@@ -1188,7 +1191,7 @@ var custom_blocks = {
 		}
 	
 		// Store in localStorage
-		safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
+		//safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
 		
 		// Update dataStore var
 		dataStore['blocks_config'] = JSON.stringify(config);
@@ -1230,7 +1233,7 @@ var custom_blocks = {
 
 		
 		// Store in localStorage
-		safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(_config));
+		//safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(_config));
 	},
 	
 	executeConfig : function() {
@@ -1280,37 +1283,37 @@ var custom_blocks = {
 			var item = $('<p class="ext_blocks_buttons"></p>').prependTo(this);
 
 			// Contenthide
-			$('<img src="'+safari.extension.baseURI+'img/blocks/minimalize.png" class="ext_block_button_right">').prependTo(item).click(function(e) {
+			$('<img src="/img/blocks/minimalize.png" class="ext_block_button_right">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				custom_blocks.contentHide( $(this).closest('div').attr('id'), true );
 			});
 
 			// Hide
-			$('<img src="'+safari.extension.baseURI+'img/blocks/close.png" class="ext_block_button_right">').prependTo(item).click(function(e) {
+			$('<img src="/img/blocks/close.png" class="ext_block_button_right">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				custom_blocks.hide( $(this).closest('div').attr('id'), true );
 			});
 			
 
 			// Down
-			$('<img src="'+safari.extension.baseURI+'img/blocks/down.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="/img/blocks/down.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				custom_blocks.down( $(this).closest('div').attr('id'), true );
 			});
 
 			// Up
-			$('<img src="'+safari.extension.baseURI+'img/blocks/up.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="/img/blocks/up.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				custom_blocks.up( $(this).closest('div').attr('id'), true );
 			});						
 
 			// Right
-			$('<img src="'+safari.extension.baseURI+'img/blocks/right.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="/img/blocks/right.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				custom_blocks.right( $(this).closest('div').attr('id'), true );
 			});			
 			// Left
-			$('<img src="'+safari.extension.baseURI+'img/blocks/left.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="/img/blocks/left.png" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				custom_blocks.left( $(this).closest('div').attr('id'), true );
 			});
@@ -1444,46 +1447,84 @@ var custom_blocks = {
 };
 
 
-function extInit() {
+var remove_adds = {
 
+	activated : function() {
+
+		// Page top
+		$('img[src*="hirdetes.gif"]').parent().remove();
+		
+		// Home sidebar
+		$('.std0:contains("Hirdetés")').parent().css({ display : 'block', width : 122 });
+		$('.std0:contains("Hirdetés")').remove();
+		
+		// Save init time in unix timestamp
+		var time = Math.round(new Date().getTime() / 1000)
+
+		// Text ads
+		var interval = setInterval(function() {
+
+			var newTime = Math.round(new Date().getTime() / 1000);
+			
+			if($('.etargetintext').length > 0) {
+
+				$('.etargetintext').each(function() {
+					
+					$('<span>'+$(this).html()+'</span>').insertAfter(this);
+					$(this).remove();
+				});
+
+				clearInterval(interval);
+			}
+			
+			// Break the cycle in 5 sec
+			if( (time+5) < newTime ) {
+				clearInterval(interval);
+			}
+		}, 500, interval);
+		
+	},
+};
+
+
+function extInit() {
+	
 	// FORUM.PHP
-	if(content.document.location.href.match('forum.php')) {
+	if(document.location.href.match('forum.php')) {
 
 		// Settings
 		cp.init(1);
-		alert('a');
+
 		// setPredefinedVars
 		setPredefinedVars();
 
 		// Custom blocks
-		if(prefManager.getBoolPref("extensions.sgforumplus.custom_blocks") == true) {
+		if(dataStore['custom_blocks'] == true) {
 			custom_blocks.activated();
 		}
 
 		// Remove chat window
-
-		if(prefManager.getBoolPref("extensions.sgforumplus.chat_hide") == true) {
-			alert('chat_hide');
+		if(dataStore['chat_hide'] == true) {
 			chat_hide.activated();
 		}
 		
 		// Jump the last unreaded message
-		if(prefManager.getBoolPref("extensions.sgforumplus.jump_unreaded_messages") == true && isLoggedIn() ) {
+		if(dataStore['jump_unreaded_messages'] == true && isLoggedIn() ) {
 			jump_unreaded_messages.activated();
 		}
 		
 		// Faves: show only with unreaded messages
-		if(prefManager.getBoolPref("extensions.sgforumplus.fav_show_only_unreaded") == true && isLoggedIn() ) {
+		if(dataStore['fav_show_only_unreaded'] == true && isLoggedIn() ) {
 			fav_show_only_unreaded.activated();
 		}
-
+	
 		// Faves: short comment marker
-		if(prefManager.getBoolPref("extensions.sgforumplus.short_comment_marker") == true&& isLoggedIn() ) {
+		if(dataStore['short_comment_marker'] == true&& isLoggedIn() ) {
 			short_comment_marker.activated();
 		}
 
 		// Custom list styles
-		if(prefManager.getBoolPref("extensions.sgforumplus.highlight_forum_categories") == true) {
+		if(dataStore['highlight_forum_categories'] == true) {
 			highlight_forum_categories.activated();
 		}
 		
@@ -1496,7 +1537,7 @@ function extInit() {
 	}
 	
 	// LISTAZAS.PHP
-	else if(content.document.location.href.match(/listazas.php3\?id/gi)) {
+	else if(document.location.href.match(/listazas.php3\?id/gi)) {
 
 		// Settings
 		cp.init(2);
@@ -1508,12 +1549,12 @@ function extInit() {
 		monitorNewCommentsNotification();
 		
 		//gradual_comments
-		if(prefManager.getBoolPref("extensions.sgforumplus.threaded_comments") == true) {
+		if(dataStore['threaded_comments'] == true) {
 			threaded_comments.activated();
 		}
 		
 		// Jump the last unreaded message
-		if(prefManager.getBoolPref("extensions.sgforumplus.jump_unreaded_messages") && isLoggedIn() ) {
+		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
 			jump_unreaded_messages.jump();
 		}
 		
@@ -1521,17 +1562,17 @@ function extInit() {
 		blocklist.init();
 		
 		// Block users/messages
-		if(prefManager.getBoolPref("extensions.sgforumplus.block_list") != '') {
+		if(dataStore['block_list'] != '') {
 			blocklist.hidemessages();
 		}
 		
 		// Load next page when scrolling down
-		if(prefManager.getBoolPref("extensions.sgforumplus.autoload_next_page") == true) {
+		if(dataStore['autoload_next_page'] == true) {
 			autoload_next_page.activated();
 		}
 		
 		// Scroll to page top button
-		if(prefManager.getBoolPref("extensions.sgforumplus.show_navigation_buttons") == true) {
+		if(dataStore['show_navigation_buttons'] == true) {
 			show_navigation_buttons.activated();
 		}
 		
@@ -1539,67 +1580,52 @@ function extInit() {
 		replyTo();
 
 		// Overlay reply-to
-		if(prefManager.getBoolPref("extensions.sgforumplus.overlay_reply_to") == true) {
+		if(dataStore['overlay_reply_to'] == true) {
 			overlay_reply_to.activated();
 		}
 		
 		// highlight_comments_for_me
-		if(prefManager.getBoolPref("extensions.sgforumplus.highlight_comments_for_me") == true && isLoggedIn()) {
+		if(dataStore['highlight_comments_for_me'] == true && isLoggedIn()) {
 			highlight_comments_for_me.activated();
 		}
 		
 		// show menitoned comment
-		if(prefManager.getBoolPref("extensions.sgforumplus.show_mentioned_comments") == true) {
+		if(dataStore['show_mentioned_comments'] == true) {
 			show_mentioned_comments.activated();
 		}
 	}
-}
-
-
-
-function loadCSS(file) {
-
-	var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
-                .getService(Components.interfaces.nsIStyleSheetService);
-	var ios = Components.classes["@mozilla.org/network/io-service;1"]
-                .getService(Components.interfaces.nsIIOService);
-	var uri = ios.newURI(file, null, null);
-
-	if(!sss.sheetRegistered(uri, sss.USER_SHEET))
-		sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
-}
-
-var jq = {
-
-	loadjQuery : function(context){
-
-		var loader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
-        	    .getService(Components.interfaces.mozIJSSubScriptLoader);
-            
-			loader.loadSubScript("chrome://sgforumplus/content/jquery.js",context);
-
-		var jQuery = window.jQuery.noConflict(true);
 	
-		if( typeof(jQuery.fn._init) == 'undefined') { jQuery.fn._init = jQuery.fn.init; }
-    
-		jq.jQuery = jQuery;
+	// GLOBAL SCRIPTS
+
+		// remove adverts
+		if(dataStore['remove_adds'] == true) {
+			remove_adds.activated();
+		}
+}
+
+
+function handleMessage(event) {
+
+	if(event.name == 'setSettings') {
+	
+		// Save localStorage data
+		dataStore = event.message;
+	
+		// Add domready event
+		$(document).ready(function() {
+				extInit();
+		});
 	}
 }
 
 
-gBrowser.addEventListener("DOMContentLoaded", function() {
+//safari.self.addEventListener("message", handleMessage, false);
 
-	// Filter out iframes and other webpages
-	if ( content.window.top === content.window && content.document.location.href.match('sg.hu') ) {
-			
-		// Load jQuery
-		jq.loadjQuery(jq);
-			
-		// Load CSS
-		loadCSS('resource://content.css/');
-		loadCSS('resource://settings.css/');
-		
+// Filter out iframes
+if (window.top === window) {
+	//safari.self.tab.dispatchMessage("getSettings", true);
+}
 
-		extInit();
-	}
-}, true);
+$(document).ready(function() {
+	chat_hide.activated();
+});

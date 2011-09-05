@@ -1,5 +1,0 @@
-content     sgforumplus    chrome/content/
-content     sgforumplus    chrome/content/ contentaccessible=yes
-overlay		chrome://browser/content/browser.xul chrome://sgforumplus/content/browser.xul
-resource	content.css		chrome://sgforumplus/skin/content.css
-resource	settings.css	chrome://sgforumplus/skin/settings.css

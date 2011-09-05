@@ -298,8 +298,3 @@
 	z-index: 9999 !important;
 }
 
-/* WYSIWYG Editor */
-.nicEdit-main {
-	text-align: left !important;
-	font: normal normal normal 13px/14px Arial, serif;
-}

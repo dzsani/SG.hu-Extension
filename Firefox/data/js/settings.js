@@ -1,18 +1,10 @@
 var cp = {
 
 	init : function(page) {
-
-var jQuery = jq.jQuery;
-var $ = function(selector,context){
-   return new  jQuery.fn.init(selector,context||window._content.document);
-};
-$.fn = $.prototype = jQuery.fn;
-jq.env=window._content.document;
-
-
+		
 		// Create the settings button
-		$('<div id="ext_settings_button"><img src="chrome://sgforumplus/skin/img/settings/icon.png" alt=""></div>').appendTo( $('body', jq.env) );
-
+		$('<div id="ext_settings_button"><img src="/img/settings/icon.png" alt=""></div>').appendTo('body');
+		
 		// Create the hiding overlay
 		$('<div id="ext_settings_hide_overlay"></div>').appendTo('body');
 		
@@ -25,7 +17,7 @@ jq.env=window._content.document;
 				cp.show();
 			}
 		});
-
+		
 		// Inject the html code
 		var html = '';
 		
@@ -34,6 +26,7 @@ jq.env=window._content.document;
 				html += '<li>Névjegy</li>';
 				html += '<li>Főoldal</li>';
 				html += '<li>Topik</li>';
+				html += '<li>Egyéb</li>';
 				html += '<li>Tiltólista</li>';
 				html += '<li class="clear"></li>';
 			html += '</ul>';
@@ -117,10 +110,13 @@ jq.env=window._content.document;
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';
 					html += '<div class="button" id="show_mentioned_comments"></div>';
 				html += '</div>';
+			html += '</div>';
+
+			html += '<div class="settings_page">';
 				html += '<div>';
-					html += '<h3>WYSIWYG Editor</h3>';
-					html += '<p>A kommentíró szövegmezőben Office szerű formázógombokkal és élő előnézettel tudod formázni a begépelt szöveget.</p>';
-					html += '<div class="button" id="wysiwyg_editor"></div>';
+					html += '<h3>Reklámok blokkolása</h3>';
+					html += '<p>Ezzel az opcióval eltávolítható az összes reklám az sg.hu-n.</p>';
+					html += '<div class="button" id="remove_adds"></div>';
 				html += '</div>';
 			html += '</div>';
 
@@ -132,31 +128,31 @@ jq.env=window._content.document;
 		html += '</div>';
 		
 		// Append settings pane html to body
-		$(html).appendTo( $('body', content.document) );
+		$(html).appendTo('body');
 		
 		// Set header list backgrounds
-		$('#ext_settings_header li', content.document).css({ 'background-image' : 'url(/img/settings/icons.png)' });
+		$('#ext_settings_header li').css({ 'background-image' : 'url(/img/settings/icons.png)' });
 		
 		// Create tabs event
-		$('#ext_settings_header li', content.document).click(function() {
+		$('#ext_settings_header li').click(function() {
 			
 			cp.tab( $(this).index() );
 		});
 		
 		// Add buttons background image
-		$('.settings_page .button', content.document).css({ 'background-image' : 'url(/img/settings/button.png)' });
+		$('.settings_page .button').css({ 'background-image' : 'url(/img/settings/button.png)' });
 		
 		// Get the requested page number
 		var page  = typeof page == "undefined" ? 0 : page;
 		
 		// Select the right page
-		//cp.tab(page);
+		cp.tab(page);
 		
 		// Set-up blocklist
 		blocklist_cp.init();
 		
 		// Close when clicking away
-		$('#ext_settings_hide_overlay', content.document).click(function() {
+		$('#ext_settings_hide_overlay').click(function() {
 			cp.hide();
 		});
 		
@@ -164,19 +160,19 @@ jq.env=window._content.document;
 		settings.restore();
 		
 		// Settings change event, saving
-		$('.settings_page .button', content.document).click(function() {
+		$('.settings_page .button').click(function() {
 			cp.button(this);
 		});
 		
 		// Set checkboxes
-		$('.settings_page input:checkbox', content.document).click(function() {
+		$('input:checkbox').click(function() {
 			settings.save(this);
 		})
 		
 		
 		// Reset blocks config
-		$('#reset_blocks_config', content.document).click(function() {
-			prefManager.setCharPref("extensions.sgforumplus.blocks_config", '');
+		$('#reset_blocks_config').click(function() {
+			//safari.self.tab.dispatchMessage("setSetting", { key : 'blocks_config', val : ''});
 		});
 	},
 	
