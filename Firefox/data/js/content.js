@@ -1604,8 +1604,8 @@ function extInit() {
 }
 
 
-function handleMessage(event) {
-
+self.port.on("message", function(event) {
+alert('set');
 	if(event.name == 'setSettings') {
 	
 		// Save localStorage data
@@ -1613,19 +1613,13 @@ function handleMessage(event) {
 	
 		// Add domready event
 		$(document).ready(function() {
-				extInit();
+			extInit();
 		});
 	}
-}
+});
 
-
-//safari.self.addEventListener("message", handleMessage, false);
 
 // Filter out iframes
 if (window.top === window) {
-	//safari.self.tab.dispatchMessage("getSettings", true);
+	self.port.emit("message", { name : "getSettings", message : true } );
 }
-
-$(document).ready(function() {
-	chat_hide.activated();
-});
