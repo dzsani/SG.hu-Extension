@@ -454,9 +454,10 @@ var autoload_next_page = {
 				}
 			
 				var tmp = $(data);
+					tmp = $(tmp.find('.topichead').get().reverse());
 
-				tmp.find('.topichead').each(function() {
-					$(this).closest('center').insertAfter( $('.topichead:last').closest('center') );
+				tmp.each(function() {
+					$(this).closest('center').insertAfter( $('.ext_autopager_idicator:last') );
 				});
 
 				// Reinit settings
