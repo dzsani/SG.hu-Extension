@@ -1607,7 +1607,7 @@ function extInit() {
 self.on("message", function(event) {
 
 	if(event.name == 'setSettings') {
-	
+
 		// Save localStorage data
 		dataStore = event.message;
 

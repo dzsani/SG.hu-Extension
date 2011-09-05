@@ -1,9 +1,9 @@
 {
-    "name": "SG Forum+", 
-    "license": "MIT license", 
-    "author": "Janos Gera", 
-    "version": "0.6.0", 
-    "fullName": "SG Forum Plus", 
-    "id": "jid1-yzL42BHeTxV2Tg", 
-    "description": "This extension is created for a popular Hungarian website, sg.hu."
+	"id": "jid1-YEB8XVqrOsQYow",
+	"name": "sgforum",
+	"fullName": "sgforumplus",
+	"version": "0.6.0",
+	"author": "Janos Gera", 
+    "description": "This extension is made for a popular Hungarian website, called sg.hu.", 
+    "license": "MIT"
 }
