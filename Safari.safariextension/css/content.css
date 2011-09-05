@@ -298,32 +298,3 @@
 	z-index: 9999 !important;
 }
 
-/* comment header group links */
-.ext_group_links {
-	width: 12px;
-	height: 12px;
-	position: relative;
-	margin: 0px;
-	padding: 0px;
-	display: inline-block;
-	list-style: none;
-}
-
-.ext_group_links:hover ul {
-	display: block;
-}
-
-.ext_group_links ul {
-	width: 100px;
-	display: none;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	background-color: grey;
-	margin: 0px;
-	padding: 5px;
-	padding-left: 20px;
-	list-style: square;
-	text-align: left;
-	z-index: 10;
-}

@@ -595,7 +595,7 @@ var update_fave_list = {
 				// Faves: show only with unreaded messages
 				if(dataStore['fav_show_only_unreaded'] == true && isLoggedIn() ) {
 					fav_show_only_unreaded.activated();
-				}
+				} 
 
 				// Faves: short comment marker
 				if(dataStore['short_comment_marker'] == true && isLoggedIn() ) {
@@ -1486,36 +1486,6 @@ var remove_adds = {
 	},
 };
 
-var group_comment_header_links = {
-
-	activated : function() {
-		
-		$('.topichead').each(function() {
-			
-			// Create the dropdown menu
-			$('<ul class="ext_group_links"><li>A<ul></ul></li></ul>').insertAfter( $(this).find('a:last') );
-			
-			// Link list to replace
-			var links = ['letiltás', 'privát','galéria'];
-			
-			// Place links into group UL
-			$(this).find('a:gt(0)').each(function(index) {
-				
-				// Check current link if is on the list
-				if(links.indexOf($(this).html()) == -1) {
-					return true;
-				}
-				
-				// Place a copy into UL
-				$('<li>'+$(this).outer()+'</li>').appendTo( $(this).closest('.topichead').find('.ext_group_links ul') );
-				
-				// Remove original A tag
-				$(this).remove();
-			});
-		})
-	
-	}
-};
 
 function extInit() {
 	
@@ -1547,7 +1517,7 @@ function extInit() {
 		if(dataStore['fav_show_only_unreaded'] == true && isLoggedIn() ) {
 			fav_show_only_unreaded.activated();
 		}
-
+	
 		// Faves: short comment marker
 		if(dataStore['short_comment_marker'] == true&& isLoggedIn() ) {
 			short_comment_marker.activated();
@@ -1622,11 +1592,6 @@ function extInit() {
 		// show menitoned comment
 		if(dataStore['show_mentioned_comments'] == true) {
 			show_mentioned_comments.activated();
-		}
-
-		// group_comment_header_links
-		if(dataStore['group_comment_header_links'] == true) {
-			group_comment_header_links.activated();
 		}
 	}
 	
