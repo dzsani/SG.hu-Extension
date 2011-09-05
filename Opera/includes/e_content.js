@@ -446,7 +446,7 @@ var autoload_next_page = {
 	},
 	
 	load : function() {
-		
+
 		// Url to call
 		var url = document.location.href.substring(0, 44);
 		

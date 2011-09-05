@@ -30,7 +30,7 @@
 	z-index: 11;
 
 	background-color: #ededed;
-	-webkit-box-shadow: #333 0px 0px 15px;
+	box-shadow: #333 0px 0px 15px;
 	overflow: hidden;
 	border: 1px solid #6c6c6c;
 	border-radius: 4px;

@@ -185,7 +185,7 @@
 	background-color: #c0c0c0;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	-webkit-box-shadow: #666 0px 0px 3px;
+	-moz-box-shadow: #666 0px 0px 3px;
 	box-shadow: #666 0px 0px 3px;
 }
 
@@ -215,7 +215,7 @@
 	left: 0px;
 	z-index: 52;
 	text-align: center;
-	-webkit-box-shadow: #333 0px 0px 10px;
+	-moz-box-shadow: #333 0px 0px 10px;
 }
 
 .ext_overlay_close {

@@ -437,7 +437,7 @@ var autoload_next_page = {
 	},
 	
 	load : function() {
-		
+	
 		// Url to call
 		var url = document.location.href.substring(0, 44);
 		
@@ -447,24 +447,18 @@ var autoload_next_page = {
 			url : url+'&index='+(autoload_next_page.currPage+1)+'', 
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
-			
+
 				// Create the 'next page' indicator
 				if(dataStore['threaded_comments'] != true) {
-					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertAfter( $('.topichead:last').closest('center') );
 				}
 			
 				var tmp = $(data);
-				var tmp = tmp.find('.topichead');
-			
-				tmp.each(function() {
-				
-					$(this).closest('center').insertBefore('.std1:last');
+
+				tmp.find('.topichead').each(function() {
+					$(this).closest('center').insertAfter( $('.topichead:last').closest('center') );
 				});
-			
-				autoload_next_page.progress = false;
-				autoload_next_page.currPage++;
-				autoload_next_page.counter++;
-			
+
 				// Reinit settings
 
 				// threaded comments
@@ -481,6 +475,10 @@ var autoload_next_page = {
 				if(dataStore['show_mentioned_comments'] == true) {
 					show_mentioned_comments.activated();
 				}
+				
+				autoload_next_page.progress = false;
+				autoload_next_page.currPage++;
+				autoload_next_page.counter++;
 			}
 		});
 	}
