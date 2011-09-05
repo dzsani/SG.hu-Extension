@@ -134,7 +134,7 @@ var jump_unreaded_messages = {
 			var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 			// Scroll to target element
-			$('body').animate({ scrollTop : targetOffset}, 500);
+			$('html').animate({ scrollTop : targetOffset}, 500);
 			
 			// Append hr tag content if any
 			var content = $('a[name=pirosvonal]').find('center').insertBefore('a[name=pirosvonal]');
@@ -350,7 +350,7 @@ var blocklist =  {
 			});
 		
 			// Post message
-			//safari.self.tab.dispatchMessage("addToBlocklist", nick);
+			self.postMessage({ name : "addToBlocklist", message : nick });
 		
 			// Add name to blocklist 
 			$('<li><span>'+nick+'</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist')
@@ -421,7 +421,7 @@ var autoload_next_page = {
 		$(document).scroll(function() {
 			
 			var docHeight = $('body').height();
-			var scrollTop = $('body').scrollTop();
+			var scrollTop = $('html').scrollTop();
 
 			if(docHeight - scrollTop < 3000 && !autoload_next_page.progress && autoload_next_page.currPage < autoload_next_page.maxPage) {
 				autoload_next_page.progress = true;
@@ -442,43 +442,46 @@ var autoload_next_page = {
 		var url = document.location.href.substring(0, 44);
 		
 		// Make the ajax query
-		$.get(url+'&index='+(autoload_next_page.currPage+1)+'', function(data) {
+		$.ajax({
 			
-			// Create the 'next page' indicator
-			if(dataStore['threaded_comments'] != true) {
-				$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
-			}
+			url : url+'&index='+(autoload_next_page.currPage+1)+'', 
+			mimeType : 'text/html;charset=iso-8859-2',
+			success : function(data) {
 			
-			var tmp = $(data);
-			var tmp = tmp.find('.topichead');
+				// Create the 'next page' indicator
+				if(dataStore['threaded_comments'] != true) {
+					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+				}
 			
-			tmp.each(function() {
+				var tmp = $(data);
+				var tmp = tmp.find('.topichead');
+			
+				tmp.each(function() {
 				
-				$(this).closest('center').insertBefore('.std1:last');
+					$(this).closest('center').insertBefore('.std1:last');
+				});
 			
-			});
+				autoload_next_page.progress = false;
+				autoload_next_page.currPage++;
+				autoload_next_page.counter++;
 			
-			autoload_next_page.progress = false;
-			autoload_next_page.currPage++;
-			autoload_next_page.counter++;
-			
-			// Reinit settings
+				// Reinit settings
 
-			// threaded comments
-			if(dataStore['threaded_comments'] == true) {
-				threaded_comments.sort();
-			}
+				// threaded comments
+				if(dataStore['threaded_comments'] == true) {
+					threaded_comments.sort();
+				}
 
-			// highlight_comments_for_me
-			if(dataStore['highlight_comments_for_me'] == true && isLoggedIn()) {
-				highlight_comments_for_me.activated();
-			}
+				// highlight_comments_for_me
+				if(dataStore['highlight_comments_for_me'] == true && isLoggedIn()) {
+					highlight_comments_for_me.activated();
+				}
 			
-			// show menitoned comment
-			if(dataStore['show_mentioned_comments'] == true) {
-				show_mentioned_comments.activated();
+				// show menitoned comment
+				if(dataStore['show_mentioned_comments'] == true) {
+					show_mentioned_comments.activated();
+				}
 			}
-			
 		});
 	}
 
@@ -494,7 +497,7 @@ var show_navigation_buttons = {
 		
 		// Add click event to scrolltop button
 		$('#ext_scrolltop').click(function() {
-			$('body').animate({ scrollTop : 0 }, 1000);
+			$('html').animate({ scrollTop : 0 }, 1000);
 		});
 
 		// Created the back button
@@ -856,7 +859,7 @@ var overlay_reply_to = {
 
 		if(textBottom > pageBottom) { 
 			var scT = textBottom - $(window).height() + 50;
-			$('body').animate( { scrollTop : scT }, 500);
+			$('html').animate( { scrollTop : scT }, 500);
 		}
 
 		// Set the right tabindex
@@ -1000,7 +1003,7 @@ var threaded_comments = {
 		var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 		// Scroll to target element
-		$('body').animate({ scrollTop : targetOffset}, 500);
+		$('html').animate({ scrollTop : targetOffset}, 500);
 	},
 	
 	next : function(ele) {
@@ -1022,7 +1025,7 @@ var threaded_comments = {
 		var targetOffset = targetTop - (windowHalf - targetHalf);
 		
 		// Scroll to target element
-		$('body').animate({ scrollTop : targetOffset}, 500);
+		$('html').animate({ scrollTop : targetOffset}, 500);
 	},
 	
 	sort : function() {
@@ -1193,8 +1196,8 @@ var custom_blocks = {
 
 
 		// Store in localStorage
-		//safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
-		
+		self.postMessage({ name : "setBlocksConfig", message : JSON.stringify(config) });
+	
 		// Update in dataStore var
 		dataStore['blocks_config'] = JSON.stringify(config);
 	},
@@ -1212,7 +1215,8 @@ var custom_blocks = {
 		}
 	
 		// Store in localStorage
-		//safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(config));
+		self.postMessage({ name : "setBlocksConfig", message : JSON.stringify(config) });
+
 		
 		// Update dataStore var
 		dataStore['blocks_config'] = JSON.stringify(config);
@@ -1254,7 +1258,8 @@ var custom_blocks = {
 
 		
 		// Store in localStorage
-		//safari.self.tab.dispatchMessage("setBlocksConfig", JSON.stringify(_config));
+		self.postMessage({ name : "setBlocksConfig", message : JSON.stringify(_config) });
+
 	},
 	
 	executeConfig : function() {
@@ -1336,7 +1341,7 @@ var custom_blocks = {
 			});						
 
 			// Right
-			$('<img src="/data:image/png;base64,'+rightImg+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
+			$('<img src="data:image/png;base64,'+rightImg+'" class="ext_block_button_left">').prependTo(item).click(function(e) {
 				e.preventDefault();
 				custom_blocks.right( $(this).closest('div').attr('id'), true );
 			});			

@@ -176,7 +176,7 @@ var cp = {
 		
 		// Reset blocks config
 		$('#reset_blocks_config').click(function() {
-			//safari.self.tab.dispatchMessage("setSetting", { key : 'blocks_config', val : ''});
+			self.postMessage({ name : "setSetting", key : 'blocks_config', val : '' });
 		});
 	},
 	
@@ -316,7 +316,8 @@ var blocklist_cp =  {
 		$(el).closest('li').remove();
 		
 		// Remove user from preferences
-		//safari.self.tab.dispatchMessage("removeUserFromBlocklist", user);
+		self.postMessage({ name : "removeUserFromBlocklist", message : user });
+
 		
 		// Add default message to the list if it is now empty
 		if($('#ext_blocklist li').length == 0) {
@@ -357,7 +358,7 @@ var settings = {
 		if( $(ele).hasClass('on') || $(ele).attr('checked') == 'checked' || $(ele).attr('checked') == true) {
 			
 			// Save new settings ...
-			//safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : true});
+			self.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : true });
 			
 			// Check for interactive action
 			if( typeof window[$(ele).attr('id')].activated != 'undefined') {
@@ -370,7 +371,7 @@ var settings = {
 		} else {
 
 			// Save new settings ...
-			//safari.self.tab.dispatchMessage("setSetting", { key : $(ele).attr('id'), val : false});
+			self.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : false });
 			
 			// Check for interactive action
 			if( typeof window[$(ele).attr('id')].disabled != 'undefined') {

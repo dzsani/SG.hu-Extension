@@ -76,11 +76,11 @@ pageMod.PageMod({
 			} else if(event.name == 'setSetting') {
 
 				// Setting name
-				var key = event.message.key;
+				var key = event.key;
 					
 				// Setting value
-				var val = event.message.val;
-					
+				var val = event.val;
+
 				ss.storage[key] = val;
 			}
 		});
