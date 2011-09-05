@@ -1,9 +1,9 @@
 {
-    "name": "translator", 
-    "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
-    "author": "", 
-    "version": "0.1", 
-    "fullName": "translator", 
+    "name": "SG Forum+", 
+    "license": "MIT license", 
+    "author": "Janos Gera", 
+    "version": "0.6.0", 
+    "fullName": "SG Forum Plus", 
     "id": "jid1-yzL42BHeTxV2Tg", 
-    "description": "a basic add-on"
+    "description": "This extension is created for a popular Hungarian website, sg.hu."
 }

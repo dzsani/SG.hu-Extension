@@ -1605,12 +1605,12 @@ function extInit() {
 
 
 self.on("message", function(event) {
-	alert(event.message);
+
 	if(event.name == 'setSettings') {
 	
 		// Save localStorage data
 		dataStore = event.message;
-	
+
 		// Add domready event
 		$(document).ready(function() {
 			extInit();
