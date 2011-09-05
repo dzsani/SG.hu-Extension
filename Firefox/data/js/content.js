@@ -1604,8 +1604,8 @@ function extInit() {
 }
 
 
-self.port.on("message", function(event) {
-alert('set');
+self.on("message", function(event) {
+	alert(event.message);
 	if(event.name == 'setSettings') {
 	
 		// Save localStorage data
@@ -1621,5 +1621,5 @@ alert('set');
 
 // Filter out iframes
 if (window.top === window) {
-	self.port.emit("message", { name : "getSettings", message : true } );
+	self.postMessage({ name : "getSettings", message : true });
 }

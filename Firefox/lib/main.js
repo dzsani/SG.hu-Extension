@@ -11,15 +11,13 @@ pageMod.PageMod({
 	include: ["http://sg.hu/*", "http://www.sg.hu/*"],
 	contentScriptWhen: 'start',
 	contentScriptFile: [data.url("js/jquery.js"), data.url("js/json.js"), data.url("js/dom.js"), data.url("js/settings.js"), data.url("js/content.js")],
-	onAttach: function onAttach(worker) {
-	
+	onAttach: function(worker) {
 		worker.on('message', function(event) {
-			
-			alert('a');
+	
 			// Send back the settings object
 			if(event.name == 'getSettings') {
 					
-				panel.port.emit("message", { name : "setSettings", message : ss.storage } );
+				worker.postMessage({ name : "setSettings", message : ss.storage });
 				
 			// Sets the blocks config
 			} else if(event.name == 'setBlocksConfig') {
@@ -36,7 +34,7 @@ pageMod.PageMod({
 				// If the blocklist is empty
 				if(ss.storage.block_list == '') { 
 					ss.storage.block_list = event.message;
-		
+			
 				// If the blocklist is not empty
 				} else {
 					var blocklist = new Array();
@@ -81,7 +79,6 @@ pageMod.PageMod({
 					
 				ss.storage[key] = val;
 			}
-
 		});
 	}
 });
