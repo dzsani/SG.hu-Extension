@@ -13,6 +13,10 @@ Telepítés:
 	Safari:
 		Engedélyezd a developer módot a beállításokban, majd Develop -> Show Extension Builder. Jobb alsó 
 		sarokban Plusz ikon -> Add Extension -> Kitallózod a Safari.safariextension mappát.
+	
+	Firefox:
+		Addon-SDK-t letöltöd a hivatalos oldalról, követed a linkben leírt instrukciókat:
+			https://addons.mozilla.org/en-US/developers/docs/sdk/1.0/dev-guide/addon-development/installation.html
 		
 		
 A bővítmény funkciói:
