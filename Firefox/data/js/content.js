@@ -1543,7 +1543,7 @@ var remove_adds = {
 function extInit() {
 	
 	// FORUM.PHP
-	if(document.location.href.match('forum.php')) {
+	if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
 
 		// Settings
 		cp.init(1);
