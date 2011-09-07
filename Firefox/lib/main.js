@@ -104,4 +104,4 @@ if( typeof ss.storage.show_mentioned_comments_in_links		== 'undefined') ss.stora
 if( typeof ss.storage.blocks_config							== 'undefined') ss.storage.blocks_config						= '';
 if( typeof ss.storage.hide_blocks_buttons					== 'undefined') ss.storage.hide_blocks_buttons					= false;
 if( typeof ss.storage.show_navigation_buttons				== 'undefined') ss.storage.show_navigation_buttons				= true;
-if( typeof ss.storage.remove_adds							== 'undefined') ss.storage.remove_adds							= false;
+if( typeof ss.storage.remove_ads							== 'undefined') ss.storage.remove_ads							= false;

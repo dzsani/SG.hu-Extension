@@ -88,7 +88,7 @@ var cp = {
 				html += '</div>';
 				html += '<div>';
 					html += '<h3>Navigációs gombok megjelenítése</h3>';
-					html += '<p>A jobb alsó sarokban egy oldal tetejére görgető gomb, plusz egy vissza a fórum főoldalra gomb jelenik meg</p>';
+					html += '<p>A bal alsó sarokban navigációs gombok jelennek meg, amikkel az oldal tetejére lehet görgetni, visszalépni a fórum főoldalra, vagy éppen keresni az adott témában.</p>';
 					html += '<div class="button" id="show_navigation_buttons"></div>';
 				html += '</div>';
 				html += '<div>';
@@ -120,7 +120,7 @@ var cp = {
 				html += '<div>';
 					html += '<h3>Reklámok blokkolása</h3>';
 					html += '<p>Ezzel az opcióval eltávolítható az összes reklám az sg.hu-n.</p>';
-					html += '<div class="button" id="remove_adds"></div>';
+					html += '<div class="button" id="remove_ads"></div>';
 				html += '</div>';
 			html += '</div>';
 

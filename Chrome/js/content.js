@@ -441,10 +441,19 @@ var autoload_next_page = {
 	load : function() {
 		
 		// Url to call
-		var url = document.location.href.substring(0, 44);
+		// date ASC order
+		if(document.location.href.match('timeline')) {
+			var url = document.location.href.substring(0, 44);
+				url = url+'&order=timeline&index='+(autoload_next_page.currPage+1)+'';
+			
+		// Date DESC order
+		} else {
+			var url = document.location.href.substring(0, 44);
+				url = url+'&index='+(autoload_next_page.currPage+1)+'';
+		}
 		
 		// Make the ajax query
-		$.get(url+'&index='+(autoload_next_page.currPage+1)+'', function(data) {
+		$.get(url, function(data) {
 			
 			// Create the 'next page' indicator
 			if(dataStore['threaded_comments'] != 'true') {
@@ -749,7 +758,14 @@ function ext_valaszmsg(target, id, no, callerid) {
 	if ($('#'+target).css('display') != 'block') {
 		var url = '/listazas_egy.php3?callerid=2&id=' + id + '&no=' + no;
 		$.get(url, function(data) { 
+
+			// Show the comment
 			$('#'+target).html(data).hide().slideDown();
+			
+			// show menitoned comment
+			if(dataStore['show_mentioned_comments'] == 'true') {
+				show_mentioned_comments.activated();
+			}
 		});
 	}
 	else { $('#'+target).slideUp(); }
@@ -1058,7 +1074,12 @@ var show_mentioned_comments = {
 
 	activated : function() {
 		
-		$('.maskwindow:not(.checked)').each(function() {
+		$('.maskwindow:not(.checked),.msg-text').each(function() {
+			
+			// Filter out duplicates
+			if( $(this).parent().is('.maskwindow') ) {
+				return true;
+			}
 
 			// Search and replace mentioned comment numbers
 			if( $(this).html().match(/\#\d+/g) ){
@@ -1518,7 +1539,7 @@ function extInit() {
 		}
 
 		// Faves: short comment marker
-		if(dataStore['short_comment_marker'] == 'true'&& isLoggedIn() ) {
+		if(dataStore['short_comment_marker'] == 'true' && isLoggedIn() ) {
 			short_comment_marker.activated();
 		}
 
@@ -1528,11 +1549,14 @@ function extInit() {
 		}
 		
 		// Refresh faves
-		update_fave_list.activated();
+		if(isLoggedIn()) {
+			update_fave_list.activated();
+		}
 
 		// Make readed all faves
-		make_read_all_faves.activated();
-
+		if(isLoggedIn()) {
+			make_read_all_faves.activated();
+		}
 	}
 	
 	// LISTAZAS.PHP
@@ -1597,7 +1621,7 @@ function extInit() {
 	// GLOBAL SCRIPTS
 
 		// remove adverts
-		if(dataStore['remove_adds'] == 'true') {
+		if(dataStore['remove_ads'] == 'true') {
 			remove_adds.activated();
 		}
 }
