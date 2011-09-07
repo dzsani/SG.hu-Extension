@@ -1,11 +1,14 @@
 $(document).ready(function() {
 	
-	// Faves
-	$('.b-h-o-head:eq(2)').addClass('ext_faves');
+	if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
 	
-	// Left sidebar
-	$('table:eq(3) td:eq(0)').attr('id', 'ext_left_sidebar');
+		// Faves
+		$('.b-h-o-head:eq(2)').addClass('ext_faves');
 	
-	// Right sidebar
-	$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').attr('id', 'ext_right_sidebar');
+		// Left sidebar
+		$('table:eq(3) td:eq(0)').attr('id', 'ext_left_sidebar');
+	
+		// Right sidebar
+		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').attr('id', 'ext_right_sidebar');
+	}
 });

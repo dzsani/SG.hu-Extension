@@ -1563,7 +1563,7 @@ function extInit() {
 	
 	// LISTAZAS.PHP
 	else if(document.location.href.match(/listazas.php3\?id/gi)) {
-
+	
 		// Settings
 		cp.init(2);
 
