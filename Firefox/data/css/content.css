@@ -307,21 +307,25 @@
 /* WYSIWYG editor smile list */
 #ext_smiles {
 	width: 600px;
-	/*display: none;*/
+	display: none;
 	text-align: left;
 }
 
 .ext_smiles_block {
-	width: 300px;
+	width: 275px;
+	height: 90px;
 	float: left;
 }
 
-.ext_smiles_block.right h3 {
-	text-align: right
+.ext_smiles_block.left {
+	margin-right: 50px;
 }
+
 
 .ext_smiles_block h3 {
 	font: normal normal normal 14px/16px Arial, serif;
 	color: #999;
+	margin: 0px;
+	padding: 0px;
 }
 
