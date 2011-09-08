@@ -10,14 +10,14 @@ var data = require("self").data;
 pageMod.PageMod({
 	include: ["http://sg.hu/*", "http://www.sg.hu/*"],
 	contentScriptWhen: 'start',
-	contentScriptFile: [data.url("js/jquery.js"), data.url("js/json.js"), data.url("js/dom.js"), data.url("js/settings.js"), data.url("js/content.js")],
+	contentScriptFile: [data.url("js/jquery.js"), data.url("js/json.js"), data.url("js/dom.js"), data.url("js/settings.js"), data.url("js/cleditor.js"), data.url("js/cleditor_bbcode.js"), data.url("js/content.js")],
 	onAttach: function(worker) {
 		worker.on('message', function(event) {
 	
 			// Send back the settings object
 			if(event.name == 'getSettings') {
-					
-				worker.postMessage({ name : "setSettings", message : ss.storage });
+
+				worker.postMessage({ name : "setSettings", message : ss.storage, file : __url__ });
 			
 			} else if(event.name == 'getCSS') {
 
@@ -105,3 +105,4 @@ if( typeof ss.storage.blocks_config							== 'undefined') ss.storage.blocks_conf
 if( typeof ss.storage.hide_blocks_buttons					== 'undefined') ss.storage.hide_blocks_buttons					= false;
 if( typeof ss.storage.show_navigation_buttons				== 'undefined') ss.storage.show_navigation_buttons				= true;
 if( typeof ss.storage.remove_ads							== 'undefined') ss.storage.remove_ads							= false;
+if( typeof ss.storage.wysiwyg_editor						== 'undefined') ss.storage.wysiwyg_editor						= true;

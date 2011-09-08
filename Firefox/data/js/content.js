@@ -1540,8 +1540,60 @@ var remove_adds = {
 };
 
 
+var wysiwyg_editor = {
+
+	activated : function() {
+		
+		// CLEditor init
+		$('textarea[name="message"]').cleditor();
+		
+		// Hide unwanted buttons
+		$('form[name="newmessage"] a:eq(2)').css('visibility', 'hidden');
+		$('form[name="newmessage"] a:eq(3)').css('visibility', 'hidden');
+		$('form[name="newmessage"] a:eq(4)').css('visibility', 'hidden');
+		
+		// Create smiles container
+		$('<div id="ext_smiles"></div>').insertAfter('form[name="newmessage"]');
+		
+		// Add click event to show or hide smile list
+		$('form[name="newmessage"] a:eq(0)').toggle(
+			function(e) {
+				e.preventDefault();
+				$('#ext_smiles').slideDown();
+			},
+			
+			function(e) {
+				e.preventDefault();
+				$('#ext_smiles').slideUp();
+			}
+		);
+		
+		// Load smile list
+		$('#ext_smiles').load('http://www.sg.hu/forumfaces.php', function() {
+
+			// Add click event to the smiles
+			$('#ext_smiles img').click(function(e) {
+				e.preventDefault();
+				alert('a');
+				
+				var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
+
+				var bhtml = '[#' + tag + ']';
+				var ihtml = '<img src="kep/faces/' + tag + '.gif">';
+
+				var tarea = $('textarea[name="message"]').val() + bhtml;
+				var imod = $("#cleditorframe").contents().find('body').html() + ihtml;
+
+				$('textarea[name="message"]').val(tarea);
+				$("#cleditorframe").contents().find('body').html(imod);
+			});
+		});
+	}
+
+};
+
 function extInit() {
-	
+
 	// FORUM.PHP
 	if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
 
@@ -1650,6 +1702,11 @@ function extInit() {
 		if(dataStore['show_mentioned_comments'] == true) {
 			show_mentioned_comments.activated();
 		}
+		
+		// WYSIWYG Editor
+		if(dataStore['wysiwyg_editor'] == true) {
+			wysiwyg_editor.activated();
+		}
 	}
 	
 	// GLOBAL SCRIPTS
@@ -1669,8 +1726,11 @@ self.on("message", function(event) {
 		dataStore = event.message;
 
 		// Add domready event
+		// Filter out iframes
 		$(document).ready(function() {
-			extInit();
+			if($('#head').length > 0) {
+				extInit();
+			}
 		});
 	
 	} else if(event.name == 'setCSS') {
@@ -1679,9 +1739,9 @@ self.on("message", function(event) {
 });
 
 
-// Filter out iframes
-if (window.top === window) {
+
 	self.postMessage({ name : "getSettings", message : true });
 	self.postMessage({ name : "getCSS", message : 'css/settings.css' });
 	self.postMessage({ name : "getCSS", message : 'css/content.css' });
-}
+	self.postMessage({ name : "getCSS", message : 'css/cleditor.css' });
+

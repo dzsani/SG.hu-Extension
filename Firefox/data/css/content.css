@@ -303,3 +303,9 @@
 	z-index: 9999 !important;
 }
 
+
+/* WYSIWYG editor smile list */
+#ext_smiles {
+	width: 100%;
+	display: none;
+}

@@ -1507,6 +1507,58 @@ var remove_adds = {
 	},
 };
 
+var wysiwyg_editor = {
+
+	activated : function() {
+		
+		// CLEditor init
+		$('textarea[name="message"]').cleditor();
+		
+		// Hide unwanted buttons
+		$('form[name="newmessage"] a:eq(2)').css('visibility', 'hidden');
+		$('form[name="newmessage"] a:eq(3)').css('visibility', 'hidden');
+		$('form[name="newmessage"] a:eq(4)').css('visibility', 'hidden');
+		
+		// Create smiles container
+		$('<div id="ext_smiles"></div>').insertAfter('form[name="newmessage"]');
+		
+		// Add click event to show or hide smile list
+		$('form[name="newmessage"] a:eq(0)').toggle(
+			function(e) {
+				e.preventDefault();
+				$('#ext_smiles').slideDown();
+			},
+			
+			function(e) {
+				e.preventDefault();
+				$('#ext_smiles').slideUp();
+			}
+		);
+		
+		// Load smile list
+		$('#ext_smiles').load('http://www.sg.hu/forumfaces.php', function() {
+
+			// Add click event to the smiles
+			$('#ext_smiles input').click(function(e) {
+				e.preventDefault();
+				
+				var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
+
+				var bhtml = '[#' + tag + ']';
+				var ihtml = '<img src="kep/faces/' + tag + '.gif">';
+
+				var tarea = $('textarea[name="message"]').val() + bhtml;
+				var imod = $(".cleditorMain iframe").contents().find('body').html() + ihtml;
+
+				$('textarea[name="message"]').val(tarea);
+				$('textarea[name="message"]').cleditor()[0].focus();
+				$('.cleditorMain iframe').contents().find('body').html(imod);
+				$('textarea[name="message"]').cleditor()[0].focus();
+			});
+		});
+	}
+
+};
 
 function extInit() {
 	
@@ -1617,6 +1669,11 @@ function extInit() {
 		// show menitoned comment
 		if(dataStore['show_mentioned_comments'] == true) {
 			show_mentioned_comments.activated();
+		}
+
+		// WYSIWYG Editor
+		if(dataStore['wysiwyg_editor'] == true) {
+			wysiwyg_editor.activated();
 		}
 	}
 	
