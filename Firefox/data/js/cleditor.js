@@ -718,7 +718,7 @@
             button);
         else
           showMessage(editor,
-            (description ? description : "Error executing the " + command + " command."),
+            (description ? description : "Nem lehet végrehajtani a " + command + " parancsot."),
             button);
       }
     }

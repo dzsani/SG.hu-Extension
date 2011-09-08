@@ -1535,27 +1535,171 @@ var wysiwyg_editor = {
 			}
 		);
 		
-		// Load smile list
-		$('#ext_smiles').load('http://www.sg.hu/forumfaces.php', function() {
+		var html = '';
+		
+		html += '<div class="ext_smiles_block left">';
+			html += '<h3>Vidám</h3>';
+			html += '<img src="/kep/faces/vigyor4.gif" alt=""> ';
+			html += '<img src="/kep/faces/pias.gif" alt=""> ';
+			html += '<img src="/kep/faces/nevetes1.gif" alt=""> ';
+			html += '<img src="/kep/faces/eplus2.gif" alt=""> ';
+			html += '<img src="/kep/faces/finom.gif" alt=""> ';
+			html += '<img src="/kep/faces/vigyor2.gif" alt=""> ';
+			html += '<img src="/kep/faces/vigyor5.gif" alt=""> ';
+			html += '<img src="/kep/faces/bohoc.gif" alt=""> ';
+			html += '<img src="/kep/faces/bee1.gif" alt=""> ';
+			html += '<img src="/kep/faces/nyes.gif" alt=""> ';
+			html += '<img src="/kep/faces/lookaround.gif" alt=""> ';
+			html += '<img src="/kep/faces/buck.gif" alt=""> ';
+			html += '<img src="/kep/faces/crazya.gif" alt=""> ';
+			html += '<img src="/kep/faces/hawaii.gif" alt=""> ';
+			html += '<img src="/kep/faces/vigyor.gif" alt=""> ';
+			html += '<img src="/kep/faces/hehe.gif" alt=""> ';
+			html += '<img src="/kep/faces/smile.gif" alt=""> ';
+			html += '<img src="/kep/faces/nevetes2.gif" alt=""> ';
+			html += '<img src="/kep/faces/email.gif" alt=""> ';
+			html += '<img src="/kep/faces/vigyor0.gif" alt=""> ';
+			html += '<img src="/kep/faces/vigyor3.gif" alt=""> ';
+		html += '</div>';
+		
+		html += '<div class="ext_smiles_block right">';
+			html += '<h3>Szomorú</h3>';
+			html += '<img src="/kep/faces/szomoru2.gif" alt=""> ';
+			html += '<img src="/kep/faces/shakehead.gif" alt=""> ';
+			html += '<img src="/kep/faces/duma.gif" alt=""> ';
+			html += '<img src="/kep/faces/rinya.gif" alt=""> ';
+			html += '<img src="/kep/faces/sniffles.gif" alt=""> ';
+			html += '<img src="/kep/faces/szomoru1.gif" alt=""> ';
+			html += '<img src="/kep/faces/sir.gif" alt=""> ';
+		html += '</div>';
+		
+		html += '<div class="ext_smiles_block left">';
+			html += '<h3>Egyetért</h3>';
+			html += '<img src="/kep/faces/eljen.gif" alt=""> ';
+			html += '<img src="/kep/faces/kacsint.gif" alt=""> ';
+			html += '<img src="/kep/faces/taps.gif" alt=""> ';
+			html += '<img src="/kep/faces/papakacsint.gif" alt=""> ';
+			html += '<img src="/kep/faces/wave.gif" alt=""> ';
+			html += '<img src="/kep/faces/worship.gif" alt=""> ';
+			html += '<img src="/kep/faces/wink.gif" alt=""> ';
+			html += '<img src="/kep/faces/awink.gif" alt=""> ';
 
-			// Add click event to the smiles
-			$('#ext_smiles input').click(function(e) {
-				e.preventDefault();
+		html += '</div>';
+
+		html += '<div class="ext_smiles_block right">';
+			html += '<h3>Ellenez</h3>';
+			html += '<img src="/kep/faces/levele.gif" alt=""> ';
+			html += '<img src="/kep/faces/gonosz3.gif" alt=""> ';
+			html += '<img src="/kep/faces/action.gif" alt=""> ';
+			html += '<img src="/kep/faces/falbav.gif" alt=""> ';
+			html += '<img src="/kep/faces/ejnye1.gif" alt=""> ';
+			html += '<img src="/kep/faces/unalmas.gif" alt=""> ';
+			html += '<img src="/kep/faces/schmoll2.gif" alt=""> ';
+			html += '<img src="/kep/faces/nezze.gif" alt=""> ';
+			html += '<img src="/kep/faces/kuss.gif" alt=""> ';
+	
+
+
+		html += '</div>';
+
+		html += '<div class="ext_smiles_block left">';
+			html += '<h3>Szeretet</h3>';
+			html += '<img src="/kep/faces/hamm.gif" alt=""> ';
+			html += '<img src="/kep/faces/puszi.gif" alt=""> ';
+			html += '<img src="/kep/faces/puszis.gif" alt=""> ';
+			html += '<img src="/kep/faces/law.gif" alt=""> ';
+			html += '<img src="/kep/faces/szeret.gif" alt=""> ';
+			html += '<img src="/kep/faces/love11.gif" alt=""> ';
+			html += '<img src="/kep/faces/love12.gif" alt=""> ';
+		html += '</div>';
+
+		html += '<div class="ext_smiles_block right">';
+			html += '<h3>Utálat</h3>';
+			html += '<img src="/kep/faces/mf1.gif" alt=""> ';
+			html += '<img src="/kep/faces/kocsog.gif" alt=""> ';
+			html += '<img src="/kep/faces/duhos2.gif" alt=""> ';
+			html += '<img src="/kep/faces/lama.gif" alt=""> ';
+			html += '<img src="/kep/faces/banplz.gif" alt=""> ';
+			html += '<img src="/kep/faces/violent.gif" alt=""> ';
+			html += '<img src="/kep/faces/gunyos1.gif" alt=""> ';
+			html += '<img src="/kep/faces/boxer.gif" alt=""> ';
+			html += '<img src="/kep/faces/mf2.gif" alt=""> ';
+			html += '<img src="/kep/faces/gun.gif" alt=""> ';
+		html += '</div>';
+
+		html += '<div class="ext_smiles_block left">';
+			html += '<h3>Csodálkozik</h3>';
+			html += '<img src="/kep/faces/csodalk.gif" alt=""> ';
+			html += '<img src="/kep/faces/wow1.gif" alt=""> ';
+			html += '<img src="/kep/faces/conf.gif" alt=""> ';
+			html += '<img src="/kep/faces/rolleyes.gif" alt=""> ';
+			html += '<img src="/kep/faces/whatever.gif" alt=""> ';
+			html += '<img src="/kep/faces/zavart1.gif" alt=""> ';
+			html += '<img src="/kep/faces/confused.gif" alt=""> ';
+			html += '<img src="/kep/faces/zavart2.gif" alt=""> ';
+			html += '<img src="/kep/faces/fejvakaras.gif" alt=""> ';
+			html += '<img src="/kep/faces/pardon1.gif" alt=""> ';
+			html += '<img src="/kep/faces/circling.gif" alt=""> ';
+			html += '<img src="/kep/faces/ijedt.gif" alt=""> ';
+			html += '<img src="/kep/faces/wow3.gif" alt=""> ';
+			html += '<img src="/kep/faces/nemtudom.gif" alt=""> ';
+			html += '<img src="/kep/faces/merges2.gif" alt=""> ';
+			html += '<img src="/kep/faces/wow2.gif" alt=""> ';
+			html += '<img src="/kep/faces/guluszem1.gif" alt=""> ';
+
+		html += '</div>';
+
+		html += '<div class="ext_smiles_block right">';
+			html += '<h3>Egyéb</h3>';
+			html += '<img src="/kep/faces/felkialtas.gif" alt=""> ';
+			html += '<img src="/kep/faces/alien2.gif" alt=""> ';
+			html += '<img src="/kep/faces/dumcsi.gif" alt=""> ';
+			html += '<img src="/kep/faces/idiota.gif" alt=""> ';
+			html += '<img src="/kep/faces/help.gif" alt=""> ';
+			html += '<img src="/kep/faces/alien.gif" alt=""> ';
+			html += '<img src="/kep/faces/bdead.gif" alt=""> ';
+			html += '<img src="/kep/faces/ticking.gif" alt=""> ';
+			html += '<img src="/kep/faces/ravasz1.gif" alt=""> ';
+			html += '<img src="/kep/faces/beka2.gif" alt=""> ';
+			html += '<img src="/kep/faces/beka3.gif" alt=""> ';
+			html += '<img src="/kep/faces/nezze.gif" alt=""> ';
+			html += '<img src="/kep/faces/vigyor1.gif" alt=""> ';
+			html += '<img src="/kep/faces/phone.gif" alt=""> ';
+			html += '<img src="/kep/faces/heureka.gif" alt=""> ';
+			html += '<img src="/kep/faces/gonosz2.gif" alt=""> ';
+			html += '<img src="/kep/faces/vomit.gif" alt=""> ';
+			html += '<img src="/kep/faces/fogmosas.gif" alt=""> ';
+			html += '<img src="/kep/faces/gonosz1.gif" alt=""> ';
+			html += '<img src="/kep/faces/oooo.gif" alt=""> ';
+			html += '<img src="u/kep/faces/integet2.gif" alt=""> ';
+
+
+		html += '</div>';
+
+		html += '<div style="clear:both;"></div>';
+		
+		$(html).appendTo('#ext_smiles');
+
+
+		// Add click event to the smiles
+		$('#ext_smiles input').click(function(e) {
+
+			e.preventDefault();
 				
-				var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
+			var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
+	
+			var bhtml = '[#' + tag + ']';
+			var ihtml = '<img src="kep/faces/' + tag + '.gif">';
 
-				var bhtml = '[#' + tag + ']';
-				var ihtml = '<img src="kep/faces/' + tag + '.gif">';
+			var tarea = $('textarea[name="message"]').val() + bhtml;
+			var imod = $(".cleditorMain iframe").contents().find('body').html() + ihtml;
 
-				var tarea = $('textarea[name="message"]').val() + bhtml;
-				var imod = $(".cleditorMain iframe").contents().find('body').html() + ihtml;
-
-				$('textarea[name="message"]').val(tarea);
-				$('textarea[name="message"]').cleditor()[0].focus();
-				$('.cleditorMain iframe').contents().find('body').html(imod);
-				$('textarea[name="message"]').cleditor()[0].focus();
-			});
+			$('textarea[name="message"]').val(tarea);
+			$('textarea[name="message"]').cleditor()[0].focus();
+			$('.cleditorMain iframe').contents().find('body').html(imod);
+			$('textarea[name="message"]').cleditor()[0].focus();
 		});
+		
 	}
 
 };

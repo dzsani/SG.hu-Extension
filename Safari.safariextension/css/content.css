@@ -303,9 +303,28 @@
 	z-index: 9999 !important;
 }
 
-
 /* WYSIWYG editor smile list */
 #ext_smiles {
-	width: 100%;
-	display: none;
+	width: 600px;
+	/*display: none;*/
+	text-align: left;
 }
+
+.ext_smiles_block {
+	width: 275px;
+	height: 80px;
+	float: left;
+}
+
+.ext_smiles_block.left {
+	margin-right: 50px;
+}
+
+
+.ext_smiles_block h3 {
+	font: normal normal normal 14px/16px Arial, serif;
+	color: #999;
+	margin: 0px;
+	padding: 0px;
+}
+

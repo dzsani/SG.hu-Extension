@@ -1568,28 +1568,60 @@ var wysiwyg_editor = {
 			}
 		);
 		
-		// Load smile list
-		$('#ext_smiles').load('http://www.sg.hu/forumfaces.php', function() {
+		var html = '';
+		
+		html += '<div class="ext_smiles_block left">';
+			html += '<h3>Mosolygós</h3>';
+			html += '<img src="/kep/faces/vigyor4.gif" alt="">';
+		html += '</div>';
+		
+		html += '<div class="ext_smiles_block right">';
+			html += '<h3>Szomorú</h3>';
+		html += '</div>';
+		
+		html += '<div class="ext_smiles_block left">';
+			html += '<h3>Visszavágó</h3>';
+			html += '<img src="/kep/faces/mf1.gif" alt="">';
+			html += '<img src="/kep/faces/kocsog.gif" alt="">';
+		html += '</div>';
 
-			// Add click event to the smiles
-			$('#ext_smiles input').click(function(e) {
+		html += '<div class="ext_smiles_block right">';
+			html += '<h3>Kiakadós</h3>';
+		html += '</div>';
 
-				e.preventDefault();
+		html += '<div class="ext_smiles_block left">';
+			html += '<h3>Szeret</h3>';
+			html += '<img src="/kep/faces/hamm.gif" alt="">';
+		html += '</div>';
+
+		html += '<div class="ext_smiles_block right">';
+			html += '<h3>Egyéb</h3>';
+		html += '</div>';
+	
+		html += '<div style="clear:both;"></div>';
+		
+		$(html).appendTo('#ext_smiles');
+
+
+		// Add click event to the smiles
+		$('#ext_smiles input').click(function(e) {
+
+			e.preventDefault();
 				
-				var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
+			var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
+	
+			var bhtml = '[#' + tag + ']';
+			var ihtml = '<img src="kep/faces/' + tag + '.gif">';
 
-				var bhtml = '[#' + tag + ']';
-				var ihtml = '<img src="kep/faces/' + tag + '.gif">';
+			var tarea = $('textarea[name="message"]').val() + bhtml;
+			var imod = $(".cleditorMain iframe").contents().find('body').html() + ihtml;
 
-				var tarea = $('textarea[name="message"]').val() + bhtml;
-				var imod = $(".cleditorMain iframe").contents().find('body').html() + ihtml;
-
-				$('textarea[name="message"]').val(tarea);
-				$('textarea[name="message"]').cleditor()[0].focus();
-				$('.cleditorMain iframe').contents().find('body').html(imod);
-				$('textarea[name="message"]').cleditor()[0].focus();
-			});
+			$('textarea[name="message"]').val(tarea);
+			$('textarea[name="message"]').cleditor()[0].focus();
+			$('.cleditorMain iframe').contents().find('body').html(imod);
+			$('textarea[name="message"]').cleditor()[0].focus();
 		});
+		
 	}
 
 };
