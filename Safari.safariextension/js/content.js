@@ -1671,7 +1671,7 @@ var wysiwyg_editor = {
 			html += '<img src="/kep/faces/fogmosas.gif" alt=""> ';
 			html += '<img src="/kep/faces/gonosz1.gif" alt=""> ';
 			html += '<img src="/kep/faces/oooo.gif" alt=""> ';
-			html += '<img src="u/kep/faces/integet2.gif" alt=""> ';
+			html += '<img src="/kep/faces/integet2.gif" alt=""> ';
 
 
 		html += '</div>';
