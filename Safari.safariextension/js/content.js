@@ -1682,7 +1682,7 @@ var wysiwyg_editor = {
 
 
 		// Add click event to the smiles
-		$('#ext_smiles input').click(function(e) {
+		$('#ext_smiles img').click(function(e) {
 
 			e.preventDefault();
 				

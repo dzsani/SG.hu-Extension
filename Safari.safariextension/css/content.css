@@ -306,7 +306,7 @@
 /* WYSIWYG editor smile list */
 #ext_smiles {
 	width: 600px;
-	/*display: none;*/
+	display: none;
 	text-align: left;
 }
 
