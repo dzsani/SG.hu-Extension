@@ -834,11 +834,26 @@ var overlay_reply_to = {
 		comment_clone.find('center').parent('div').remove();
 		
 		// Create textarea clone
-		var textarea_clone = $('textarea:first').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+		
+		// WYSIWYG editor
+		if(dataStore['wysiwyg_editor'] == true) {
+			var textarea_clone = $('form[name="newmessage"]').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+				textarea_clone.find('.cleditorMain').remove();
+				textarea_clone.find('form div:eq(0)').append('<textarea cols="50" rows="10" name="message"></textarea>');
+				textarea_clone.find('form div:eq(0)').css('padding-left', 100);
+				
+				// Fix smile list
+				$('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100 });
+				
+			$(".ext_clone_textarea textarea").cleditor()[0].focus();
+		
+		// Normal textarea
+		} else {
+			var textarea_clone = $('textarea:first').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+		}
 		
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
-	
 		
 		var left = $(document).width() / 2 - 405;
 			textarea_clone.delay(350).css({ top : top + 200, left : left, opacity : 0 }).animate({ top : top + 10, opacity : 1 }, 300);
