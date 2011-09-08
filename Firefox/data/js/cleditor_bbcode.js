@@ -96,10 +96,6 @@
 		[/<u>([\s\S]*?)<\/u>/gi, "[u]$1[/u]"],
 		[/<ins>([\s\S]*?)<\/ins>/gi, "[u]$1[/u]"],
       
-		// Anchor and images
-		[/<a.*?href="(.*?)".*?>(.*?)<\/a>/gi, "[url=$1]$2[/url]"],
-		[/<img.*?src="(.*?)".*?>/gi, "[img]$1[/img]"],
-      
 		// Font sizes
 		[/<font size="1">([\s\S]*?)<\/font>/img, "[apro]$1[/apro]"],
 		[/<font size="2">([\s\S]*?)<\/font>/img, "$1"],
@@ -227,7 +223,11 @@
 		[/<img.*?src.*kep\/faces\/guluszem1.gif".*?>/gmi, "[#guluszem1]"],
 		[/<img.*?src.*kep\/faces\/vigyor3.gif".*?>/gmi, "[#vigyor3]"],
 		[/<img.*?src.*kep\/faces\/love12.gif".*?>/gmi, "[#love12]"],   
-      
+
+		// Anchor and images
+		[/<a.*?href="(.*?)".*?>(.*?)<\/a>/gi, "[url=$1]$2[/url]"],
+		[/<img.*?src="(.*?)".*?>/gi, "[img]$1[/img]"],
+
 		// Convert all HTML elements to nothing
 		//[/<.*?>(.*?)<\/.*?>/g, "$1"]
 		
@@ -256,10 +256,6 @@
       
 		// Underline
 		[/\[u\](.*?)\[\/u\]/gi, "<u>$1</u>"],
-      
-		// Anchor and images
-		[/\[url=(.*?)\](.*?)\[\/url\]/gi, "<a href=\"$1\">$2</a>"],
-		[/\[img\](.*?)\[\/img\]/gi, "<img src=\"$1\">"],
 
 		// Font sizes
 		[/\[apro\]([\s\S]*?)\[\/apro]/gim, '<font size="1" >$1</font>'],
@@ -387,6 +383,9 @@
 		[/\[#vigyor3]/gmi, '<img src="kep/faces/vigyor3.gif">'],
 		[/\[#love12]/gmi, '<img src="kep/faces/love12.gif">'],  
 
+		// Anchor and images
+		[/\[url=(.*?)\](.*?)\[\/url\]/gi, "<a href=\"$1\">$2</a>"],
+		[/\[img\](.*?)\[\/img\]/gi, "<img src=\"$1\">"],
       ], function(index, item) {
         code = code.replace(item[0], item[1]);
       });

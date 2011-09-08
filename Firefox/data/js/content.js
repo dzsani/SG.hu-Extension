@@ -1572,9 +1572,9 @@ var wysiwyg_editor = {
 		$('#ext_smiles').load('http://www.sg.hu/forumfaces.php', function() {
 
 			// Add click event to the smiles
-			$('#ext_smiles img').click(function(e) {
+			$('#ext_smiles input').click(function(e) {
+
 				e.preventDefault();
-				alert('a');
 				
 				var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
 
@@ -1582,10 +1582,12 @@ var wysiwyg_editor = {
 				var ihtml = '<img src="kep/faces/' + tag + '.gif">';
 
 				var tarea = $('textarea[name="message"]').val() + bhtml;
-				var imod = $("#cleditorframe").contents().find('body').html() + ihtml;
+				var imod = $(".cleditorMain iframe").contents().find('body').html() + ihtml;
 
 				$('textarea[name="message"]').val(tarea);
-				$("#cleditorframe").contents().find('body').html(imod);
+				$('textarea[name="message"]').cleditor()[0].focus();
+				$('.cleditorMain iframe').contents().find('body').html(imod);
+				$('textarea[name="message"]').cleditor()[0].focus();
 			});
 		});
 	}
