@@ -215,13 +215,19 @@
 	left: 0px;
 	z-index: 52;
 	text-align: center;
+}
+
+.ext_clone_textarea textarea, .ext_clone_textarea .cleditorMain {
+
 	-webkit-box-shadow: #333 0px 0px 10px;
 }
 
 .ext_overlay_close {
+	width: 16px;
+	height: 16px;
 	position: absolute;
-	top: 0px;
-	right: 0px;
+	top: 11px;
+	right: 6px;
 	cursor: pointer;
 }
 

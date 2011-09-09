@@ -840,12 +840,27 @@ var overlay_reply_to = {
 			var textarea_clone = $('form[name="newmessage"]').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 				textarea_clone.find('.cleditorMain').remove();
 				textarea_clone.find('form div:eq(0)').append('<textarea cols="50" rows="10" name="message"></textarea>');
-				textarea_clone.find('form div:eq(0)').css('padding-left', 100);
+				
+				// Remove div padding
+				textarea_clone.find('form div:eq(0)').css('padding', 0);
+				
+				// Apply some styles
+				textarea_clone.css({'background' : 'none', 'border' : 'none' });
+				
+				// Remove username
+				textarea_clone.find('.std1').remove();
+				
+				// Fix buttons
+				textarea_clone.find('a:eq(0)').css({ position : 'absolute', top : 220, left : 0 });
+				textarea_clone.find('a:eq(1)').css({ position : 'absolute', top : 220, left : 90 });
+				textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 180 });
+				textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
 				
 				// Fix smile list
-				$('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100 });
+				textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100 });
+				textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
 				
-			$(".ext_clone_textarea textarea").cleditor()[0].focus();
+			$(".ext_clone_textarea textarea").cleditor({ width : 806 })[0].focus();
 		
 		// Normal textarea
 		} else {
