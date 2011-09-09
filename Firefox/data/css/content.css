@@ -217,7 +217,7 @@
 	text-align: center;
 }
 
-.ext_clone_textarea textarea, .ext_clone_textarea .cleditorMain {
+.ext_clone_textarea .cleditorMain {
 
 	-moz-box-shadow: #333 0px 0px 10px;
 }

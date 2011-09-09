@@ -18,7 +18,7 @@ function isLoggedIn() {
 	
 	// Topic page
 	} else if(document.location.href.match(/listazas.php3\?id/gi)) {
-		return ( $('.std1').length > 1) ? true : false;
+		return ( $('.std1').length > 0) ? true : false;
 	}
 	
 }
@@ -860,6 +860,9 @@ var overlay_reply_to = {
 				textarea_clone.find('.cleditorMain').remove();
 				textarea_clone.find('form div:eq(0)').append('<textarea cols="50" rows="10" name="message"></textarea>');
 				
+				// Copy textarea original comment to the tmp element
+				textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
+				
 				// Remove div padding
 				textarea_clone.find('form div:eq(0)').css('padding', 0);
 				
@@ -876,7 +879,7 @@ var overlay_reply_to = {
 				textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
 				
 				// Fix smile list
-				textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100 });
+				textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
 				textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
 				
 			$(".ext_clone_textarea textarea").cleditor({ width : 806 })[0].focus();
@@ -884,6 +887,9 @@ var overlay_reply_to = {
 		// Normal textarea
 		} else {
 			var textarea_clone = $('textarea:first').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+		
+				// Copy textarea original comment to the tmp element
+				textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
 		}
 		
 		// Textarea position
@@ -1767,7 +1773,7 @@ var wysiwyg_editor = {
 };
 
 function extInit() {
-
+	
 	// FORUM.PHP
 	if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
 
@@ -1917,3 +1923,4 @@ if(unsafeWindow.self == unsafeWindow.top) {
 	self.postMessage({ name : "getCSS", message : 'css/content.css' });
 	self.postMessage({ name : "getCSS", message : 'css/cleditor.css' });
 }
+

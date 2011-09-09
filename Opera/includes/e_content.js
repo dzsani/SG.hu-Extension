@@ -864,7 +864,10 @@ var overlay_reply_to = {
 		
 		// Create textarea clone
 		var textarea_clone = $('textarea:first').closest('div').clone().prependTo('body').addClass('ext_clone_textarea');
-		
+
+			// Copy textarea original comment to the tmp element
+			textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
+
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
 	
