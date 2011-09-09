@@ -718,7 +718,7 @@
             button);
         else
           showMessage(editor,
-            (description ? description : "Nem lehet végrehajtani a" + command + " parancsot."),
+            (description ? description : "Nem lehet végrehajtani a " + command + " parancsot."),
             button);
       }
     }
