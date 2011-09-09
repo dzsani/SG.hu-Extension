@@ -216,13 +216,19 @@
 	left: 0px;
 	z-index: 52;
 	text-align: center;
+}
+
+.ext_clone_textarea .cleditorMain {
+
 	-webkit-box-shadow: #333 0px 0px 10px;
 }
 
 .ext_overlay_close {
+	width: 16px;
+	height: 16px;
 	position: absolute;
-	top: 0px;
-	right: 0px;
+	top: 11px;
+	right: 6px;
 	cursor: pointer;
 }
 
@@ -303,4 +309,29 @@
 .nicEdit-main {
 	text-align: left !important;
 	font: normal normal normal 13px/14px Arial, serif;
+}
+
+/* WYSIWYG editor smile list */
+#ext_smiles {
+	width: 600px;
+	display: none;
+	text-align: left;
+}
+
+.ext_smiles_block {
+	width: 275px;
+	height: 90px;
+	float: left;
+}
+
+.ext_smiles_block.left {
+	margin-right: 50px;
+}
+
+
+.ext_smiles_block h3 {
+	font: normal normal normal 14px/16px Arial, serif;
+	color: #999;
+	margin: 0px;
+	padding: 0px;
 }
