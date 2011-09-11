@@ -1866,6 +1866,7 @@ function extInit() {
 		}
 }
 
+
 // Filter out iframes
 // Request settings object
 if (window.top === window) {

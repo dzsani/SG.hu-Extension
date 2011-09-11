@@ -733,7 +733,7 @@
   function focus(editor) {
     setTimeout(function() {
       if (sourceMode(editor)) editor.$area.focus();
-      else editor.$frame[0].contentWindow.focus();
+      else editor.$frame[0].contentDocument.body.focus();
       refreshButtons(editor);
     }, 0);
   }
@@ -803,7 +803,7 @@
       .appendTo($main);
 
     // Load the iframe document content
-    var contentWindow = $frame[0].contentDocument;
+    var contentWindow = $frame[0].contentDocument.body;
       doc = editor.doc = $frame[0].contentDocument,
       $doc = $(doc);
 
@@ -864,7 +864,9 @@
     }
 
     // Update the textarea when the iframe loses focus
-    ($.browser.mozilla ? $doc : $(contentWindow)).blur(function() {
+    alert(contentWindow);
+    ($.browser.mozilla ? $doc : $(contentWindow)).keyup(function() {
+    alert('update');
       updateTextArea(editor, true);
     });
 
@@ -913,7 +915,7 @@
 
     // Webkit requires focus before queryCommandEnabled will return anything but false
     if (!iOS && $.browser.webkit && !editor.focused) {
-      editor.$frame[0].contentWindow.focus();
+      editor.$frame[0].contentDocument.body.focus();
       window.focus();
       editor.focused = true;
     }
@@ -1094,7 +1096,7 @@
 
   // updateTextArea - updates the textarea with the iframe contents
   function updateTextArea(editor, checkForChange) {
-
+	alert('updateTextArea');
     var html = $(editor.doc.body).html(),
       options = editor.options,
       updateTextAreaCallback = options.updateTextArea,
