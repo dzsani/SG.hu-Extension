@@ -121,9 +121,9 @@
 		[/<font class="Apple-style-span" color="#ffa500">([\s\S]*?)<\/font>/img, "[szin=orange]$1[/szin]"],
       
 		// Text align
-		[/<div align="left">([\s\S]*?)<\/div>/img, "$1"],
-		[/<div align="center">([\s\S]*?)<\/div>/img, "[center]$1[/center]"],
-		[/<div align="right">([\s\S]*?)<\/div>/img, "[right]$1[/right]"],
+		[/<div style="text-align: left;">([\s\S]*?)<\/div>/img, "$1"],
+		[/<div style="text-align: center;">([\s\S]*?)<\/div>/img, "[center]$1[/center]"],
+		[/<div style="text-align: right;">([\s\S]*?)<\/div>/img, "[right]$1[/right]"],
 
 		// Smiles
 		[/<img.*?src.*kep\/faces\/hamm.gif".*?>/gmi, "[#hamm]"],
@@ -235,7 +235,7 @@
 		[/<img.*?src="(.*?)".*?>/gi, "[img]$1[/img]"],
 		
 		// Convert all HTML elements to nothing
-		[/<.*?>(.*?)<\/.*?>/g, "$1"]
+		//[/<.*?>(.*?)<\/.*?>/g, "$1"]
 		
       ], function(index, item) {
         html = html.replace(item[0], item[1]);
@@ -281,8 +281,8 @@
 		[/\[szin=orange\]([\s\S]*?)\[\/szin]/gim, '<font class="Apple-style-span" color="#ffa500">$1</font>'],
       
 		// Text align
-		[/\[center\]([\s\S]*?)\[\/center]/gim, '<div align="center">$1</div>'],
-		[/\[right\]([\s\S]*?)\[\/right]/gim, '<div align="right">$1</div>'],
+		[/\[center\]([\s\S]*?)\[\/center]/gim, '<div style="text-align: center;">$1</div>'],
+		[/\[right\]([\s\S]*?)\[\/right]/gim, '<div style="text-align: right;">$1</div>'],
 		
 		// Smiles
 		[/\[#hamm]/gmi, '<img src="kep/faces/hamm.gif">'],

@@ -1556,7 +1556,14 @@ var wysiwyg_editor = {
 		$('form[name="newmessage"] a:eq(2)').css('visibility', 'hidden');
 		$('form[name="newmessage"] a:eq(3)').css('visibility', 'hidden');
 		$('form[name="newmessage"] a:eq(4)').css('visibility', 'hidden');
-		
+
+		// Rearrange buttons
+		$('form[name="newmessage"]').css('position', 'relative');
+		$('form[name="newmessage"] a:eq(0)').css({ 'position' : 'absolute', 'left' : 20 });
+		$('form[name="newmessage"] a:eq(1)').css({ 'position' : 'absolute', 'left' : 110 });
+		$('form[name="newmessage"] a:eq(5)').css({ 'position' : 'absolute', 'left' : 200 });
+		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });
+
 		// Create smiles container
 		$('<div id="ext_smiles"></div>').insertAfter('form[name="newmessage"]');
 		
