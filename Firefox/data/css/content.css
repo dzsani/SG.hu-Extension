@@ -229,6 +229,7 @@
 	top: 11px;
 	right: 6px;
 	cursor: pointer;
+	z-index: 100;
 }
 
 /* Comments for me indicator */
