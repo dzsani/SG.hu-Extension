@@ -123,6 +123,11 @@ var cp = {
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';
 					html += '<div class="button" id="show_mentioned_comments"></div>';
 				html += '</div>';
+				html += '<div>';
+					html += '<h3>Smile lista csoportba rendezése</h3>';
+					html += '<p>A smile lista egy legördülő menüben jelenik meg ahol típusuk szerint csoportokba vannak rendezve. Például: szomorú, vidám, stb.</p>';
+					html += '<div class="button" id="group_smiles"></div>';
+				html += '</div>';	
 			html += '</div>';
 
 			html += '<div class="settings_page">';

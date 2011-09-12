@@ -299,8 +299,27 @@
 	float: right;
 }
 
-/* WYSIWYG Editor */
-.nicEdit-main {
-	text-align: left !important;
-	font: normal normal normal 13px/14px Arial, serif;
+/* WYSIWYG editor smile list */
+#ext_smiles {
+	width: 600px;
+	display: none;
+	text-align: left;
+}
+
+.ext_smiles_block {
+	width: 275px;
+	height: 90px;
+	float: left;
+}
+
+.ext_smiles_block.left {
+	margin-right: 50px;
+}
+
+
+.ext_smiles_block h3 {
+	font: normal normal normal 14px/16px Arial, serif;
+	color: #999;
+	margin: 0px;
+	padding: 0px;
 }
