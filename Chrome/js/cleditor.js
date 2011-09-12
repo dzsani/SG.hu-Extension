@@ -864,12 +864,14 @@
     }
 
     // Update the textarea when the iframe loses focus
-    alert(contentWindow);
     ($.browser.mozilla ? $doc : $(contentWindow)).keyup(function() {
-    alert('update');
       updateTextArea(editor, true);
     });
-
+	
+	setInterval(function() {
+		updateTextArea(editor, true);	
+	}, 500, editor);
+	
     // Enable the toolbar buttons as the user types or clicks
     $doc.click(hidePopups)
       .bind("keyup mouseup", function() {
@@ -1096,7 +1098,6 @@
 
   // updateTextArea - updates the textarea with the iframe contents
   function updateTextArea(editor, checkForChange) {
-	alert('updateTextArea');
     var html = $(editor.doc.body).html(),
       options = editor.options,
       updateTextAreaCallback = options.updateTextArea,

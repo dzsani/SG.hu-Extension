@@ -838,7 +838,7 @@ var overlay_reply_to = {
 		comment_clone.find('center').parent('div').remove();
 		
 		// WYSIWYG editor
-		if(dataStore['wysiwyg_editor'] == true) {
+		if(dataStore['wysiwyg_editor'] == 'true') {
 			var textarea_clone = $('form[name="newmessage"]').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 				textarea_clone.find('.cleditorMain').remove();
 				textarea_clone.find('form div:eq(0)').append('<textarea cols="50" rows="10" name="message"></textarea>');
