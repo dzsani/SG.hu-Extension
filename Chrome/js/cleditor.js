@@ -747,7 +747,7 @@
   // getSelection - gets the current text range object
   function getSelection(editor) {
     if (ie) return editor.doc.selection;
-    return editor.$frame[0].contentWindow.getSelection();
+    return editor.$frame[0].contentDocument.getSelection();
   }
 
   // Returns the hex value for the passed in string.
@@ -867,7 +867,8 @@
     ($.browser.mozilla ? $doc : $(contentWindow)).keyup(function() {
       updateTextArea(editor, true);
     });
-	
+
+	
 	setInterval(function() {
 		updateTextArea(editor, true);	
 	}, 500, editor);
