@@ -75,7 +75,8 @@
 }
 
 .settings_page {
-
+	max-height: 500px;
+	overflow-y: auto;
 	padding: 20px;
 	text-align: justify;
 }

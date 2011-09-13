@@ -78,6 +78,8 @@
 }
 
 .settings_page {
+	max-height: 500px;
+	overflow-y: auto;
 	display: none;
 	padding: 20px;
 	text-align: justify;
