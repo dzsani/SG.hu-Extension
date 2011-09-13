@@ -1,9 +1,9 @@
 {
 	"id": "jid1-YEB8XVqrOsQYow",
 	"name": "sgforumplus",
-	"fullName": "SG Forum Plus",
+	"fullName": "SG Fórum+",
 	"version": "1.1.1",
-	"author": "Janos Gera", 
-    "description": "This extension is made for a popular Hungarian website, called sg.hu.", 
+	"author": "Gera János", 
+    "description": "Az SG.hu nemhivatalos Firefox bővítménye", 
     "license": "MIT"
 }
