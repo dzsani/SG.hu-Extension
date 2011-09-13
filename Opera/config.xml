@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" id="http://kreaturamedia.com/" version="1.1.1">
 
-		<name>SG Forum Plus</name>
+		<name>SG Fórum Plusz</name>
 		
-		<description>This extension is made for a popular Hungarian website, sg.hu.</description>
+		<description>Az SG.hu nemhivatalos Opera bővítménye</description>
 
-		<author href="http://kreaturamedia.com" email="gerajanos@kreaturamedia.com">Janos Gera</author>
+		<author href="http://kreaturamedia.com" email="gerajanos@kreaturamedia.com">Gera János</author>
 		
 		<license href="http://www.opensource.org/licenses/mit-license.php">Licensed under the MIT license</license>
 		
