@@ -294,12 +294,17 @@ var blocklist =  {
 	init : function() {
 
 		// Create the block buttons
-		$('.topichead a[href*="forummsg.php"]').each(function() {
+		$('.topichead:not(.blockbutton) a[href*="forummsg.php"]').each(function() {
+			
+			// Insert the block button
 			$('<a href="#" class="block_user">letiltás</a> <span>| </span> ').insertBefore(this);
+			
+			// Add "blockbutton" class to avoid duplicates on re-init
+			$(this).closest('.topichead').addClass('blockbutton');
 		});
 	
 		// Create the block evenst
-		$('.block_user').click(function(e) {
+		$('.block_user').die('click').live('click', function(e) {
 			e.preventDefault();
 			blocklist.block(this);
 		});
@@ -475,20 +480,23 @@ var autoload_next_page = {
 			
 			// Reinit settings
 
-			// threaded comments
-			if(dataStore['threaded_comments'] == 'true') {
-				threaded_comments.sort();
-			}
+				// Set-up block buttons
+				blocklist.init();
+				
+				// threaded comments
+				if(dataStore['threaded_comments'] == 'true') {
+					threaded_comments.sort();
+				}
 
-			// highlight_comments_for_me
-			if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
-				highlight_comments_for_me.activated();
-			}
+				// highlight_comments_for_me
+				if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
+					highlight_comments_for_me.activated();
+				}
 			
-			// show menitoned comment
-			if(dataStore['show_mentioned_comments'] == 'true') {
-				show_mentioned_comments.activated();
-			}
+				// show menitoned comment
+				if(dataStore['show_mentioned_comments'] == 'true') {
+					show_mentioned_comments.activated();
+				}
 			
 		});
 	}

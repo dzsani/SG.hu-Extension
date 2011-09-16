@@ -286,7 +286,7 @@
 		[/<img.*?src="(.*?)".*?>/gi, "[img]$1[/img]"],
 		
 		// Convert all HTML elements to nothing
-		//[/<.*?>(.*?)<\/.*?>/g, "$1"]
+		[/<.*?>(.*?)<\/.*?>/g, "$1"]
 		
       ], function(index, item) {
         html = html.replace(item[0], item[1]);
