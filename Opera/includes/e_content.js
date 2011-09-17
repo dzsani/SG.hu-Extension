@@ -871,7 +871,7 @@ var overlay_reply_to = {
 		comment_clone.find('center').parent('div').remove();
 		
 		// Create textarea clone
-		var textarea_clone = $('textarea:first').closest('div').clone().prependTo('body').addClass('ext_clone_textarea');
+		var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone().prependTo('body').addClass('ext_clone_textarea');
 
 		// Fix smile list
 		if(dataStore['group_smiles'] == 'true') {

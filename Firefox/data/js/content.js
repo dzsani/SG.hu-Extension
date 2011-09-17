@@ -896,7 +896,7 @@ var overlay_reply_to = {
 		
 		// Normal textarea
 		} else {
-			var textarea_clone = $('textarea:first').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+			var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 		
 				// Copy textarea original comment to the tmp element
 				textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
