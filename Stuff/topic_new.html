@@ -10,7 +10,7 @@
 <form method="post">
 	<input type="TEXT" size="50" name="title" value="dzsani teszt topikja">
 	<textarea name="topic" cols="50" rows="6"></textarea>
-<br><br><input type="hidden" name="ellenorzokod" value="ce89a522f6ec2c0d24a50775893a269e"><input type="hidden" name="extraflags" value="1"><br><input type="submit" value="Mehet!">&nbsp;<input type="reset" value="Vissza"><input type="hidden" name="id" value="1308399664"><input type="hidden" name="action" value="tkar"><input type="hidden" name="status" value="1"><input type="hidden" name="identid" value="57481-67515-1315241924">
+<br><br><input type="hidden" name="ellenorzokod" value="574cef76761dbc69a6d14a6b5d328e90"><input type="hidden" name="extraflags" value="1"><br><input type="submit" value="Mehet!">&nbsp;<input type="reset" value="Vissza"><input type="hidden" name="id" value="1244640182"><input type="hidden" name="action" value="tkar"><input type="hidden" name="status" value="1"><input type="hidden" name="identid" value="57481-67515-1315241924">
 </form>
 
 -->
@@ -63,12 +63,22 @@
 
 #ext_bugreport_form {
 	width: 600px;
-	height: 500px;
+	height: 285px;
+	padding: 15px;
 	display: none;
 	position: fixed;
 	top: 0px;
 	left: 0px;
 	z-index: 101;
+	background-color: #fff;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	box-shadow: 0px 0px 15px #000;
+	-moz-box-shadow: 0px 0px 15px #000;
+	-webkit-box-shadow: 0px 0px 15px #000;
+	-o-box-shadow: 0px 0px 15px #000;
 }
 
 #ext_bugreport_form p {
@@ -81,18 +91,35 @@
 	text-align: center;
 }
 
-#ext_bugreport_form textarea {
-	width: 600px;
-	height: 400px;
-	box-shadow: 0px 0px 10px #666;
-	-moz-box-shadow: 0px 0px 10px #666;
-	-webkit-box-shadow: 0px 0px 10px #666;
-	-o-box-shadow: 0px 0px 10px #666;
+#ext_bugreport_form h4 {
+	margin: 10px 0px;
+	padding: 0px;
+	height: 20px;
+	font: normal normal bold 13px/20px Arial, serif !important;
+	color: #000;
+}
+
+#ext_bugreport_form h4:first-child {
+	margin: 0px;
+}
+
+#ext_bugreport_form input {
+	width: 100%;
+	height: 20px;
+	border: 1px solid #999;
+	padding: 0px;
+	font: normal normal normal 12px/14px Arial, serif !important;
+	color: #666;
+
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
 }
 
 #ext_bugreport_form span {
 	position: absolute;
-	top: 430px;
+	top: 330px;
 	left: 0px;
 	
 	font: normal normal bold 13px/16px Arial, serif !important;
@@ -102,7 +129,7 @@
 
 #ext_bugreport_form a {
 	position: absolute !important;
-	top: 430px !important;
+	top: 330px !important;
 	right: 0px !important;
 }
 
@@ -154,9 +181,6 @@
 			
 			// Add new name attr to bugreport form
 			$('#ext_bugreport_form').attr('name', 'newmessage');
-			
-			// Add proper name to bugreport textarea
-			$('#ext_bugreport_form textarea').attr('name', 'message');
 		});
 		
 		
@@ -174,8 +198,41 @@
 			// Remove name attr from bugreport form
 			$('#ext_bugreport_form').removeAttr('name');
 			
-			// Remove name attr from bugreport textarea
-			$('#ext_bugreport_form textarea').removeAttr('name');
+		});
+		
+		
+		$('#ext_bugreport_form').submit(function(e) {
+			
+			// Prevent default submission
+			e.preventDefault();
+
+			// Build message
+			var tmp = '';
+				tmp += '[center][nagy]Hibajelentés[/nagy][/center]\r\n\r\n';
+				
+				tmp += '[b]Mi a hibajelenség? Jellemezd a problémádat![/b}\r\n';
+				tmp += $('#ext_bugreport_form input').eq(0).val() + '\r\n\r\n';
+				
+				tmp += '[b]Mi lenne az elvárható mûködés, minek kellett volna történnie?[/b}\r\n';
+				tmp += $('#ext_bugreport_form input').eq(1).val() + '\r\n\r\n';	
+
+				tmp += '[b]Hogyan lehet reprodukálni a hibát? Milyen események között jelentkezik?[/b}\r\n';
+				tmp += $('#ext_bugreport_form input').eq(2).val() + '\r\n\r\n';	
+
+				tmp += '[b]Milyen releváns beállítási lehetõségek mellett jelentkezik a hiba?[/b}\r\n';
+				tmp += $('#ext_bugreport_form input').eq(3).val() + '\r\n\r\n';	
+
+				tmp += '[b]Milyen böngészõt és melyik bõvítményt használod? Verziószámokat is írj![/b}\r\n';
+				tmp += $('#ext_bugreport_form input').eq(4).val();	
+			
+			// Create message textarea
+			$('<textarea name="message"></textarea>').appendTo('#ext_bugreport_form').hide();
+			
+			// Set message
+			$('#ext_bugreport_form textarea').val(tmp);
+			
+			// Submit the form
+			document.newmessage.submit();
 		});
 
 	});
@@ -234,32 +291,28 @@
 
 <div id="ext_bugreport_hidden_layer"></div>
 <form action="newmessage.php3" method="post" id="ext_bugreport_form">
-<p>Ne írd át a szövegmezõ eredeti tartalmát, a kérdések alá írd meg válaszaidat azokra!</p>
-<textarea cols="50" rows="10">
-[center][nagy]Hibajelentés[/nagy][/center]
+	<h4>Mi a hibajelenség? Jellemezd a problémádat!</h4>
+	<p><input type="text"></p>
 
-[b]Mi a hibajelenség? Jellemezd a problémádat![/b]
+	<h4>Mi lenne az elvárható mûködés, minek kellett volna történnie?</h4>
+	<p><input type="text"></p>
 
+	<h4>Hogyan lehet reprodukálni a hibát? Milyen események között jelentkezik?</h4>
+	<p><input type="text"></p>
 
+	<h4>Milyen releváns beállítási lehetõségek mellett jelentkezik a hiba?</h4>
+	<p><input type="text"></p>
 
-[b]Mi lenne az elvárható mûködés, minek kellett volna történnie?[/b]
+	<h4>Milyen böngészõt és melyik bõvítményt használod? Verziószámokat is írj!</h4>
+	<p><input type="text"></p>
 
-
-
-[b]Hogyan lehet reprodukálni a hibát? Milyen események között jelentkezik?[/b]
-
-
-
-[b]Milyen böngészõt és melyik bõvítményt használod? Verziószámokat is írj![/b]
-</textarea>
-<input type="HIDDEN" name="submitted" value="true">
-<input type="HIDDEN" name="id" value="1308399664">
-<input type="HIDDEN" name="no_ref">
-<input type="HIDDEN" name="szmajli">
+	<input type="HIDDEN" name="submitted" value="true">
+	<input type="HIDDEN" name="id" value="1244640182">
+	<input type="HIDDEN" name="no_ref">
+	<input type="HIDDEN" name="szmajli">
 	<span>bezárás</span>
-	<a href="JavaScript:document.newmessage.submit();" tabindex="4" style="position: absolute; right: 22px; ">
-		<input type="image" src="images/mehet.png">
-	</a>
+	
+	<button type="submit">Elküld</button>
 </form>
 </body>
 </html>
