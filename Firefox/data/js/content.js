@@ -930,7 +930,7 @@ var overlay_reply_to = {
 		// Set the textarea focus
 		textarea_clone.find('textarea').focus();
 
-		// Block default tab action
+		// Block default tab action in non-WYSIWYG editor
 		$('body').keydown(function(event) {
 			if (event.keyCode == '9') {
     			 event.preventDefault();

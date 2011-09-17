@@ -912,7 +912,6 @@ var overlay_reply_to = {
 
 		// Block default tab action in non-WYSIWYG editor
 		$('body').keydown(function(event) {
-			event.preventDefault();
 			if (event.keyCode == '9') {
     			 event.preventDefault();
     			 textarea_clone.find('a:last').focus();

@@ -64,11 +64,21 @@
 #ext_bugreport_form {
 	width: 600px;
 	height: 500px;
+	padding: 15px;
 	display: none;
 	position: fixed;
 	top: 0px;
 	left: 0px;
 	z-index: 101;
+	background-color: #fff;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	box-shadow: 0px 0px 15px #000;
+	-moz-box-shadow: 0px 0px 15px #000;
+	-webkit-box-shadow: 0px 0px 15px #000;
+	-o-box-shadow: 0px 0px 15px #000;
 }
 
 #ext_bugreport_form p {
@@ -81,13 +91,24 @@
 	text-align: center;
 }
 
-#ext_bugreport_form textarea {
-	width: 600px;
-	height: 400px;
-	box-shadow: 0px 0px 10px #666;
-	-moz-box-shadow: 0px 0px 10px #666;
-	-webkit-box-shadow: 0px 0px 10px #666;
-	-o-box-shadow: 0px 0px 10px #666;
+#ext_bugreport_form h4 {
+	margin: 10px 0px;
+	padding: 0px;
+	height: 20px;
+	font: normal normal bold 13px/20px Arial, serif !important;
+	color: #000;
+}
+
+#ext_bugreport_form input {
+	width: 100%;
+	height: 20px;
+	font: normal normal normal 12px/20px Arial, serif !important;
+	color: #666;
+
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-o-border-radius: 2px;
 }
 
 #ext_bugreport_form span {
@@ -234,28 +255,25 @@
 
 <div id="ext_bugreport_hidden_layer"></div>
 <form action="newmessage.php3" method="post" id="ext_bugreport_form">
-<p>Ne írd át a szövegmezõ eredeti tartalmát, a kérdések alá írd meg válaszaidat azokra!</p>
-<textarea cols="50" rows="10">
-[center][nagy]Hibajelentés[/nagy][/center]
+	<h4>Mi a hibajelenség? Jellemezd a problémádat!</h4>
+	<p><input type="text"></p>
 
-[b]Mi a hibajelenség? Jellemezd a problémádat![/b]
+	<h4>Mi lenne az elvárható mûködés, minek kellett volna történnie?</h4>
+	<p><input type="text"></p>
 
+	<h4>Hogyan lehet reprodukálni a hibát? Milyen események között jelentkezik?</h4>
+	<p><input type="text"></p>
 
+	<h4>Milyen releváns beállítási lehetõségek mellett jelentkezik a hiba?</h4>
+	<p><input type="text"></p>
 
-[b]Mi lenne az elvárható mûködés, minek kellett volna történnie?[/b]
+	<h4>Milyen böngészõt és melyik bõvítményt használod? Verziószámokat is írj!</h4>
+	<p><input type="text"></p>
 
-
-
-[b]Hogyan lehet reprodukálni a hibát? Milyen események között jelentkezik?[/b]
-
-
-
-[b]Milyen böngészõt és melyik bõvítményt használod? Verziószámokat is írj![/b]
-</textarea>
-<input type="HIDDEN" name="submitted" value="true">
-<input type="HIDDEN" name="id" value="1308399664">
-<input type="HIDDEN" name="no_ref">
-<input type="HIDDEN" name="szmajli">
+	<input type="HIDDEN" name="submitted" value="true">
+	<input type="HIDDEN" name="id" value="1244640182">
+	<input type="HIDDEN" name="no_ref">
+	<input type="HIDDEN" name="szmajli">
 	<span>bezárás</span>
 	<a href="JavaScript:document.newmessage.submit();" tabindex="4" style="position: absolute; right: 22px; ">
 		<input type="image" src="images/mehet.png">
