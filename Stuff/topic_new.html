@@ -10,7 +10,7 @@
 <form method="post">
 	<input type="TEXT" size="50" name="title" value="dzsani teszt topikja">
 	<textarea name="topic" cols="50" rows="6"></textarea>
-<br><br><input type="hidden" name="ellenorzokod" value="574cef76761dbc69a6d14a6b5d328e90"><input type="hidden" name="extraflags" value="1"><br><input type="submit" value="Mehet!">&nbsp;<input type="reset" value="Vissza"><input type="hidden" name="id" value="1244640182"><input type="hidden" name="action" value="tkar"><input type="hidden" name="status" value="1"><input type="hidden" name="identid" value="57481-67515-1315241924">
+<br><br><input type="hidden" name="ellenorzokod" value="ce89a522f6ec2c0d24a50775893a269e"><input type="hidden" name="extraflags" value="1"><br><input type="submit" value="Mehet!">&nbsp;<input type="reset" value="Vissza"><input type="hidden" name="id" value="1308399664"><input type="hidden" name="action" value="tkar"><input type="hidden" name="status" value="1"><input type="hidden" name="identid" value="57481-67515-1315241924">
 </form>
 
 -->
@@ -97,6 +97,7 @@
 	height: 20px;
 	font: normal normal bold 13px/20px Arial, serif !important;
 	color: #000;
+	text-align: left;
 }
 
 #ext_bugreport_form h4:first-child {
@@ -127,7 +128,7 @@
 	cursor: pointer;
 }
 
-#ext_bugreport_form a {
+#ext_bugreport_form button {
 	position: absolute !important;
 	top: 330px !important;
 	right: 0px !important;
@@ -202,27 +203,27 @@
 		
 		
 		$('#ext_bugreport_form').submit(function(e) {
-			
+		
 			// Prevent default submission
 			e.preventDefault();
 
 			// Build message
 			var tmp = '';
-				tmp += '[center][nagy]Hibajelentés[/nagy][/center]\r\n\r\n';
+				tmp += '[center][nagy]Hibajelentés[/nagy][/center]\\r\\n\\r\\n';
 				
-				tmp += '[b]Mi a hibajelenség? Jellemezd a problémádat![/b}\r\n';
-				tmp += $('#ext_bugreport_form input').eq(0).val() + '\r\n\r\n';
+				tmp += '[b]Mi a hibajelenség? Jellemezd a problémádat![/b]\\r\\n';
+				tmp += $('#ext_bugreport_form input').eq(0).val() + '\\r\\n\\r\\n';
 				
-				tmp += '[b]Mi lenne az elvárható mûködés, minek kellett volna történnie?[/b}\r\n';
-				tmp += $('#ext_bugreport_form input').eq(1).val() + '\r\n\r\n';	
+				tmp += '[b]Mi lenne az elvárható mûködés, minek kellett volna történnie?[/b]\\r\\n';
+				tmp += $('#ext_bugreport_form input').eq(1).val() + '\\r\\n\\r\\n';	
 
-				tmp += '[b]Hogyan lehet reprodukálni a hibát? Milyen események között jelentkezik?[/b}\r\n';
-				tmp += $('#ext_bugreport_form input').eq(2).val() + '\r\n\r\n';	
+				tmp += '[b]Hogyan lehet reprodukálni a hibát? Milyen események között jelentkezik?[/b]\\r\\n';
+				tmp += $('#ext_bugreport_form input').eq(2).val() + '\\r\\n\\r\\n';	
 
-				tmp += '[b]Milyen releváns beállítási lehetõségek mellett jelentkezik a hiba?[/b}\r\n';
-				tmp += $('#ext_bugreport_form input').eq(3).val() + '\r\n\r\n';	
+				tmp += '[b]Milyen releváns beállítási lehetõségek mellett jelentkezik a hiba?[/b]\\r\\n';
+				tmp += $('#ext_bugreport_form input').eq(3).val() + '\\r\\n\\r\\n';	
 
-				tmp += '[b]Milyen böngészõt és melyik bõvítményt használod? Verziószámokat is írj![/b}\r\n';
+				tmp += '[b]Milyen böngészõt és melyik bõvítményt használod? Verziószámokat is írj![/b]\\r\\n';
 				tmp += $('#ext_bugreport_form input').eq(4).val();	
 			
 			// Create message textarea
@@ -231,8 +232,21 @@
 			// Set message
 			$('#ext_bugreport_form textarea').val(tmp);
 			
-			// Submit the form
-			document.newmessage.submit();
+			// Var to store errors
+			var errors = 0;
+			
+			$('#ext_bugreport_form input[type="text"]').each(function() {
+				if($(this).val() == '') {
+					errors++;
+				}
+			});
+
+			// Post the message
+			if(errors == 0) {
+				$('#ext_bugreport_form')[0].submit();
+			} else {
+				alert('Minden mezo kitoltese kotelezo!');
+			}
 		});
 
 	});
@@ -307,7 +321,7 @@
 	<p><input type="text"></p>
 
 	<input type="HIDDEN" name="submitted" value="true">
-	<input type="HIDDEN" name="id" value="1244640182">
+	<input type="HIDDEN" name="id" value="1308399664">
 	<input type="HIDDEN" name="no_ref">
 	<input type="HIDDEN" name="szmajli">
 	<span>bezárás</span>
