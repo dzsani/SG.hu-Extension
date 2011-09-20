@@ -894,9 +894,12 @@ var overlay_reply_to = {
 				textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
 				textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
 				
-			// Init CLEditor
-			$(".ext_clone_textarea textarea").cleditor({ width : 806 })[0].focus();
-		
+				// Init CLEditor
+				$(".ext_clone_textarea textarea").cleditor({ width : 806 })[0].focus();
+
+				// Fix auto focus
+				textarea_clone.find('iframe').focus();
+						
 		// Normal textarea
 		} else {
 			var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
@@ -939,6 +942,14 @@ var overlay_reply_to = {
 
 		// Block default tab action in non-WYSIWYG editor
 		$('body').keydown(function(event) {
+			if (event.keyCode == '9') {
+    			 event.preventDefault();
+    			 textarea_clone.find('a:last').focus();
+   			}
+		});
+
+		// Block default tab action in a WYSIWYG editor
+		$(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function(event) {
 			if (event.keyCode == '9') {
     			 event.preventDefault();
     			 textarea_clone.find('a:last').focus();

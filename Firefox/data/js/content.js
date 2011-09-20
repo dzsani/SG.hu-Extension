@@ -950,7 +950,15 @@ var overlay_reply_to = {
     			 textarea_clone.find('a:last').focus();
    			}
 		});
-		
+
+		// Block default tab action in a WYSIWYG editor
+		$(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function(event) {
+			if (event.keyCode == '9') {
+    			 event.preventDefault();
+    			 textarea_clone.find('a:last').focus();
+   			}
+		});
+
 		// Thickbox
 		textarea_clone.find('a.thickbox').each(function() {
 			
