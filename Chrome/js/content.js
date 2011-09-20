@@ -155,8 +155,11 @@ var jump_unreaded_messages = {
 		if($('.ext_new_comment').length > 0) {
 			var target = $('.ext_new_comment:first').closest('center');
 		
-		} else {
+		} else if($('#ext_unreaded_hr').length > 0) {
 			var target = $('#ext_unreaded_hr');
+		
+		} else {
+			return false;
 		}
 
 		// Target offsets
@@ -891,7 +894,11 @@ var overlay_reply_to = {
 				textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
 				textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
 				
+			// Init CLEditor
 			$(".ext_clone_textarea textarea").cleditor({ width : 806 })[0].focus();
+			
+			// Fix auto focus
+			textarea_clone
 		
 		// Normal textarea
 		} else {

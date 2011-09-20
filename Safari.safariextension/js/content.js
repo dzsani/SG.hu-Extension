@@ -153,8 +153,11 @@ var jump_unreaded_messages = {
 		if($('.ext_new_comment').length > 0) {
 			var target = $('.ext_new_comment:first').closest('center');
 		
-		} else {
+		} else if($('#ext_unreaded_hr').length > 0) {
 			var target = $('#ext_unreaded_hr');
+		
+		} else {
+			return false;
 		}
 
 		// Target offsets
