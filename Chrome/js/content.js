@@ -71,7 +71,7 @@ var jump_unreaded_messages = {
 				
 				// Rewrite the url
 				$(this).attr('href', $(this).attr('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
-
+			
 			// Remove newmsg var from link
 			} else if( $(this).attr('href').indexOf('&order') != -1) {
 				
@@ -95,13 +95,13 @@ var jump_unreaded_messages = {
 		});
 	},
 	
-	jump : function() {
+	topic : function() {
 	
 		// Get new messages counter
 		var newMsg = document.location.href.split('&newmsg=')[1];
-
-		// Return if there isnot comment counter set
-		if(typeof newMsg == "undefined" || newMsg == '') {
+		
+		// Return if there is not comment counter set
+		if(typeof newMsg == "undefined" || newMsg == '' || newMsg == 0) {
 			return false;
 		}
 		
@@ -125,32 +125,48 @@ var jump_unreaded_messages = {
 			$('<hr>').insertAfter(target).attr('id', 'ext_unreaded_hr');
 		}
 		
-		
-		// Set 1 sec delay 
-		setTimeout(function(){ 
-		
-			// Target offsets
-			var windowHalf = $(window).height() / 2;
-			var targetHalf = $(target).outerHeight() / 2;
-			var targetTop = $(target).offset().top;
-			var targetOffset = targetTop - (windowHalf - targetHalf);
-		
-			// Scroll to target element
-			$('body').animate({ scrollTop : targetOffset}, 500);
+		// Append hr tag content if any
+		var content = $('a[name=pirosvonal]').find('center').insertBefore('a[name=pirosvonal]');
 			
-			// Append hr tag content if any
-			var content = $('a[name=pirosvonal]').find('center').insertBefore('a[name=pirosvonal]');
-			
-			// Remove original hr tag
-			$('a[name=pirosvonal]').remove();
-			
-		}, 1000, target);
+		// Remove original hr tag
+		$('a[name=pirosvonal]').remove();
 
 		// Url to rewrite
 		var url = document.location.href.substring(0, 44);
 
 		// Update the url to avoid re-jump
 		history.replaceState({ page : url }, '', url);
+				
+		// Call the jump method with 1 sec delay
+		setTimeout(function(){ 
+			jump_unreaded_messages.jump();
+		}, 1000);
+		
+		// Add click event the manual 'jump to last msg' button
+		$('a[href*="pirosvonal"]').click(function() {
+			jump_unreaded_messages.jump();
+		});
+	},
+	
+	
+	jump : function() {
+		
+		// Get the target element
+		if($('.ext_new_comment').length > 0) {
+			var target = $('.ext_new_comment:first').closest('center');
+		
+		} else {
+			var target = $('#ext_unreaded_hr');
+		}
+
+		// Target offsets
+		var windowHalf = $(window).height() / 2;
+		var targetHalf = $(target).outerHeight() / 2;
+		var targetTop = $(target).offset().top;
+		var targetOffset = targetTop - (windowHalf - targetHalf);
+		
+		// Scroll to target element
+		$('body').animate({ scrollTop : targetOffset}, 500);
 	}
 	
 };
