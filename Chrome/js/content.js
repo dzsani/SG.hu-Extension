@@ -896,9 +896,6 @@ var overlay_reply_to = {
 				
 			// Init CLEditor
 			$(".ext_clone_textarea textarea").cleditor({ width : 806 })[0].focus();
-			
-			// Fix auto focus
-			textarea_clone
 		
 		// Normal textarea
 		} else {
@@ -1896,7 +1893,7 @@ function extInit() {
 		
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
-			jump_unreaded_messages.jump();
+			jump_unreaded_messages.topic();
 		}
 		
 		// Set-up block buttons

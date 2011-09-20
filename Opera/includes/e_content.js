@@ -1862,7 +1862,7 @@ function extInit() {
 		
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
-			jump_unreaded_messages.jump();
+			jump_unreaded_messages.topic();
 		}
 		
 		// Set-up block buttons
