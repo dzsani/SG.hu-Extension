@@ -143,7 +143,8 @@ var jump_unreaded_messages = {
 		}, 1000);
 		
 		// Add click event the manual 'jump to last msg' button
-		$('a[href*="pirosvonal"]').click(function() {
+		$('a[href*="pirosvonal"]').click(function(e) {
+			e.preventDefault();
 			jump_unreaded_messages.jump();
 		});
 	},
