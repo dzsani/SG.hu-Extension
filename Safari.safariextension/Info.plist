@@ -33,6 +33,7 @@
 				<string>js/settings.js</string>
 				<string>js/cleditor.js</string>
 				<string>js/cleditor_bbcode.js</string>
+				<string>js/date.js</string>
 				<string>js/content.js</string>
 			</array>
 		</dict>

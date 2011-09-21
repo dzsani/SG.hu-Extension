@@ -22,6 +22,10 @@
 			if( typeof safari.extension.settings.show_navigation_buttons			== 'undefined') safari.extension.settings.show_navigation_buttons			= true;
 			if( typeof safari.extension.settings.remove_ads							== 'undefined') safari.extension.settings.remove_ads						= false;
 			if( typeof safari.extension.settings.wysiwyg_editor						== 'undefined') safari.extension.settings.wysiwyg_editor					= true;
+			
+			// Message Center
+			if( typeof safari.extension.settings.mc_messages						== 'undefined') safari.extension.settings.mc_messages						= '';
+			if( typeof safari.extension.settings.mc_selected_tab					== 'undefined') safari.extension.settings.mc_selected_tab					= 0;
 						
 		
 			function respondToMessage(event) {
@@ -89,6 +93,14 @@
 					var val = event.message.val;
 					
 					safari.extension.settings[key] = val;
+
+				// Store selected tab in message center
+				} else if(event.name == 'setMCSelectedTab') {
+					safari.extension.settings['mc_selected_tab'] = event.message;
+
+				// Store own messages for message center
+				} else if(event.name == 'setMCMessages') {
+					safari.extension.settings['mc_messages'] = event.message;
 				}
 
 			}

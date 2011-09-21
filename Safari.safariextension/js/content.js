@@ -597,8 +597,11 @@ var update_fave_list = {
 		});
 		
 		// Set auto refresh
-		setInterval(function() {
-			update_fave_list.refresh();
+		setTimeout(function() {
+
+			setInterval(function() {
+				update_fave_list.refresh();
+			}, 60000);
 		}, 30000);
 		
 	},
@@ -608,11 +611,16 @@ var update_fave_list = {
 		// Set 'in progress' icon
 		$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh_waiting.png');
 		
+		// Restore session cookie
+		message_center.restoreSessionCookie();
 		
 		$.ajax({
 			url : 'forum.php',
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
+				
+				// re-set session cookie
+				message_center.removeSessionCookie();
 				
 				// Set 'completed' icon
 				$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh_done.png');
@@ -1559,7 +1567,7 @@ var remove_adds = {
 		$('.std0:contains("Hirdetés")').remove();
 		
 		// Save init time in unix timestamp
-		var time = Math.round(new Date().getTime() / 1000)
+		var time = Math.round(new Date().getTime() / 1000);
 
 		// Text ads
 		var interval = setInterval(function() {
@@ -1827,6 +1835,447 @@ var wysiwyg_editor = {
 
 };
 
+var message_center = {
+	
+	session_id : 0,
+	
+	init : function() {
+		
+		// HTML code to insert
+		var html = '';
+		
+			html += '<tr>';
+				html += '<td colspan="4">';
+					html += '<div>';
+						html += '<div class="b-h-o-head ext_mc_tabs">';
+							html += '<img src="images/ful_o_l.png" width="1" height="21" vspace="0" hspace="0" align="left">';
+							html += '<span class="hasab-head-o">Fórumkategóriák</span>';
+						html += '</div>';
+
+						html += '<div class="b-h-b-head ext_mc_tabs">';
+							html += '<img src="images/ful_b_l.png" width="1" height="21" vspace="0" hspace="0" align="left">';
+							html += '<span class="hasab-head-b">Saját üzeneteim</span>';
+						html += '</div>';
+						
+						html += '<div class="b-h-b-head ext_mc_tabs">';
+							html += '<img src="images/ful_b_l.png" width="1" height="21" vspace="0" hspace="0" align="left">';
+							html += '<span class="hasab-head-b">Válaszok</span>';
+						html += '</div>';
+					html += '</div>';
+				html += '</td>';
+			html += '</tr>';
+		
+		// Insert tabs
+		$('.cikk-2').closest('tr').before(html);
+		
+		// Create DIV for each pages
+		$('.cikk-2').addClass('ext_mc_pages');
+		$('.cikk-2').after('<div class="ext_mc_pages"><h3>Még nem érkezett válasz egyetlen kommentedre sem.</h3><div class="contents"></div></div>');
+		$('.cikk-2').after('<div class="ext_mc_pages"><h3>Még nincs egy elmentett üzenet sem.</h3></div>');
+		
+		// Fix right sidebar top position
+		$('.cikk-2').closest('tr').children('td:eq(2)').css({ position : 'relative', top : -21 });
+		
+		// Show the last used tab
+		message_center.tab(dataStore['mc_selected_tab']);
+		
+		// Set tab selection events
+		$('.ext_mc_tabs').click(function() {
+			message_center.tab( $(this).index() );
+		});
+
+		
+		// Store session id cookie
+		message_center.getSessionCookie();
+		
+		// reset session cookie for avoid to set last readed time
+		message_center.removeSessionCookie
+		
+		// Set unload event to restore session id
+		$(window).unload(function() {
+			message_center.restoreSessionCookie();
+		});
+		
+		// Start searching ..
+		message_center.search();
+		
+		// Set auto-search in 5 mins
+		setInterval(function() {
+			message_center.search();
+		}, 300000);
+		
+		// buildOwnCommentsTab
+		message_center.buildOwnCommentsTab();
+		
+		// Set auto list building in 6 mins
+		setInterval(function() {
+			message_center.buildOwnCommentsTab();
+		}, 360000);
+		
+		// buildAnswersTab
+		message_center.buildAnswersTab();
+
+		// Set auto list building in 6 mins
+		setInterval(function() {
+			message_center.buildAnswersTab();
+		}, 360000);
+	}, 
+
+	tab : function(n) {
+		
+		// Hide all pages
+		$('.ext_mc_pages').hide();
+		
+		// Show selected page
+		$('.ext_mc_pages').eq(n).show();
+		
+		// Maintain styles, remove active style 
+		$('.ext_mc_tabs').removeClass('b-h-o-head').addClass('b-h-b-head');
+		$('.ext_mc_tabs').find('img[src*="ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+		$('.ext_mc_tabs').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
+		
+		// Maintain styles, add active style 
+		$('.ext_mc_tabs').eq(n).removeClass('b-h-b-head').addClass('b-h-o-head');
+		$('.ext_mc_tabs').eq(n).find('img[src*="ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+		$('.ext_mc_tabs').eq(n).find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+		
+		// Store last selected tag for initial status
+		safari.self.tab.dispatchMessage("setMCSelectedTab", n);
+	},
+	
+	log : function() {
+		
+		// Check the latest comment for getting the comment ID
+		if(getCookie('getCommentID') == 1) {
+			
+			// Get messages for MC
+			var messages = JSON.parse(dataStore['mc_messages']);
+			
+			// Get the comment ID
+			var id = $('.topichead:first a:last').html().match(/\d+/g);
+			
+			// Store the ID for the latest message
+			messages[0]['comment_id'] = id[0];
+			
+			// Store new messages object in LocalStorage
+			safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
+			
+			// Remove marker for getting an ID
+			removeCookie('getCommentID');
+		}
+		
+		// Catch comment event
+		$('form[name="newmessage"]').submit(function(e) {
+			
+			// Prevent default submission
+			e.preventDefault();
+
+			// Get topic name
+			var topic_name = $('select[name="id"] option:selected').text();
+			
+			// Get topic ID
+			var topic_id	= $('select[name="id"] option:selected').val();
+			
+			// Get comment time
+			var time = Math.round(new Date().getTime() / 1000);
+			
+			// Get message
+			var message = $(this).find('textarea').val();
+			
+			// Build the message object
+			var tmp = {
+			
+				topic_name : topic_name,
+				topic_id : topic_id,
+				time : time,
+				message : message,
+				checked : time,
+				answers : new Array()
+			};
+			
+			
+			// If theres no previous messages
+			if(dataStore['mc_messages'] == '') {
+				var messages = new Array();
+					messages.push(tmp);
+			
+			// There is other messages
+			} else {
+			
+				// Get the previous messages from localStorage
+				var messages = JSON.parse(dataStore['mc_messages']);
+				
+				// Unshift the new message
+				messages.unshift(tmp);
+				
+				// Check for max entries
+				if(messages.length > 10) {
+					messages.splice(9);
+				}
+			}
+			
+			// Store in localStorage
+			safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
+			
+			// Set a marker for gettni the comment ID
+			setCookie('getCommentID', 1);	
+		});
+	},
+	
+	getSessionCookie : function() {
+		message_center.session_id = getCookie('PHPSESSID');
+	},
+	
+	removeSessionCookie : function() {
+		setCookie('PHPSESSID', '0', 0);
+	},
+	
+	restoreSessionCookie : function() {
+		setCookie('PHPSESSID', message_center.session_id, 0);
+	},
+	
+	search : function() {
+		
+		// Remove session id
+		message_center.removeSessionCookie();
+		
+		// Check if theres any previous posts
+		if(dataStore['mc_messages'] == '')  {
+			return false;
+		}
+		
+		// Get the latest post
+		var messages = JSON.parse(dataStore['mc_messages']);
+
+		// Iterate over the posts
+		for(key = 0; key < messages.length; key++) {
+			
+			// Get current timestamp
+			var time = Math.round(new Date().getTime() / 1000);
+			
+			// Check last searched state
+			if(time < messages[key].checked + 60 * 15) {
+				continue;
+			}
+			
+			function doAjax(messages, key) {
+			
+				$.ajax({
+				
+					url : 'http://www.sg.hu/listazas.php3?id=' + messages[key]['topic_id'],
+					mimeType : 'text/html;charset=iso-8859-2',
+					success : function(data) {
+					
+						// Parse html response
+						var tmp = $(data);
+						var answers = new Array();
+						var TmpAnswers = null;
+					
+						// Search posts that is an answer to us
+						var TmpAnswers = $( tmp.find('.msg-replyto a:contains("#'+messages[key]['comment_id']+'")').closest('center').get().reverse() );
+
+						// Iterate over the answers
+						if(TmpAnswers.length == 0) {
+							return false;
+						}
+
+						for(c = 0; c < TmpAnswers.length; c++) {
+							
+							var nick = ($(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").length == 1) ? $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a img").attr("alt") : $(TmpAnswers[c]).find(".topichead table tr:eq(0) td:eq(0) a")[0].innerHTML;
+								nick = nick.replace(/ - VIP/, "");
+							
+							var message = $(TmpAnswers[c]).find('.maskwindow').html();
+
+							
+							var AD = {
+								author : nick,
+								message : message
+							};
+							
+							answers.push( AD );
+						}
+
+						// Get current time
+						var time = Math.round(new Date().getTime() / 1000);
+					
+						// Set new checked date
+						messages[key]['checked'] = time;
+						
+						// Set the answers
+						messages[key]['answers'] = answers;
+					
+						// Store in localStorage
+						safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
+						
+						// Store in dataStore
+						dataStore['mc_messages'] = JSON.stringify(messages);
+
+					}
+				});
+			}
+			
+			doAjax(messages, key);
+		}
+	},
+	
+	buildOwnCommentsTab : function() {
+	
+		// Get the previous messages form LocalStorage
+		var messages = JSON.parse(dataStore['mc_messages']);
+		
+		if(messages.length > 0) {
+			$('.ext_mc_pages:eq(1)').html('');
+		}
+		
+		// Iterate over the messages
+		for(c = 0; c < messages.length; c++) {
+			
+			// Get the post date and time
+			var time = date('Y. m. d. -  H:i', messages[c]['time']);
+			
+			// Get the today's date
+			var today =  date('Y. m. d.', Math.round(new Date().getTime() / 1000));
+			
+			// Get yesteday's date
+			var yesterday = Math.round(new Date().getTime() / 1000) - 60 * 60 * 24;
+				yesterday = date('Y. m. d.', yesterday);
+				
+			// Convert today and yesterday strings
+			$.each([
+				[today, "ma"],
+				[yesterday, "tegnap"]
+
+			], function(index, item) {
+				time = time.replace(item[0], item[1]);
+			});	
+			
+			// Get the message
+			var msg = messages[c]['message'];
+			
+			// Filter out BB tags and add line breaks
+			$.each([
+				[/[\r|\n]/g, "<br>"],
+				[/\[.*?\]([\s\S]*?)\[\/.*?\]/g, "$1"]
+
+			], function(index, item) {
+				msg = msg.replace(item[0], item[1]);
+			});			
+			
+			var html = '';
+			
+				html += '<div class="ext_mc_messages">';
+					html += '<p><a href="http://www.sg.hu/listazas.php3?id='+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
+					html += '<span>'+time+'</span>';
+					html += '<div>'+msg+'</div>';
+				html += '</div>';
+			
+			$(html).appendTo('.ext_mc_pages:eq(1)');
+		}	
+	},
+	
+	buildAnswersTab : function() {
+		
+		// Get the previous messages form LocalStorage
+		var messages = JSON.parse(dataStore['mc_messages']);
+		
+		// Empty the container first for re-init
+		$('.ext_mc_pages:eq(2) div.contents').html('');
+
+		// Html to insert
+		var html = '';
+
+		// Iterate over the messages
+		for(c = 0; c < messages.length; c++) {
+			
+			// Continue when no answers
+			if(messages[c]['answers'].length == 0) {
+				continue;
+			}
+
+			// Get the post date and time
+			var time = date('Y. m. d. -  H:i', messages[c]['time']);
+			
+			// Get the today's date
+			var today =  date('Y. m. d.', Math.round(new Date().getTime() / 1000));
+			
+			// Get yesteday's date
+			var yesterday = Math.round(new Date().getTime() / 1000) - 60 * 60 * 24;
+				yesterday = date('Y. m. d.', yesterday);
+				
+			// Convert today and yesterday strings
+			$.each([
+				[today, "ma"],
+				[yesterday, "tegnap"]
+
+			], function(index, item) {
+				time = time.replace(item[0], item[1]);
+			});	
+			
+			// Get the message
+			var msg = messages[c]['message'];
+			
+			// Filter out BB tags and add line breaks
+			$.each([
+				[/[\r|\n]/g, "<br>"],
+				[/\[.*?\]([\s\S]*?)\[\/.*?\]/g, "$1"]
+
+			], function(index, item) {
+				msg = msg.replace(item[0], item[1]);
+			});	
+
+			// Own comment
+			html += '<div class="ext_mc_messages">';
+				html += '<p><a href="http://www.sg.hu/listazas.php3?id='+messages[c]['topic_id']+'">'+messages[c]['topic_name']+'</a></p>';
+					html += '<span>'+time+'</span>';
+					html += '<div>'+msg+'</div>';
+			html += '</div>';
+			
+			// Iterate over the answers
+			for(a = 0; a < messages[c]['answers'].length; a++) {
+			
+				html += '<div class="ext_mc_messages ident">';
+					html += '<p>'+messages[c]['answers'][a]['author']+'</p>';
+					html += '<div>'+messages[c]['answers'][a]['message']+'</div>';
+				html += '</div>';
+			}
+			
+			// Insert html
+			$(html).appendTo('.ext_mc_pages:eq(2) div.contents');
+			
+			if(html != '') {
+				$('.ext_mc_pages:eq(2)').find('h3').remove();
+			}
+		}	
+	}
+
+};
+
+function setCookie(c_name,value,exdays) {
+	var exdate=new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	document.cookie=c_name + "=" + c_value;
+}
+
+function getCookie(c_name) {
+	var i,x,y,ARRcookies=document.cookie.split(";");
+	for (i=0;i<ARRcookies.length;i++) {
+		x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+		y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+		x=x.replace(/^\s+|\s+$/g,"");
+		if (x==c_name) {
+			return unescape(y);
+		}
+	}
+}
+
+function removeCookie( name, path, domain ) {
+	if ( getCookie( name ) ) document.cookie = name + "=" +
+	( ( path ) ? ";path=" + path : "") +
+	( ( domain ) ? ";domain=" + domain : "" ) +
+	";expires=Thu, 01-Jan-1970 00:00:01 GMT";
+}
+
 function extInit() {
 	
 	// FORUM.PHP
@@ -1877,6 +2326,9 @@ function extInit() {
 		if(isLoggedIn()) {
 			make_read_all_faves.activated();
 		}
+		
+		// Message center
+		message_center.init();
 
 	}
 	
@@ -1942,6 +2394,9 @@ function extInit() {
 		if(dataStore['wysiwyg_editor'] == true) {
 			wysiwyg_editor.activated();
 		}
+		
+		// Message Center
+		message_center.log();
 	}
 	
 	// GLOBAL SCRIPTS
