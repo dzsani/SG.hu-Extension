@@ -1247,7 +1247,7 @@ var custom_blocks = {
 		var counter = 1;
 		
 		// Left side blocks
-		$('.b-h-o-head, .b-h-b-head').parent().each(function() {
+		$('#ext_left_sidebar .b-h-o-head, #ext_right_sidebar .b-h-b-head').parent().each(function() {
 			
 			// Set the ID
 			$(this).attr('class', 'ext_block').attr('id', 'block-'+counter);
@@ -1364,24 +1364,27 @@ var custom_blocks = {
 			// Side and pos
 			if( config[c]['side'] == 'left' ) {
 				
-				$('#'+config[c]['id']).prependTo('table:eq(3) td:eq(0)');
+				$('#'+config[c]['id']).prependTo('#ext_left_sidebar');
 				
 			} else {
 				
-				$('#'+config[c]['id']).prependTo('table:eq(3) td:eq(2) table:first tr > td:eq(2)');
+				$('#'+config[c]['id']).prependTo('#ext_right_sidebar');
 			}
 		}
 		
 		// Maintain style settings
-		$('table:eq(3) td:eq(0)').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
-		$('table:eq(3) td:eq(0)').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
-		$('table:eq(3) td:eq(0)').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
+		$('#ext_left_sidebar').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
+		$('#ext_left_sidebar').find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
+		$('#ext_left_sidebar').find('img[src="images/ful_b_l.png"]').attr('src', 'images/ful_o_l.png');
 
 		// Maintain style settings
-		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
-		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
-		$('table:eq(3) td:eq(2) table:first tr > td:eq(2)').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
-	
+		$('#ext_right_sidebar').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
+		$('#ext_right_sidebar').find('.hasab-head-o').removeClass('hasab-head-o').addClass('hasab-head-b');
+		$('#ext_right_sidebar').find('img[src="images/ful_o_l.png"]').attr('src', 'images/ful_b_l.png');
+		
+		
+		// Fix welcome block for private messages
+		$('.ext_welcome:first').next().find('br').css('display', 'inline');
 	},
 	
 	setOverlay : function() {
@@ -1492,7 +1495,7 @@ var custom_blocks = {
 		if($('#'+id).find('.b-h-b-head').length == 0) {
 		
 			// Move the block
-			$('#'+id).prependTo('table:eq(3) td:eq(2) table:first tr > td:eq(2)');
+			$('#'+id).prependTo('#ext_right_sidebar');
 
 			// Maintain style settings
 			$('#ext_right_sidebar').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');
@@ -2177,7 +2180,7 @@ var message_center = {
 		
 		// Get the previous messages form LocalStorage
 		var messages = JSON.parse(dataStore['mc_messages']);
-		
+				
 		// Empty the container first for re-init
 		$('.ext_mc_pages:eq(2) div.contents').html('');
 
@@ -2186,7 +2189,7 @@ var message_center = {
 
 		// Iterate over the messages
 		for(c = 0; c < messages.length; c++) {
-			
+
 			// Continue when no answers
 			if(messages[c]['answers'].length == 0) {
 				continue;
@@ -2287,16 +2290,16 @@ function extInit() {
 		// setPredefinedVars
 		setPredefinedVars();
 
-		// Custom blocks
-		if(dataStore['custom_blocks'] == true) {
-			custom_blocks.activated();
-		}
-
 		// Remove chat window
 		if(dataStore['chat_hide'] == true) {
 			chat_hide.activated();
 		}
-		
+
+		// Custom blocks
+		if(dataStore['custom_blocks'] == true) {
+			custom_blocks.activated();
+		}
+	
 		// Jump the last unreaded message
 		if(dataStore['jump_unreaded_messages'] == true && isLoggedIn() ) {
 			jump_unreaded_messages.activated();
