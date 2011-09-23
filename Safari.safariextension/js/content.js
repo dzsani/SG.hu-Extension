@@ -1831,7 +1831,6 @@ var wysiwyg_editor = {
 var message_center = {
 	
 	ident_id : 0,
-	session_id : 0,
 	
 	init : function() {
 		
@@ -1916,7 +1915,6 @@ var message_center = {
 		setInterval(function() {
 			message_center.search();
 		}, 300000);
-	
 	},
 	
 	tab : function(n) {
@@ -1944,8 +1942,8 @@ var message_center = {
 	log : function() {
 		
 		// Check the latest comment for getting the comment ID
-		if(getCookie('getCommentID') == 1) {
-			
+		if(getCookie('getCommentID') == '1') {
+
 			// Get messages for MC
 			var messages = JSON.parse(dataStore['mc_messages']);
 			
@@ -1954,9 +1952,12 @@ var message_center = {
 			
 			// Store the ID for the latest message
 			messages[0]['comment_id'] = id[0];
-			
+
 			// Store new messages object in LocalStorage
 			safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
+			
+			// Store in dataStore var
+			dataStore['mc_messages'] = JSON.stringify(messages);
 			
 			// Remove marker for getting an ID
 			removeCookie('getCommentID');
@@ -2016,24 +2017,21 @@ var message_center = {
 			safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
 			
 			// Set a marker for gettni the comment ID
-			setCookie('getCommentID', 1);	
+			setCookie('getCommentID', '1', 1);	
 		});
 	},
 	
 	getSessionCookie : function() {
 		message_center.ident_id = getCookie('identid');
-		message_center.session_id = getCookie('PHPSESSID');
 	},
 	
 	removeSessionCookie : function() {
 
-		setCookie('identid', '0', 1);
-		setCookie('PHPSESSID', '0', 1);
+		setCookie('identid', '0', 365);
 	},
 	
 	restoreSessionCookie : function() {
-		setCookie('identid', message_center.ident_id, 1);
-		setCookie('PHPSESSID', message_center.session_id, 1);
+		setCookie('identid', message_center.ident_id, 365);
 	},
 	
 	search : function() {
@@ -2050,7 +2048,7 @@ var message_center = {
 		var counter = 0;
 		
 		// Updated topics counter
-		completedCounter = 0;
+		var completedCounter = 0;
 		
 		// Count topics that waiting for update
 		for(key = 0; key < messages.length; key++) {
@@ -2066,7 +2064,6 @@ var message_center = {
 		
 		// Remove session cookie if theres any topic to be updated
 		if(counter > 0) {
-			alert('removeSession');
 			message_center.removeSessionCookie();
 		}
 		
@@ -2080,22 +2077,33 @@ var message_center = {
 			if(time < messages[key].checked + 60 * 10) {
 				continue;
 			}
-			
+
 			function doAjax(messages, key) {
 			
 				$.ajax({
 				
 					url : 'http://www.sg.hu/listazas.php3?id=' + messages[key]['topic_id'],
 					mimeType : 'text/html;charset=iso-8859-2',
+					error : function() {
+				
+						// Set the completed topics counter
+						completedCounter++;
+					},
+					
 					success : function(data) {
-					
+
+						// Set the completed topics counter
+						completedCounter++;
+
 						// Parse html response
-						var tmp = $(data);
+						var tmp = '';
+							 tmp = $(data);
+							 
 						var answers = new Array();
-						var TmpAnswers = null;
-					
-						// Search posts that is an answer to us
-						var TmpAnswers = $( tmp.find('.msg-replyto a:contains("#'+messages[key]['comment_id']+'")').closest('center').get().reverse() );
+						var TmpAnswers = new Array();
+						
+							// Search posts that is an answer to us
+							 TmpAnswers = $( tmp.find('.msg-replyto a:contains("#'+messages[key]['comment_id']+'")').closest('center').get().reverse() );
 
 						// Iterate over the answers
 						if(TmpAnswers.length == 0) {
@@ -2133,8 +2141,6 @@ var message_center = {
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
 						
-						// Set the completed topics counter
-						completedCounter++;
 					}
 				});
 			}
@@ -2145,15 +2151,14 @@ var message_center = {
 		
 		// Check if the update process is completed
 		var interval = setInterval(function() {
+			//alert(completedCounter);
+			//alert(counter);
 			if(completedCounter == counter) {
-				
 				// Restore session cookie
 				message_center.restoreSessionCookie();
 				
 				// Break the interval
 				clearInterval(interval);
-				
-				alert('completed: '+completedCounter);
 			}
 		}, 500);
 	},
