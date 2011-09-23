@@ -596,14 +596,10 @@ var update_fave_list = {
 			update_fave_list.refresh();
 		});
 		
-		// Set auto refresh
-		setTimeout(function() {
-
-			setInterval(function() {
-				update_fave_list.refresh();
-			}, 60000);
+		// Set up auto-update
+		setInterval(function() {
+			update_fave_list.refresh();
 		}, 30000);
-		
 	},
 	
 	refresh : function() {
