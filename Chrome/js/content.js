@@ -2317,14 +2317,14 @@ function extInit() {
 		// setPredefinedVars
 		setPredefinedVars();
 
-		// Custom blocks
-		if(dataStore['custom_blocks'] == 'true') {
-			custom_blocks.activated();
-		}
-
 		// Remove chat window
 		if(dataStore['chat_hide'] == 'true') {
 			chat_hide.activated();
+		}
+
+		// Custom blocks
+		if(dataStore['custom_blocks'] == 'true') {
+			custom_blocks.activated();
 		}
 		
 		// Jump the last unreaded message
