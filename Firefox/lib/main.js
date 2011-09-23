@@ -10,7 +10,7 @@ var data = require("self").data;
 pageMod.PageMod({
 	include: ["http://sg.hu/*", "http://www.sg.hu/*"],
 	contentScriptWhen: 'start',
-	contentScriptFile: [data.url("js/jquery.js"), data.url("js/json.js"), data.url("js/dom.js"), data.url("js/settings.js"), data.url("js/cleditor.js"), data.url("js/cleditor_bbcode.js"), data.url("js/content.js")],
+	contentScriptFile: [data.url("js/jquery.js"), data.url("js/json.js"), data.url("js/dom.js"), data.url("js/settings.js"), data.url("js/cleditor.js"), data.url("js/cleditor_bbcode.js"), data.url("js/date.js"), data.url("js/content.js")],
 	onAttach: function(worker) {
 		worker.on('message', function(event) {
 	
@@ -82,6 +82,14 @@ pageMod.PageMod({
 				var val = event.val;
 
 				ss.storage[key] = val;
+
+			// Store selected tab in message center
+			} else if(event.name == 'setMCSelectedTab') {
+				ss.storage['mc_selected_tab'] = event.message;
+
+			// Store own messages for message center
+			} else if(event.name == 'setMCMessages') {
+				ss.storage['mc_messages'] = event.message;
 			}
 		});
 	}
@@ -106,3 +114,7 @@ if( typeof ss.storage.hide_blocks_buttons					== 'undefined') ss.storage.hide_bl
 if( typeof ss.storage.show_navigation_buttons				== 'undefined') ss.storage.show_navigation_buttons				= true;
 if( typeof ss.storage.remove_ads							== 'undefined') ss.storage.remove_ads							= false;
 if( typeof ss.storage.wysiwyg_editor						== 'undefined') ss.storage.wysiwyg_editor						= true;
+
+// Message Center
+if( typeof ss.storage.mc_messages							== 'undefined') ss.storage.mc_messages							= '';
+if( typeof ss.storage.mc_selected_tab						== 'undefined') ss.storage.mc_selected_tab						= 0;
