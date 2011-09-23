@@ -22,7 +22,10 @@
 			if( typeof widget.preferences.show_navigation_buttons				== 'undefined') widget.preferences.show_navigation_buttons				= 'true';
 			if( typeof widget.preferences.remove_ads							== 'undefined') widget.preferences.remove_ads							= 'false';
 			if( typeof widget.preferences.group_smiles							== 'undefined') widget.preferences.group_smiles							= 'true';
-			
+
+			// Message Center
+			if( typeof widget.preferences.mc_messages						== 'undefined') widget.preferences.mc_messages						= '';
+			if( typeof widget.preferences.mc_selected_tab					== 'undefined') widget.preferences.mc_selected_tab					= 0;			
 			
 			window.addEventListener("load", setupConnection, false);
 			
@@ -93,6 +96,14 @@
 						var val = msg.val;
 					
 						widget.preferences[key] = val;
+
+					// Store selected tab in message center
+					} else if(msg.name == 'setMCSelectedTab') {
+						widget.preferences['mc_selected_tab'] = msg.message;
+
+					// Store own messages for message center
+					} else if(msg.name == 'setMCMessages') {
+						widget.preferences['mc_messages'] = msg.message;
 					}
 				}
 			}

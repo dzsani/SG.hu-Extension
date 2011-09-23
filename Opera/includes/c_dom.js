@@ -10,7 +10,10 @@
 $(document).ready(function() {
 	
 	if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
-	
+
+		// Welcome block
+		$('.b-h-o-head:eq(0)').addClass('ext_welcome');
+
 		// Faves
 		$('.b-h-o-head:eq(2)').addClass('ext_faves');
 	

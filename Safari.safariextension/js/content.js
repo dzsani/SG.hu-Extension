@@ -1840,6 +1840,7 @@ var wysiwyg_editor = {
 
 var message_center = {
 	
+	ident_id : 0,
 	session_id : 0,
 	
 	init : function() {
@@ -1892,7 +1893,7 @@ var message_center = {
 		message_center.getSessionCookie();
 		
 		// reset session cookie for avoid to set last readed time
-		message_center.removeSessionCookie
+		message_center.removeSessionCookie();
 		
 		// Set unload event to restore session id
 		$(window).unload(function() {
@@ -2026,15 +2027,19 @@ var message_center = {
 	},
 	
 	getSessionCookie : function() {
+		message_center.ident_id = getCookie('identid');
 		message_center.session_id = getCookie('PHPSESSID');
 	},
 	
 	removeSessionCookie : function() {
-		setCookie('PHPSESSID', '0', 0);
+
+		//setCookie('identid', '0', 1);
+		//setCookie('PHPSESSID', '0', 1);
 	},
 	
 	restoreSessionCookie : function() {
-		setCookie('PHPSESSID', message_center.session_id, 0);
+		setCookie('identid', message_center.ident_id, 1);
+		setCookie('PHPSESSID', message_center.session_id, 1);
 	},
 	
 	search : function() {
@@ -2122,7 +2127,12 @@ var message_center = {
 	},
 	
 	buildOwnCommentsTab : function() {
-	
+
+		// Check if theres any previous posts
+		if(dataStore['mc_messages'] == '')  {
+			return false;
+		}
+
 		// Get the previous messages form LocalStorage
 		var messages = JSON.parse(dataStore['mc_messages']);
 		
@@ -2177,19 +2187,25 @@ var message_center = {
 	},
 	
 	buildAnswersTab : function() {
-		
+
+		// Check if theres any previous posts
+		if(dataStore['mc_messages'] == '')  {
+			return false;
+		}
+	
 		// Get the previous messages form LocalStorage
 		var messages = JSON.parse(dataStore['mc_messages']);
-				
+
 		// Empty the container first for re-init
 		$('.ext_mc_pages:eq(2) div.contents').html('');
 
-		// Html to insert
-		var html = '';
 
 		// Iterate over the messages
 		for(c = 0; c < messages.length; c++) {
-
+			
+			// Html to insert
+			var html = '';
+			
 			// Continue when no answers
 			if(messages[c]['answers'].length == 0) {
 				continue;
