@@ -607,16 +607,10 @@ var update_fave_list = {
 		// Set 'in progress' icon
 		$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh_waiting.png');
 		
-		// Restore session cookie
-		message_center.restoreSessionCookie();
-		
 		$.ajax({
 			url : 'forum.php',
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
-				
-				// re-set session cookie
-				message_center.removeSessionCookie();
 				
 				// Set 'completed' icon
 				$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh_done.png');
@@ -1884,26 +1878,6 @@ var message_center = {
 			message_center.tab( $(this).index() );
 		});
 
-		
-		// Store session id cookie
-		message_center.getSessionCookie();
-		
-		// reset session cookie for avoid to set last readed time
-		message_center.removeSessionCookie();
-		
-		// Set unload event to restore session id
-		$(window).unload(function() {
-			message_center.restoreSessionCookie();
-		});
-		
-		// Start searching ..
-		message_center.search();
-		
-		// Set auto-search in 5 mins
-		setInterval(function() {
-			message_center.search();
-		}, 300000);
-		
 		// buildOwnCommentsTab
 		message_center.buildOwnCommentsTab();
 		
@@ -1918,9 +1892,33 @@ var message_center = {
 		// Set auto list building in 6 mins
 		setInterval(function() {
 			message_center.buildAnswersTab();
-		}, 360000);
-	}, 
+		}, 360000);			
 
+	}, 
+	
+	topic : function() {
+		
+		// Set-up post logger
+		message_center.log();
+		
+		// Store session id cookie
+		message_center.getSessionCookie();
+
+		// Set unload event to restore session id
+		$(window).unload(function() {
+			message_center.restoreSessionCookie();
+		});
+		
+		// Start searching ..
+		message_center.search();
+		
+		// Set auto-search in 5 mins
+		setInterval(function() {
+			message_center.search();
+		}, 300000);
+	
+	},
+	
 	tab : function(n) {
 		
 		// Hide all pages
@@ -2029,8 +2027,8 @@ var message_center = {
 	
 	removeSessionCookie : function() {
 
-		//setCookie('identid', '0', 1);
-		//setCookie('PHPSESSID', '0', 1);
+		setCookie('identid', '0', 1);
+		setCookie('PHPSESSID', '0', 1);
 	},
 	
 	restoreSessionCookie : function() {
@@ -2040,9 +2038,6 @@ var message_center = {
 	
 	search : function() {
 		
-		// Remove session id
-		message_center.removeSessionCookie();
-		
 		// Check if theres any previous posts
 		if(dataStore['mc_messages'] == '')  {
 			return false;
@@ -2050,7 +2045,31 @@ var message_center = {
 		
 		// Get the latest post
 		var messages = JSON.parse(dataStore['mc_messages']);
-
+		
+		// Topics counter that waiting for update
+		var counter = 0;
+		
+		// Updated topics counter
+		completedCounter = 0;
+		
+		// Count topics that waiting for update
+		for(key = 0; key < messages.length; key++) {
+			
+			// Get current timestamp
+			var time = Math.round(new Date().getTime() / 1000);
+			
+			// Check last searched state
+			if(time > messages[key].checked + 60 * 15) {
+				counter++;
+			}
+		}
+		
+		// Remove session cookie if theres any topic to be updated
+		if(counter > 0) {
+			alert('removeSession');
+			message_center.removeSessionCookie();
+		}
+		
 		// Iterate over the posts
 		for(key = 0; key < messages.length; key++) {
 			
@@ -2058,7 +2077,7 @@ var message_center = {
 			var time = Math.round(new Date().getTime() / 1000);
 			
 			// Check last searched state
-			if(time < messages[key].checked + 60 * 15) {
+			if(time < messages[key].checked + 60 * 10) {
 				continue;
 			}
 			
@@ -2113,13 +2132,30 @@ var message_center = {
 						
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
-
+						
+						// Set the completed topics counter
+						completedCounter++;
 					}
 				});
 			}
 			
+			// Make the requests
 			doAjax(messages, key);
 		}
+		
+		// Check if the update process is completed
+		var interval = setInterval(function() {
+			if(completedCounter == counter) {
+				
+				// Restore session cookie
+				message_center.restoreSessionCookie();
+				
+				// Break the interval
+				clearInterval(interval);
+				
+				alert('completed: '+completedCounter);
+			}
+		}, 500);
 	},
 	
 	buildOwnCommentsTab : function() {
@@ -2414,7 +2450,7 @@ function extInit() {
 		
 		// Message Center
 		if(dataStore['message_center'] == true) {
-			message_center.log();
+			message_center.topic();
 		}
 	}
 	

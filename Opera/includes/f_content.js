@@ -628,17 +628,11 @@ var update_fave_list = {
 		
 		// Set 'in progress' icon
 		$('#ext_refresh_faves img').attr('src', 'data:image/png;base64,'+inProgressImg);
-
-		// Restore session cookie
-		message_center.restoreSessionCookie();		
 		
 		$.ajax({
 			url : 'forum.php',
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
-
-				// re-set session cookie
-				message_center.removeSessionCookie();
 
 				// Set 'completed' icon
 				$('#ext_refresh_faves img').attr('src', 'data:image/png;base64,'+completedImg);

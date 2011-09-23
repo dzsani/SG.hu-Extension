@@ -607,18 +607,12 @@ var update_fave_list = {
 	refresh : function() {
 		
 		// Set 'in progress' icon
-		$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png') );
-
-		// Restore session cookie
-		message_center.restoreSessionCookie();		
+		$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_waiting.png') );	
 		
 		$.ajax({
 			url : 'forum.php',
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
-
-				// re-set session cookie
-				message_center.removeSessionCookie();
 
 				// Set 'completed' icon
 				$('#ext_refresh_faves img').attr('src', chrome.extension.getURL('/img/content/refresh_done.png') );
