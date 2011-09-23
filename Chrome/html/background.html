@@ -23,6 +23,9 @@
 			if( typeof localStorage['remove_ads']							== 'undefined') localStorage['remove_ads']							= 'false';
 			if( typeof localStorage['wysiwyg_editor']						== 'undefined') localStorage['wysiwyg_editor']						= 'true';
 
+			// Message Center
+			if( typeof localStorage['mc_messages']							== 'undefined') localStorage['mc_messages']							= '';
+			if( typeof localStorage['mc_selected_tab']						== 'undefined') localStorage['mc_selected_tab']						= 0;
 			
 			chrome.extension.onConnect.addListener(function(port) {
 				port.onMessage.addListener(function(event) {
@@ -91,8 +94,15 @@
 						var val = event.val;
 					
 						localStorage[key] = val;
-					}
 
+					// Store selected tab in message center
+					} else if(event.name == 'setMCSelectedTab') {
+						localStorage['mc_selected_tab'] = event.message;
+
+					// Store own messages for message center
+					} else if(event.name == 'setMCMessages') {
+						localStorage['mc_messages'] = event.message;
+					}
 				});
 			});
 
