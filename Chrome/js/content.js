@@ -2356,6 +2356,11 @@ function extInit() {
 		if(isLoggedIn()) {
 			make_read_all_faves.activated();
 		}
+		
+		// Message center
+		if(dataStore['message_center'] == 'true') {
+			message_center.init();
+		}
 	}
 	
 	// LISTAZAS.PHP
@@ -2419,6 +2424,11 @@ function extInit() {
 		// WYSIWYG Editor
 		if(dataStore['wysiwyg_editor'] == 'true') {
 			wysiwyg_editor.activated();
+		}
+
+		// Message Center
+		if(dataStore['message_center'] == 'true') {
+			message_center.log();
 		}
 	}
 

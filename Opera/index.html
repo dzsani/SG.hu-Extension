@@ -24,8 +24,9 @@
 			if( typeof widget.preferences.group_smiles							== 'undefined') widget.preferences.group_smiles							= 'true';
 
 			// Message Center
-			if( typeof widget.preferences.mc_messages						== 'undefined') widget.preferences.mc_messages						= '';
-			if( typeof widget.preferences.mc_selected_tab					== 'undefined') widget.preferences.mc_selected_tab					= 0;			
+			if( typeof widget.preferences.message_center						== 'undefined') widget.preferences.message_center						= 'true';
+			if( typeof widget.preferences.mc_messages							== 'undefined') widget.preferences.mc_messages							= '';
+			if( typeof widget.preferences.mc_selected_tab						== 'undefined') widget.preferences.mc_selected_tab						= 0;			
 			
 			window.addEventListener("load", setupConnection, false);
 			

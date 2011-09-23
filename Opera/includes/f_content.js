@@ -2314,7 +2314,9 @@ function extInit() {
 		}
 
 		// Message center
-		message_center.init();
+		if(dataStore['message_center'] == 'true') {
+			message_center.init();
+		}
 	}
 	
 	// LISTAZAS.PHP
@@ -2381,7 +2383,9 @@ function extInit() {
 		}
 
 		// Message Center
-		message_center.log();
+		if(dataStore['message_center'] == 'true') {
+			message_center.log();
+		}
 
 	}
 

@@ -116,5 +116,6 @@ if( typeof ss.storage.remove_ads							== 'undefined') ss.storage.remove_ads				
 if( typeof ss.storage.wysiwyg_editor						== 'undefined') ss.storage.wysiwyg_editor						= true;
 
 // Message Center
+if( typeof ss.storage.message_center						== 'undefined') ss.storage.message_center						= true;
 if( typeof ss.storage.mc_messages							== 'undefined') ss.storage.mc_messages							= '';
 if( typeof ss.storage.mc_selected_tab						== 'undefined') ss.storage.mc_selected_tab						= 0;
