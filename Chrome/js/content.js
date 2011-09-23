@@ -599,8 +599,11 @@ var update_fave_list = {
 		});
 		
 		// Set auto refresh
-		setInterval(function() {
-			update_fave_list.refresh();
+		setTimeout(function() {
+
+			setInterval(function() {
+				update_fave_list.refresh();
+			}, 60000);
 		}, 30000);
 		
 	},
