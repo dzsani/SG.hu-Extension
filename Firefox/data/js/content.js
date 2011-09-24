@@ -557,6 +557,33 @@ var show_navigation_buttons = {
 			function() { show_navigation_buttons.showSearch(); },
 			function() { show_navigation_buttons.hideSearch(); }	
 		);
+
+		// Get topic ID
+		var id = $('select[name="id"] option:selected').val();
+		
+		// Determining current status
+		var status, title = '';
+		var whitelist = new Array();
+			whitelist = dataStore['topic_whitelist'].split(',');
+
+			if(whitelist.indexOf(id) == -1) {
+				status = '+';
+				title = 'Téma hozzáadása a fehérlistához';
+			} else {
+				status = '-';
+				title = 'Téma eltávolítása a fehérlistából';
+			}
+		
+		// Create the whitelist button
+		$('<div id="ext_whitelist" title="'+title+'">'+status+'</div>').prependTo('body');
+		
+		// Create whitelist event
+		$('#ext_whitelist').click(function() { 
+		
+			topic_whitelist.execute(this);
+			
+		});
+
 	},
 	
 	disabled : function() {
@@ -2418,6 +2445,40 @@ var spoiler_blocks = {
 	},
 };
 
+var topic_whitelist = {
+
+	execute : function(ele) {
+		
+		// Get topic ID
+		var id = $('select[name="id"] option:selected').val();
+		
+		// Add topic to whitelist
+		if($(ele).html() == '+') {
+			
+			// Change the status icon
+			$(ele).html('-');
+			
+			// Change status title
+			$(ele).attr('title', 'Téma eltávolítása a fehérlistából');
+
+			// Add to config
+			self.postMessage({ name : "addTopicToWhitelist", message : id });
+			
+		// Remove topic from whitelist
+		} else {
+
+			// Change the status icon
+			$(ele).html('+');
+
+			// Change status title
+			$(ele).attr('title', 'Téma hozzáadása a fehérlistához');
+
+			// Remove from config
+			self.postMessage({ name : "removeTopicFromWhitelist", message : id });
+		}
+	},
+};
+
 function extInit() {
 	
 	// FORUM.PHP
@@ -2484,73 +2545,86 @@ function extInit() {
 		// Settings
 		cp.init(2);
 
-		// setPredefinedVars
-		setPredefinedVars();
+		// Get topic ID for whitelist check
+		var id = $('select[name="id"] option:selected').val();
 		
-		// Monitor the new comments notification
-		monitorNewCommentsNotification();
+		// Determining current status
+		var whitelist = new Array();
+			whitelist = dataStore['topic_whitelist'].split(',');
+
+		if(whitelist.indexOf(id) == -1) {
+
+			// setPredefinedVars
+			setPredefinedVars();
 		
-		//gradual_comments
-		if(dataStore['threaded_comments'] == true) {
-			threaded_comments.activated();
-		}
+			// Monitor the new comments notification
+			monitorNewCommentsNotification();
 		
-		// Jump the last unreaded message
-		if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
-			jump_unreaded_messages.topic();
-		}
+			// gradual_comments
+			if(dataStore['threaded_comments'] == true) {
+				threaded_comments.activated();
+			}
 		
-		// Set-up block buttons
-		blocklist.init();
+			// Jump the last unreaded message
+			if(dataStore['jump_unreaded_messages'] && isLoggedIn() ) {
+				jump_unreaded_messages.topic();
+			}
 		
-		// Block users/messages
-		if(dataStore['block_list'] != '') {
-			blocklist.hidemessages();
-		}
+			// Set-up block buttons
+			blocklist.init();
 		
-		// Load next page when scrolling down
-		if(dataStore['autoload_next_page'] == true) {
-			autoload_next_page.activated();
-		}
+			// Block users/messages
+			if(dataStore['block_list'] != '') {
+				blocklist.hidemessages();
+			}
 		
-		// Scroll to page top button
-		if(dataStore['show_navigation_buttons'] == true) {
+			// Load next page when scrolling down
+			if(dataStore['autoload_next_page'] == true) {
+				autoload_next_page.activated();
+			}
+		
+			// Scroll to page top button
+			show_navigation_buttons.activated();
+
+		
+			// Animated replyto
+			replyTo();
+
+			// Overlay reply-to
+			if(dataStore['overlay_reply_to'] == true) {
+				overlay_reply_to.activated();
+			}
+		
+			// highlight_comments_for_me
+			if(dataStore['highlight_comments_for_me'] == true && isLoggedIn()) {
+				highlight_comments_for_me.activated();
+			}
+		
+			// show menitoned comment
+			if(dataStore['show_mentioned_comments'] == true) {
+				show_mentioned_comments.activated();
+			}
+		
+			// WYSIWYG Editor
+			if(dataStore['wysiwyg_editor'] == true) {
+				wysiwyg_editor.activated();
+			}
+
+			// Message Center
+			if(dataStore['message_center'] == true) {
+				message_center.log();
+			}
+
+			// Openable spoiler blocks
+			if(dataStore['spoiler_blocks'] == true) {
+				spoiler_blocks.activated();
+			}
+	
+		// Topic is whitelisted, place the navigation buttons 
+		// to have the ability of whitelist removal
+		} else {
 			show_navigation_buttons.activated();
 		}
-		
-		// Animated replyto
-		replyTo();
-
-		// Overlay reply-to
-		if(dataStore['overlay_reply_to'] == true) {
-			overlay_reply_to.activated();
-		}
-		
-		// highlight_comments_for_me
-		if(dataStore['highlight_comments_for_me'] == true && isLoggedIn()) {
-			highlight_comments_for_me.activated();
-		}
-		
-		// show menitoned comment
-		if(dataStore['show_mentioned_comments'] == true) {
-			show_mentioned_comments.activated();
-		}
-		
-		// WYSIWYG Editor
-		if(dataStore['wysiwyg_editor'] == true) {
-			wysiwyg_editor.activated();
-		}
-
-		// Message Center
-		if(dataStore['message_center'] == true) {
-			message_center.log();
-		}
-
-		// Openable spoiler blocks
-		if(dataStore['spoiler_blocks'] == true) {
-			spoiler_blocks.activated();
-		}
-
 	}
 	
 	// GLOBAL SCRIPTS

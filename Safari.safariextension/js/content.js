@@ -2510,7 +2510,10 @@ function extInit() {
 	
 	// LISTAZAS.PHP
 	else if(document.location.href.match(/listazas.php3\?id/gi)) {
-		
+
+		// Settings
+		cp.init(2);
+
 		// Get topic ID for whitelist check
 		var id = $('select[name="id"] option:selected').val();
 		
@@ -2519,10 +2522,6 @@ function extInit() {
 			whitelist = dataStore['topic_whitelist'].split(',');
 
 		if(whitelist.indexOf(id) == -1) {
-			
-		
-			// Settings
-			cp.init(2);
 
 			// setPredefinedVars
 			setPredefinedVars();

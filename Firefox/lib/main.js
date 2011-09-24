@@ -90,6 +90,42 @@ pageMod.PageMod({
 			// Store own messages for message center
 			} else if(event.name == 'setMCMessages') {
 				ss.storage['mc_messages'] = event.message;
+
+			// Add topic to whitelist
+			} else if(event.name == 'addTopicToWhitelist') {
+
+				// If the whitelist is empty
+				if(ss.storage.topic_whitelist == '') { 
+					ss.storage.topic_whitelist = event.message;
+		
+				// If the blocklist is not empty
+				} else {
+					var whitelist = new Array();
+						whitelist = ss.storage.topic_whitelist.split(',');
+						if(whitelist.indexOf(event.message) == -1) { 
+							whitelist.push(event.message); 
+							ss.storage.topic_whitelist = whitelist.join(',');
+						}
+				}
+
+
+			// Remove topic from whitelist
+			} else if(event.name == 'removeTopicFromWhitelist') {
+
+				// Get username
+				var id = event.message;
+	
+				// Get the blocklist array
+				var list = ss.storage.topic_whitelist.split(',');
+		
+				// Get the removed user index
+				var index = list.indexOf(id);
+		
+				// Remove user from array
+				list.splice(index, 1);
+					
+				// Save changes in localStorage
+				ss.storage.topic_whitelist = list.join(',');
 			}
 		});
 	}
@@ -115,6 +151,7 @@ if( typeof ss.storage.show_navigation_buttons				== 'undefined') ss.storage.show
 if( typeof ss.storage.remove_ads							== 'undefined') ss.storage.remove_ads							= false;
 if( typeof ss.storage.wysiwyg_editor						== 'undefined') ss.storage.wysiwyg_editor						= true;
 if( typeof ss.storage.spoiler_blocks						== 'undefined') ss.storage.spoiler_blocks						= true;
+if( typeof ss.storage.topic_whitelist						== 'undefined') ss.storage.topic_whitelist						= '';
 
 // Message Center
 if( typeof ss.storage.message_center						== 'undefined') ss.storage.message_center						= false;
