@@ -70,7 +70,7 @@ var cp = {
 					html += '<div class="button" id="custom_blocks"></div>';
 				html += '</div>';
 				html += '<div>';
-					html += '<h3>Üzenetközpont</h3>';
+					html += '<h3>Üzenetközpont (BÉTA)</h3>';
 					html += '<p>Saját üzenetek naplózása, azokra érkező válaszok nyomkövetése.</p>';
 					html += '<div class="button" id="message_center"></div>';
 				html += '</div>';
