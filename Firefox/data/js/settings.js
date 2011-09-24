@@ -125,7 +125,7 @@ var cp = {
 					html += '<div class="button" id="wysiwyg_editor"></div>';
 				html += '</div>';
 				html += '<div>';
-					html += '<h3>Kiniytható spoiler blokkok</h3>';
+					html += '<h3>Kinyitható spoiler blokkok</h3>';
 					html += '<p>Ezzel a funkcióval átalakítható az SG alapértelmezett spoiler kezelése, immár nem kell kijelölni hozzá a szöveget ami sokaknak zavaró volt.</p>';
 					html += '<div class="button" id="spoiler_blocks"></div>';
 				html += '</div>';
