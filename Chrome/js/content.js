@@ -1850,11 +1850,9 @@ var wysiwyg_editor = {
 };
 
 
-
 var message_center = {
 	
 	ident_id : 0,
-	session_id : 0,
 	
 	init : function() {
 		
@@ -1901,26 +1899,6 @@ var message_center = {
 			message_center.tab( $(this).index() );
 		});
 
-		
-		// Store session id cookie
-		message_center.getSessionCookie();
-		
-		// reset session cookie for avoid to set last readed time
-		message_center.removeSessionCookie();
-		
-		// Set unload event to restore session id
-		$(window).unload(function() {
-			message_center.restoreSessionCookie();
-		});
-		
-		// Start searching ..
-		message_center.search();
-		
-		// Set auto-search in 5 mins
-		setInterval(function() {
-			message_center.search();
-		}, 300000);
-		
 		// buildOwnCommentsTab
 		message_center.buildOwnCommentsTab();
 		
@@ -1935,9 +1913,32 @@ var message_center = {
 		// Set auto list building in 6 mins
 		setInterval(function() {
 			message_center.buildAnswersTab();
-		}, 360000);
-	}, 
+		}, 360000);			
 
+	}, 
+	
+	topic : function() {
+		
+		// Set-up post logger
+		message_center.log();
+		
+		// Store session id cookie
+		message_center.getSessionCookie();
+
+		// Set unload event to restore session id
+		$(window).unload(function() {
+			message_center.restoreSessionCookie();
+		});
+		
+		// Start searching ..
+		message_center.search();
+		
+		// Set auto-search in 5 mins
+		setInterval(function() {
+			message_center.search();
+		}, 300000);
+	},
+	
 	tab : function(n) {
 		
 		// Hide all pages
@@ -1957,14 +1958,14 @@ var message_center = {
 		$('.ext_mc_tabs').eq(n).find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
 		
 		// Store last selected tag for initial status
-		port.postMessage({ name : "setMCSelectedTab", message : n });
+		safari.self.tab.dispatchMessage("setMCSelectedTab", n);
 	},
 	
 	log : function() {
 		
 		// Check the latest comment for getting the comment ID
-		if(getCookie('getCommentID') == 1) {
-			
+		if(getCookie('getCommentID') == '1') {
+
 			// Get messages for MC
 			var messages = JSON.parse(dataStore['mc_messages']);
 			
@@ -1973,9 +1974,12 @@ var message_center = {
 			
 			// Store the ID for the latest message
 			messages[0]['comment_id'] = id[0];
-			
+
 			// Store new messages object in LocalStorage
-			port.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
+			safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
+			
+			// Store in dataStore var
+			dataStore['mc_messages'] = JSON.stringify(messages);
 			
 			// Remove marker for getting an ID
 			removeCookie('getCommentID');
@@ -2032,33 +2036,27 @@ var message_center = {
 			}
 			
 			// Store in localStorage
-			port.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
+			safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
 			
 			// Set a marker for gettni the comment ID
-			setCookie('getCommentID', 1);	
+			setCookie('getCommentID', '1', 1);	
 		});
 	},
 	
 	getSessionCookie : function() {
 		message_center.ident_id = getCookie('identid');
-		message_center.session_id = getCookie('PHPSESSID');
 	},
 	
 	removeSessionCookie : function() {
 
-		//setCookie('identid', '0', 1);
-		//setCookie('PHPSESSID', '0', 1);
+		setCookie('identid', '0', 365);
 	},
 	
 	restoreSessionCookie : function() {
-		setCookie('identid', message_center.ident_id, 1);
-		setCookie('PHPSESSID', message_center.session_id, 1);
+		setCookie('identid', message_center.ident_id, 365);
 	},
 	
 	search : function() {
-		
-		// Remove session id
-		message_center.removeSessionCookie();
 		
 		// Check if theres any previous posts
 		if(dataStore['mc_messages'] == '')  {
@@ -2067,7 +2065,30 @@ var message_center = {
 		
 		// Get the latest post
 		var messages = JSON.parse(dataStore['mc_messages']);
-
+		
+		// Topics counter that waiting for update
+		var counter = 0;
+		
+		// Updated topics counter
+		var completedCounter = 0;
+		
+		// Count topics that waiting for update
+		for(key = 0; key < messages.length; key++) {
+			
+			// Get current timestamp
+			var time = Math.round(new Date().getTime() / 1000);
+			
+			// Check last searched state
+			if(time > messages[key].checked + 60 * 15) {
+				counter++;
+			}
+		}
+		
+		// Remove session cookie if theres any topic to be updated
+		if(counter > 0) {
+			message_center.removeSessionCookie();
+		}
+		
 		// Iterate over the posts
 		for(key = 0; key < messages.length; key++) {
 			
@@ -2075,25 +2096,36 @@ var message_center = {
 			var time = Math.round(new Date().getTime() / 1000);
 			
 			// Check last searched state
-			if(time < messages[key].checked + 60 * 15) {
+			if(time < messages[key].checked + 60 * 10) {
 				continue;
 			}
-			
+
 			function doAjax(messages, key) {
 			
 				$.ajax({
 				
 					url : 'http://www.sg.hu/listazas.php3?id=' + messages[key]['topic_id'],
 					mimeType : 'text/html;charset=iso-8859-2',
+					error : function() {
+				
+						// Set the completed topics counter
+						completedCounter++;
+					},
+					
 					success : function(data) {
-					
+
+						// Set the completed topics counter
+						completedCounter++;
+
 						// Parse html response
-						var tmp = $(data);
+						var tmp = '';
+							 tmp = $(data);
+							 
 						var answers = new Array();
-						var TmpAnswers = null;
-					
-						// Search posts that is an answer to us
-						var TmpAnswers = $( tmp.find('.msg-replyto a:contains("#'+messages[key]['comment_id']+'")').closest('center').get().reverse() );
+						var TmpAnswers = new Array();
+						
+							// Search posts that is an answer to us
+							 TmpAnswers = $( tmp.find('.msg-replyto a:contains("#'+messages[key]['comment_id']+'")').closest('center').get().reverse() );
 
 						// Iterate over the answers
 						if(TmpAnswers.length == 0) {
@@ -2126,17 +2158,31 @@ var message_center = {
 						messages[key]['answers'] = answers;
 					
 						// Store in localStorage
-						port.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
+						safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
 						
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
-
+						
 					}
 				});
 			}
 			
+			// Make the requests
 			doAjax(messages, key);
 		}
+		
+		// Check if the update process is completed
+		var interval = setInterval(function() {
+			//alert(completedCounter);
+			//alert(counter);
+			if(completedCounter == counter) {
+				// Restore session cookie
+				message_center.restoreSessionCookie();
+				
+				// Break the interval
+				clearInterval(interval);
+			}
+		}, 500);
 	},
 	
 	buildOwnCommentsTab : function() {
@@ -2307,54 +2353,6 @@ function removeCookie( name, path, domain ) {
 	( ( domain ) ? ";domain=" + domain : "" ) +
 	";expires=Thu, 01-Jan-1970 00:00:01 GMT";
 }
-
-var spoiler_blocks = {
-
-	activated : function() {
-		
-		// Iterate over the spoilers
-		$('.topichead').closest('center').find('.msg-text div:contains("SPOILER!"):not(.ext_spoiler)').each(function() {
-			
-			// Get the message
-			var message = $(this).find('div').html();
-			
-			// Html to insert
-			var html = '';
-				
-				html += '<b>SPOILER!</b>';
-				html += '<a href="#">Kattints ide a szöveg megtekintéséhez!</a>';
-				html += '<div>'+message+'</div>';
-			
-			// Override original contents
-			$(this).html(html);
-			
-			// Add class to the container
-			$(this).addClass('ext_spoiler');
-		});
-		
-		// Add toggle event
-		$('.ext_spoiler a').unbind('toggle').toggle(
-		
-			function(e) {
-			
-				// Prevent borowser default action
-				e.preventDefault();
-
-				// Open the contents
-				$(this).next().slideDown();
-			},
-			
-			function(e) {
-	
-				// Prevent borowser default action
-				e.preventDefault();
-			
-				// Open the contents
-				$(this).next().slideUp();
-			}
-		);
-	},
-};
 
 function extInit() {
 	

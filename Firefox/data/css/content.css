@@ -350,7 +350,6 @@
 
 .ext_mc_pages {
 	width: 480px;
-	height: 1050px;
 	display: none;
 	overflow-y: auto;
 }
