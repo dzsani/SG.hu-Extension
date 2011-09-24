@@ -114,6 +114,7 @@ if( typeof ss.storage.hide_blocks_buttons					== 'undefined') ss.storage.hide_bl
 if( typeof ss.storage.show_navigation_buttons				== 'undefined') ss.storage.show_navigation_buttons				= true;
 if( typeof ss.storage.remove_ads							== 'undefined') ss.storage.remove_ads							= false;
 if( typeof ss.storage.wysiwyg_editor						== 'undefined') ss.storage.wysiwyg_editor						= true;
+if( typeof ss.storage.spoiler_blocks						== 'undefined') ss.storage.spoiler_blocks						= true;
 
 // Message Center
 if( typeof ss.storage.message_center						== 'undefined') ss.storage.message_center						= true;

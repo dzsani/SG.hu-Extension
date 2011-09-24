@@ -124,6 +124,11 @@ var cp = {
 					html += '<p>Office-szerű formázógombokat kapsz a kommentíró mezőbe élő előnézettel.</p>';
 					html += '<div class="button" id="wysiwyg_editor"></div>';
 				html += '</div>';
+				html += '<div>';
+					html += '<h3>Kiniytható spoiler blokkok</h3>';
+					html += '<p>Ezzel a funkcióval átalakítható az SG alapértelmezett spoiler kezelése, immár nem kell kijelölni hozzá a szöveget ami sokaknak zavaró volt.</p>';
+					html += '<div class="button" id="spoiler_blocks"></div>';
+				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';

@@ -399,3 +399,21 @@
 	font: normal normal normal 12px/16px Arial, serif;
 	color: #333;
 }
+
+/* SPOILERS */
+.ext_spoiler {
+	margin: 5px;
+	border: 1px solid #ddd;
+}
+
+.ext_spoiler a {
+	margin-left: 10px;
+	font: normal normal normal 13px/16px Arial, serif !important;
+	color: #666 !important;
+	text-decoration: none !important;
+}
+
+.ext_spoiler div {
+	padding: 5px;
+	display: none;
+}

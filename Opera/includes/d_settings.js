@@ -132,7 +132,12 @@ var cp = {
 					html += '<h3>Smile lista csoportba rendezése</h3>';
 					html += '<p>A smile lista egy legördülő menüben jelenik meg ahol típusuk szerint csoportokba vannak rendezve. Például: szomorú, vidám, stb.</p>';
 					html += '<div class="button" id="group_smiles"></div>';
-				html += '</div>';	
+				html += '</div>';
+				html += '<div>';
+					html += '<h3>Kiniytható spoiler blokkok</h3>';
+					html += '<p>Ezzel a funkcióval átalakítható az SG alapértelmezett spoiler kezelése, immár nem kell kijelölni hozzá a szöveget ami sokaknak zavaró volt.</p>';
+					html += '<div class="button" id="spoiler_blocks"></div>';
+				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';

@@ -516,6 +516,10 @@ var autoload_next_page = {
 					show_mentioned_comments.activated();
 				}
 			
+				// Openable spoiler blocks
+				if(dataStore['spoiler_blocks'] == true) {
+					spoiler_blocks.activated();
+				}
 		});
 	}
 
@@ -788,6 +792,12 @@ function ext_valaszmsg(target, id, no, callerid) {
 			if(dataStore['show_mentioned_comments'] == true) {
 				show_mentioned_comments.activated();
 			}
+
+			// Openable spoiler blocks
+			if(dataStore['spoiler_blocks'] == true) {
+				spoiler_blocks.activated();
+			}
+
 		});
 	}
 	else { $('#'+target).slideUp(); }
@@ -2332,6 +2342,54 @@ function removeCookie( name, path, domain ) {
 	";expires=Thu, 01-Jan-1970 00:00:01 GMT";
 }
 
+var spoiler_blocks = {
+
+	activated : function() {
+		
+		// Iterate over the spoilers
+		$('.topichead').closest('center').find('.msg-text div:contains("SPOILER!"):not(.ext_spoiler)').each(function() {
+			
+			// Get the message
+			var message = $(this).find('div').html();
+			
+			// Html to insert
+			var html = '';
+				
+				html += '<b>SPOILER!</b>';
+				html += '<a href="#">Kattints ide a szöveg megtekintéséhez!</a>';
+				html += '<div>'+message+'</div>';
+			
+			// Override original contents
+			$(this).html(html);
+			
+			// Add class to the container
+			$(this).addClass('ext_spoiler');
+		});
+		
+		// Add toggle event
+		$('.ext_spoiler a').unbind('toggle').toggle(
+		
+			function(e) {
+			
+				// Prevent borowser default action
+				e.preventDefault();
+
+				// Open the contents
+				$(this).next().slideDown();
+			},
+			
+			function(e) {
+	
+				// Prevent borowser default action
+				e.preventDefault();
+			
+				// Open the contents
+				$(this).next().slideUp();
+			}
+		);
+	},
+};
+
 function extInit() {
 	
 	// FORUM.PHP
@@ -2456,6 +2514,11 @@ function extInit() {
 		// Message Center
 		if(dataStore['message_center'] == true) {
 			message_center.topic();
+		}
+		
+		// Openable spoiler blocks
+		if(dataStore['spoiler_blocks'] == true) {
+			spoiler_blocks.activated();
 		}
 	}
 	
