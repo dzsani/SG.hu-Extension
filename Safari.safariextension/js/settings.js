@@ -88,11 +88,6 @@ var cp = {
 					html += '<div class="button" id="autoload_next_page"></div>';
 				html += '</div>';
 				html += '<div>';
-					html += '<h3>Navigációs gombok megjelenítése</h3>';
-					html += '<p>A bal alsó sarokban navigációs gombok jelennek meg, amikkel az oldal tetejére lehet görgetni, visszalépni a fórum főoldalra, vagy éppen keresni az adott témában.</p>';
-					html += '<div class="button" id="show_navigation_buttons"></div>';
-				html += '</div>';
-				html += '<div>';
 					html += '<h3>Overlay kommentmező</h3>';
 					html += '<p>Egy hozzászólásra válaszolva az oldal nem ugrik fel a felső textarához, ehelyett kiemeli a megválaszolandó kommentet és egy overlay szövegmező jelenik meg alatta.</p>';
 					html += '<div class="button" id="overlay_reply_to"></div>';

@@ -23,6 +23,7 @@
 			if( typeof safari.extension.settings.remove_ads							== 'undefined') safari.extension.settings.remove_ads						= false;
 			if( typeof safari.extension.settings.wysiwyg_editor						== 'undefined') safari.extension.settings.wysiwyg_editor					= true;
 			if( typeof safari.extension.settings.spoiler_blocks						== 'undefined') safari.extension.settings.spoiler_blocks					= true;
+			if( typeof safari.extension.settings.topic_whitelist					== 'undefined') safari.extension.settings.topic_whitelist					= '';
 			
 			// Message Center
 			if( typeof safari.extension.settings.message_center						== 'undefined') safari.extension.settings.message_center					= false;
@@ -103,8 +104,43 @@
 				// Store own messages for message center
 				} else if(event.name == 'setMCMessages') {
 					safari.extension.settings['mc_messages'] = event.message;
-				}
+				
+				// Add topic to whitelist
+				} else if(event.name == 'addTopicToWhitelist') {
 
+					// If the whitelist is empty
+					if(safari.extension.settings.topic_whitelist == '') { 
+						safari.extension.settings.topic_whitelist = event.message;
+		
+					// If the blocklist is not empty
+					} else {
+						var whitelist = new Array();
+							whitelist = safari.extension.settings.topic_whitelist.split(',');
+							if(whitelist.indexOf(event.message) == -1) { 
+								whitelist.push(event.message); 
+								safari.extension.settings.topic_whitelist = whitelist.join(',');
+							}
+					}
+
+
+				// Remove topic from whitelist
+				} else if(event.name == 'removeTopicFromWhitelist') {
+
+					// Get username
+					var id = event.message;
+	
+					// Get the blocklist array
+					var list = safari.extension.settings.topic_whitelist.split(',');
+		
+					// Get the removed user index
+					var index = list.indexOf(id);
+		
+					// Remove user from array
+					list.splice(index, 1);
+					
+					// Save changes in localStorage
+					safari.extension.settings.topic_whitelist = list.join(',');
+				}
 			}
 			
 			safari.application.addEventListener("message", respondToMessage, false);
