@@ -23,6 +23,7 @@
 			if( typeof localStorage['remove_ads']							== 'undefined') localStorage['remove_ads']							= 'false';
 			if( typeof localStorage['wysiwyg_editor']						== 'undefined') localStorage['wysiwyg_editor']						= 'true';
 			if( typeof localStorage['spoiler_blocks']						== 'undefined') localStorage['spoiler_blocks']						= 'true';
+			if( typeof localStorage['topic_whitelist']						== 'undefined') localStorage['topic_whitelist']						= '';
 
 			// Message Center
 			if( typeof localStorage['message_center']						== 'undefined') localStorage['message_center']						= 'false';
@@ -104,6 +105,42 @@
 					// Store own messages for message center
 					} else if(event.name == 'setMCMessages') {
 						localStorage['mc_messages'] = event.message;
+
+					// Add topic to whitelist
+					} else if(event.name == 'addTopicToWhitelist') {
+
+						// If the whitelist is empty
+						if(localStorage['topic_whitelist'] == '') { 
+							localStorage['topic_whitelist'] = event.message;
+		
+						// If the blocklist is not empty
+						} else {
+							var whitelist = new Array();
+								whitelist = localStorage['whitelist'].split(',');
+								if(whitelist.indexOf(event.message) == -1) { 
+									whitelist.push(event.message); 
+									localStorage['topic_whitelist'] = whitelist.join(',');
+								}
+						}
+
+
+					// Remove topic from whitelist
+					} else if(event.name == 'removeTopicFromWhitelist') {
+
+						// Get username
+						var id = event.message;
+	
+						// Get the blocklist array
+						var list = localStorage['topic_whitelist'].split(',');
+		
+						// Get the removed user index
+						var index = list.indexOf(id);
+		
+						// Remove user from array
+						list.splice(index, 1);
+					
+						// Save changes in localStorage
+						localStorage['topic_whitelist'] = list.join(',');
 					}
 				});
 			});

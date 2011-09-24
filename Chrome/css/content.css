@@ -132,12 +132,12 @@
 	border-radius: 5px;
 }
 
-/* scroll to top */
+/* navigation buttons */
 #ext_scrolltop {
 	width: 26px;
 	height: 26px;
 	position: fixed;
-	bottom: 172px;
+	bottom: 208px;
 	left: 10px;
 	background-color: #999;
 	border-radius: 5px;
@@ -150,7 +150,7 @@
 	width: 26px;
 	height: 26px;
 	position: fixed;
-	bottom: 136px;
+	bottom: 172px;
 	left: 10px;
 	background-color: #999;
 	border-radius: 5px;
@@ -163,7 +163,7 @@
 	width: 26px;
 	height: 26px;
 	position: fixed;
-	bottom: 100px;
+	bottom: 136px;
 	left: 10px;
 	background-color: #999;
 	border-radius: 5px;
@@ -179,7 +179,7 @@
 	height: 40px;
 	padding: 10px !important;
 	position: fixed;
-	bottom: 83px;
+	bottom: 119px;
 	left: 50px;
 	
 	font: normal normal bold 12px/14px Arial, serif;
@@ -192,6 +192,22 @@
 
 #ext_overlay_search input:nth-child(1) {
 	width: 225px;
+}
+
+#ext_whitelist {
+	width: 26px;
+	height: 26px;
+	position: fixed;
+	bottom: 100px;
+	left: 10px;
+	background-color: #999;
+	border-radius: 5px;
+	opacity: 0.5;
+	font: normal normal normal 14px/26px Arial;
+	cursor: pointer;
+	background-repeat: no-repeat;
+	background-position: center center;
+	font: normal normal bold 16px/26px Arial, serif;
 }
 
 /* Overlay commentbox */
