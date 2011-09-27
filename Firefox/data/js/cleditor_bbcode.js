@@ -45,7 +45,7 @@
   $.cleditor.defaultOptions.controls =
 	"bold italic underline | size color removeformat | " +
 	"alignleft center alignright | " +
-	"image link unlink | undo redo source";
+	"image link unlink | undo redo pastetext source";
 
   // Save the previously assigned callback handlers
   var oldAreaCallback = $.cleditor.defaultOptions.updateTextArea;
