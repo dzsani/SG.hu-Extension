@@ -945,6 +945,24 @@ var overlay_reply_to = {
 		
 				// Copy textarea original comment to the tmp element
 				textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
+				
+				// Remove username line
+				textarea_clone.find('.std1').remove();
+				
+				// Fix buttons
+				textarea_clone.find('a:eq(0)').css({ position : 'absolute',  left : 0 });
+				textarea_clone.find('a:eq(1)').css({ position : 'absolute',  left : 90 });
+				textarea_clone.find('a:eq(2)').css({ position : 'absolute',  left : 180 });
+				textarea_clone.find('a:eq(3)').css({ position : 'absolute',  left : 270 });
+				textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
+				textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
+				textarea_clone.find('a:eq(6)').css({ position : 'absolute',  right : 0 });
+			
+				// Create a container element around the textarea for box-shadow
+				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
+				
+				// Put textarea the container
+				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
 		}
 
 		// Copy textarea original comment to the tmp element
@@ -988,12 +1006,14 @@ var overlay_reply_to = {
 		});
 
 		// Block default tab action in a WYSIWYG editor
-		$(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function(event) {
-			if (event.keyCode == '9') {
-    			 event.preventDefault();
-    			 textarea_clone.find('a:last').focus();
-   			}
-		});
+		if(dataStore['wysiwyg_editor'] == 'true') {
+			$(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function(event) {
+				if (event.keyCode == '9') {
+    				 event.preventDefault();
+    				 textarea_clone.find('a:last').focus();
+   				}
+			});
+		}
 
 		// Thickbox
 		textarea_clone.find('a.thickbox').each(function() {
@@ -1013,7 +1033,7 @@ var overlay_reply_to = {
 
 		// Change close button position if WYSIWYG editor is disabled
 		if(dataStore['wysiwyg_editor'] != 'true') {
-			close_btm.css({ 'right' : 10, 'top' : 10 });
+			close_btm.css({ 'right' : 4, 'top' : 9 });
 		}
 
 		// Add Close event
