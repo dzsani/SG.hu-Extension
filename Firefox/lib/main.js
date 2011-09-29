@@ -126,6 +126,11 @@ pageMod.PageMod({
 					
 				// Save changes in localStorage
 				ss.storage.topic_whitelist = list.join(',');
+			
+			// Update faves filter last state
+			} else if(event.name == 'updateFavesFilterLastState') {
+
+				ss.storage.fav_show_only_unreaded_opened = event.message;
 			}
 		});
 	}
@@ -136,6 +141,8 @@ if( typeof ss.storage.chat_hide 							== 'undefined') ss.storage.chat_hide 				
 if( typeof ss.storage.custom_blocks							== 'undefined') ss.storage.custom_blocks 						= false;
 if( typeof ss.storage.jump_unreaded_messages				== 'undefined') ss.storage.jump_unreaded_messages				= true;
 if( typeof ss.storage.fav_show_only_unreaded				== 'undefined') ss.storage.fav_show_only_unreaded				= true;
+if( typeof ss.storage.fav_show_only_unreaded_remember		== 'undefined') ss.storage.fav_show_only_unreaded_remember		= false;
+if( typeof ss.storage.fav_show_only_unreaded_opened			== 'undefined') ss.storage.fav_show_only_unreaded_opened		= false;
 if( typeof ss.storage.short_comment_marker					== 'undefined') ss.storage.short_comment_marker					= true;
 if( typeof ss.storage.highlight_forum_categories			== 'undefined') ss.storage.custom_list_styles					= false;
 if( typeof ss.storage.threaded_comments						== 'undefined') ss.storage.threaded_comments					= false;

@@ -8,6 +8,8 @@
 			if( typeof widget.preferences.custom_blocks							== 'undefined') widget.preferences.custom_blocks 						= 'false';
 			if( typeof widget.preferences.jump_unreaded_messages				== 'undefined') widget.preferences.jump_unreaded_messages				= 'true';
 			if( typeof widget.preferences.fav_show_only_unreaded				== 'undefined') widget.preferences.fav_show_only_unreaded				= 'true';
+			if( typeof widget.preferences.fav_show_only_unreaded_remember		== 'undefined') widget.preferences.fav_show_only_unreaded_remember		= 'false';
+			if( typeof widget.preferences.fav_show_only_unreaded_opened			== 'undefined') widget.preferences.fav_show_only_unreaded_opened		= 'false';
 			if( typeof widget.preferences.short_comment_marker					== 'undefined') widget.preferences.short_comment_marker					= 'true';
 			if( typeof widget.preferences.highlight_forum_categories			== 'undefined') widget.preferences.custom_list_styles					= 'false';
 			if( typeof widget.preferences.threaded_comments						== 'undefined') widget.preferences.threaded_comments					= 'false';
@@ -144,6 +146,11 @@
 					
 						// Save changes in localStorage
 						widget.preferences.topic_whitelist = list.join(',');
+
+					// Update faves filter last state
+					} else if(msg.name == 'updateFavesFilterLastState') {
+
+						widget.preferences.fav_show_only_unreaded_opened = msg.message;
 					}
 				}
 			}

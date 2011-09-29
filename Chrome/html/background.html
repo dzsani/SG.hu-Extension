@@ -8,6 +8,8 @@
 			if( typeof localStorage['custom_blocks']						== 'undefined') localStorage['custom_blocks'] 						= 'false';
 			if( typeof localStorage['jump_unreaded_messages']				== 'undefined') localStorage['jump_unreaded_messages']				= 'true';
 			if( typeof localStorage['fav_show_only_unreaded']				== 'undefined') localStorage['fav_show_only_unreaded']				= 'true';
+			if( typeof localStorage['fav_show_only_unreaded_remember']		== 'undefined') localStorage['fav_show_only_unreaded_remember']		= 'false';
+			if( typeof localStorage['fav_show_only_unreaded_opened']		== 'undefined') localStorage['fav_show_only_unreaded_opened']		= 'false';
 			if( typeof localStorage['short_comment_marker']					== 'undefined') localStorage['short_comment_marker']				= 'true';
 			if( typeof localStorage['highlight_forum_categories']			== 'undefined') localStorage['custom_list_styles']					= 'false';
 			if( typeof localStorage['threaded_comments']					== 'undefined') localStorage['threaded_comments']					= 'false';
@@ -141,6 +143,11 @@
 					
 						// Save changes in localStorage
 						localStorage['topic_whitelist'] = list.join(',');
+				
+					// Update faves filter last state
+					} else if(event.name == 'updateFavesFilterLastState') {
+
+						localStorage['fav_show_only_unreaded_opened'] = event.message;
 					}
 				});
 			});

@@ -1,6 +1,15 @@
 // Predefined vars
 var userName, isLoggedIn, dataStore;
 
+function convertBool(string){
+
+	switch(string.toLowerCase()){
+		case "true": case "yes": case "1": return true;
+		case "false": case "no": case "0": case null: return false;
+		default: return Boolean(string);
+	}
+}
+
 function setPredefinedVars() {
 	
 	loggedIn = isLoggedIn();
@@ -171,8 +180,24 @@ var fav_show_only_unreaded = {
 	
 	opened : false,
 	
+	init : function() {
+		if(dataStore['fav_show_only_unreaded_remember']) {
+
+			fav_show_only_unreaded.opened = dataStore['fav_show_only_unreaded_opened'];
+		}
+	},
+	
 	activated : function() {
-		
+
+		// Remove original toggle button
+		$('div[class*="csakujuzi"]').remove();
+
+		// Remove style tags from faves containers
+		$('.ext_faves').next().children('div').removeAttr("style");
+
+		// Disable page auto-hide function
+		setCookie('sgkedvencrejtve', '0', 365);
+
 		// Move the button away to place toggle button
 		$('#ext_refresh_faves').css('right', 18);
 		$('#ext_read_faves').css('right', 36);
@@ -228,6 +253,9 @@ var fav_show_only_unreaded = {
 				$('.ext_hidden_fave').show();
 				
 				fav_show_only_unreaded.opened = true;
+				
+				// Update last state in LocalStorage
+				self.postMessage({ name : "updateFavesFilterLastState", message : true });
 			
 			} else {
 				$('#ext_filtered_faves_error').show();
@@ -235,6 +263,9 @@ var fav_show_only_unreaded = {
 				$('.ext_hidden_fave').hide();
 				
 				fav_show_only_unreaded.opened = false;
+
+				// Update last state in LocalStorage
+				self.postMessage({ name : "updateFavesFilterLastState", message : false });
 			}
 		});
 
@@ -856,7 +887,7 @@ var overlay_reply_to = {
 		$('textarea:first').closest('div').find('a:last').attr('tabindex', '4');
 		
 		// Change the behavior the replyto button
-		$('.topichead a:contains("válasz erre")').live('click', function(e) {
+		$('.topichead a:contains("válasz")').live('click', function(e) {
 			
 			// Prevent default submission
 			e.preventDefault();
@@ -872,7 +903,7 @@ var overlay_reply_to = {
 	
 	disabled : function() {
 	
-		$('.topichead a:contains("válasz erre")').die('click');
+		$('.topichead a:contains("válasz")').die('click');
 	
 	},
 	
@@ -2528,6 +2559,7 @@ function extInit() {
 		
 		// Faves: show only with unreaded messages
 		if(dataStore['fav_show_only_unreaded'] == true && isLoggedIn() ) {
+			fav_show_only_unreaded.init();
 			fav_show_only_unreaded.activated();
 		}
 	

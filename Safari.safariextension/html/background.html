@@ -8,6 +8,8 @@
 			if( typeof safari.extension.settings.custom_blocks						== 'undefined') safari.extension.settings.custom_blocks 					= false;
 			if( typeof safari.extension.settings.jump_unreaded_messages				== 'undefined') safari.extension.settings.jump_unreaded_messages			= true;
 			if( typeof safari.extension.settings.fav_show_only_unreaded				== 'undefined') safari.extension.settings.fav_show_only_unreaded			= true;
+			if( typeof safari.extension.settings.fav_show_only_unreaded_remember	== 'undefined') safari.extension.settings.fav_show_only_unreaded_remember	= false;
+			if( typeof safari.extension.settings.fav_show_only_unreaded_opened		== 'undefined') safari.extension.settings.fav_show_only_unreaded_opened		= false;
 			if( typeof safari.extension.settings.short_comment_marker				== 'undefined') safari.extension.settings.short_comment_marker				= true;
 			if( typeof safari.extension.settings.highlight_forum_categories			== 'undefined') safari.extension.settings.custom_list_styles				= false;
 			if( typeof safari.extension.settings.threaded_comments					== 'undefined') safari.extension.settings.threaded_comments					= false;
@@ -140,6 +142,11 @@
 					
 					// Save changes in localStorage
 					safari.extension.settings.topic_whitelist = list.join(',');
+
+				// Update faves filter last state
+				} else if(event.name == 'updateFavesFilterLastState') {
+
+					safari.extension.settings.fav_show_only_unreaded_opened = event.message;
 				}
 			}
 			
