@@ -1294,7 +1294,7 @@ var show_mentioned_comments = {
 			id = id.split('#')[0];
 			id = id.split('&')[0];
 		
-		var target = $(ele).closest('.msg-text').next().attr('id');
+		var target = $(ele).closest('.msg-text').next().next().attr('id');
 		
 		eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);");
 	}
