@@ -148,7 +148,7 @@ var jump_unreaded_messages = {
 		$('a[name=pirosvonal]').remove();
 
 		// Url to rewrite
-		var url = document.location.href.substring(0, 44);
+		var url = document.location.href.substring(0, 66);
 
 		// Update the url to avoid re-jump
 		window.history.replaceState({ page : url }, '', url);
