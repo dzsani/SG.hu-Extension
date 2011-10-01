@@ -196,7 +196,7 @@ var fav_show_only_unreaded = {
 	opened : false,
 	
 	init : function() {
-		if(dataStore['fav_show_only_unreaded_remember']) {
+		if(dataStore['fav_show_only_unreaded_remember'] == 'true') {
 			fav_show_only_unreaded.opened = convertBool(dataStore['fav_show_only_unreaded_opened']);
 		}
 	},
