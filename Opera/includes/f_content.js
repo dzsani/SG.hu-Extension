@@ -287,7 +287,8 @@ var fav_show_only_unreaded = {
 		if(fav_show_only_unreaded.opened == true) {
 			$('#ext_filtered_faves_error').hide();
 			$('#ext_show_filtered_faves_arrow').attr('class', 'hide');
-			$('.ext_hidden_fave').show();
+			//$('.ext_hidden_fave').show();
+			$('.ext_hidden_fave').css('display', 'block');
 		}
 	},
 	
