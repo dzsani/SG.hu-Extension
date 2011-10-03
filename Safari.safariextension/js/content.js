@@ -640,7 +640,10 @@ var update_fave_list = {
 
 	activated : function() {
 		
-		// Create refhref button
+		// Disable site's built-in auto-update by remove "fkedvenc" ID
+		$('#fkedvenc').removeAttr('id');
+		
+		// Create refresh button
 		$('.ext_faves').append('<div id="ext_refresh_faves"></div>');
 		
 		// Move the button away if unreaded faves is on
@@ -668,8 +671,8 @@ var update_fave_list = {
 		$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh_waiting.png');
 		
 		$.ajax({
-			url : 'forum.php',
-			mimeType : 'text/html;charset=iso-8859-2',
+			url : 'ajax/kedvencdb.php',
+			mimeType : 'text/html;charset=utf-8',
 			success : function(data) {
 				
 				// Set 'completed' icon
@@ -679,13 +682,9 @@ var update_fave_list = {
 				setTimeout(function() {
 					$('#ext_refresh_faves img').attr('src', safari.extension.baseURI+'img/content/refresh.png');
 				}, 2000);
-				
-				// Get new fave list
-				var tmp = $(data);
-					tmp = tmp.find('.b-h-o-head:eq(2)').next().html();
-				
+							
 				// Append new fave list
-				$('.ext_faves:first').next().html(tmp);
+				$('.ext_faves:first').next().html(data);
 				
 				// Faves: show only with unreaded messages
 				if(dataStore['fav_show_only_unreaded'] == true && isLoggedIn() ) {
