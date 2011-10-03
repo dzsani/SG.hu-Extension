@@ -1928,8 +1928,6 @@ var wysiwyg_editor = {
 
 var message_center = {
 	
-	ident_id : 0,
-	
 	init : function() {
 		
 		// HTML code to insert
@@ -1977,7 +1975,7 @@ var message_center = {
 
 		// buildOwnCommentsTab
 		message_center.buildOwnCommentsTab();
-		
+
 		// Set auto list building in 6 mins
 		setInterval(function() {
 			message_center.buildOwnCommentsTab();
@@ -1989,7 +1987,15 @@ var message_center = {
 		// Set auto list building in 6 mins
 		setInterval(function() {
 			message_center.buildAnswersTab();
-		}, 360000);			
+		}, 360000);	
+
+		// Start searching ..
+		message_center.search();
+		
+		// Set auto-search in 5 mins
+		setInterval(function() {
+			message_center.search();
+		}, 300000);
 
 	}, 
 	
@@ -1997,14 +2003,6 @@ var message_center = {
 		
 		// Set-up post logger
 		message_center.log();
-		
-		// Store session id cookie
-		message_center.getSessionCookie();
-
-		// Set unload event to restore session id
-		$(window).unload(function() {
-			message_center.restoreSessionCookie();
-		});
 		
 		// Start searching ..
 		message_center.search();
@@ -2034,7 +2032,7 @@ var message_center = {
 		$('.ext_mc_tabs').eq(n).find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
 		
 		// Store last selected tag for initial status
-		safari.self.tab.dispatchMessage("setMCSelectedTab", n);
+		port.postMessage({ name : "setMCSelectedTab", message : n });
 	},
 	
 	log : function() {
@@ -2052,7 +2050,7 @@ var message_center = {
 			messages[0]['comment_id'] = id[0];
 
 			// Store new messages object in LocalStorage
-			safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
+			port.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
 			
 			// Store in dataStore var
 			dataStore['mc_messages'] = JSON.stringify(messages);
@@ -2063,9 +2061,6 @@ var message_center = {
 		
 		// Catch comment event
 		$('form[name="newmessage"]').submit(function(e) {
-			
-			// Prevent default submission
-			e.preventDefault();
 
 			// Get topic name
 			var topic_name = $('select[name="id"] option:selected').text();
@@ -2112,24 +2107,11 @@ var message_center = {
 			}
 			
 			// Store in localStorage
-			safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
+			port.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
 			
 			// Set a marker for gettni the comment ID
 			setCookie('getCommentID', '1', 1);	
 		});
-	},
-	
-	getSessionCookie : function() {
-		message_center.ident_id = getCookie('identid');
-	},
-	
-	removeSessionCookie : function() {
-
-		setCookie('identid', '0', 365);
-	},
-	
-	restoreSessionCookie : function() {
-		setCookie('identid', message_center.ident_id, 365);
 	},
 	
 	search : function() {
@@ -2141,29 +2123,6 @@ var message_center = {
 		
 		// Get the latest post
 		var messages = JSON.parse(dataStore['mc_messages']);
-		
-		// Topics counter that waiting for update
-		var counter = 0;
-		
-		// Updated topics counter
-		var completedCounter = 0;
-		
-		// Count topics that waiting for update
-		for(key = 0; key < messages.length; key++) {
-			
-			// Get current timestamp
-			var time = Math.round(new Date().getTime() / 1000);
-			
-			// Check last searched state
-			if(time > messages[key].checked + 60 * 15) {
-				counter++;
-			}
-		}
-		
-		// Remove session cookie if theres any topic to be updated
-		if(counter > 0) {
-			message_center.removeSessionCookie();
-		}
 		
 		// Iterate over the posts
 		for(key = 0; key < messages.length; key++) {
@@ -2177,21 +2136,13 @@ var message_center = {
 			}
 
 			function doAjax(messages, key) {
-			
+
 				$.ajax({
 				
-					url : 'http://www.sg.hu/listazas.php3?id=' + messages[key]['topic_id'],
+					url : 'utolso80.php?id=' + messages[key]['topic_id'],
 					mimeType : 'text/html;charset=iso-8859-2',
-					error : function() {
-				
-						// Set the completed topics counter
-						completedCounter++;
-					},
 					
 					success : function(data) {
-
-						// Set the completed topics counter
-						completedCounter++;
 
 						// Parse html response
 						var tmp = '';
@@ -2234,7 +2185,7 @@ var message_center = {
 						messages[key]['answers'] = answers;
 					
 						// Store in localStorage
-						safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
+						port.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
 						
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
@@ -2246,19 +2197,6 @@ var message_center = {
 			// Make the requests
 			doAjax(messages, key);
 		}
-		
-		// Check if the update process is completed
-		var interval = setInterval(function() {
-			//alert(completedCounter);
-			//alert(counter);
-			if(completedCounter == counter) {
-				// Restore session cookie
-				message_center.restoreSessionCookie();
-				
-				// Break the interval
-				clearInterval(interval);
-			}
-		}, 500);
 	},
 	
 	buildOwnCommentsTab : function() {
@@ -2403,6 +2341,7 @@ var message_center = {
 	}
 
 };
+
 
 function setCookie(c_name,value,exdays) {
 	var exdate=new Date();

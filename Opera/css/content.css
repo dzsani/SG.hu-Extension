@@ -387,6 +387,7 @@
 	position: relative;
 	background-color: #ddd;
 	border-radius: 5px;
+	text-align: left;
 }
 
 .ext_mc_messages.ident {
