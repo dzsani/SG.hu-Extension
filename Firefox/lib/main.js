@@ -95,11 +95,13 @@ pageMod.PageMod({
 			} else if(event.name == 'addTopicToWhitelist') {
 
 				// If the whitelist is empty
-				if(ss.storage.topic_whitelist == '') { 
+				if(ss.storage.topic_whitelist == '') {
+
 					ss.storage.topic_whitelist = event.message;
 		
 				// If the blocklist is not empty
 				} else {
+
 					var whitelist = new Array();
 						whitelist = ss.storage.topic_whitelist.split(',');
 						if(whitelist.indexOf(event.message) == -1) { 

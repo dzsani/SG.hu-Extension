@@ -2440,7 +2440,7 @@ var topic_whitelist = {
 		
 		// Get topic ID
 		var id = $('select[name="id"] option:selected').val();
-		
+
 		// Add topic to whitelist
 		if($(ele).html() == '+') {
 			
@@ -2537,7 +2537,7 @@ function extInit() {
 
 		// Get topic ID for whitelist check
 		var id = $('select[name="id"] option:selected').val();
-		
+
 		// Determining current status
 		var whitelist = new Array();
 			whitelist = dataStore['topic_whitelist'].split(',');

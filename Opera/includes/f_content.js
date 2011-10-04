@@ -2470,7 +2470,7 @@ function extInit() {
 
 		// Get topic ID for whitelist check
 		var id = $('select[name="id"] option:selected').val();
-		
+
 		// Determining current status
 		var whitelist = new Array();
 			whitelist = dataStore['topic_whitelist'].split(',');
