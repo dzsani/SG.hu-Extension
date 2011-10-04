@@ -663,9 +663,6 @@ var show_navigation_buttons = {
 				// Write data into wrapper
 				$('#ext_nav_faves_wrapper div:last-child').html(data);
 						
-				// Remove rows background
-				$('#ext_nav_faves_wrapper div:last-child .cikk-bal-etc2').css('background', 'transparent');
-						
 				// Hide topics that doesnt have unreaded messages
 				fav_show_only_unreaded.activated();
 						

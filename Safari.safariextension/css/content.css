@@ -262,6 +262,10 @@
 	display: none;
 }
 
+#ext_nav_faves_wrapper div:last-child .cikk-bal-etc2 {
+	background: none !important;
+}
+
 /* Overlay commentbox */
 .ext_hidden_layer {
 	width: 100%;
