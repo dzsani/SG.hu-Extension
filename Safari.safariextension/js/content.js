@@ -613,6 +613,50 @@ var show_navigation_buttons = {
 			topic_whitelist.execute(this);
 			
 		});
+		
+		// Create faves button
+		$('<div id="ext_mav_faves"></div>').prependTo('body');
+		
+		// Place the faves icon
+		$('#ext_mav_faves').css('background-image', 'url('+safari.extension.baseURI+'img/content/star.png)');
+		
+		// Place faves opened cotainer
+		$('<div id="ext_mav_faves_wrapper"><p id="ext_mav_faves_arrow"></p><div class="ext_faves"></div><div></div></div>').prependTo('body');
+		
+		// Create faves button event
+		$('#ext_mav_faves').toggle(
+			
+			function() {
+				
+				$.ajax({
+					url : 'ajax/kedvencdb.php',
+					mimeType : 'text/html;charset=utf-8',
+					success : function(data) {
+						
+						// Write data into wrapper
+						$('#ext_mav_faves_wrapper div:last-child').html(data);
+						
+						// Remove rows background
+						$('#ext_mav_faves_wrapper div:last-child .cikk-bal-etc2').css('background', 'transparent');
+						
+						// Hide topics that doesnt have unreaded messages
+						fav_show_only_unreaded.activated();
+						
+						// Faves: short comment marker
+						if(dataStore['short_comment_marker'] == true ) {
+							short_comment_marker.activated();
+						}
+						
+						// Show the container
+						$('#ext_mav_faves_wrapper').show();
+					}
+				});
+			},
+			
+			function() {
+				$('#ext_mav_faves_wrapper').hide();
+			}
+		);
 	},
 	
 	disabled : function() {

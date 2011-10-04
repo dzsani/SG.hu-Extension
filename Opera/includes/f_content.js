@@ -2437,7 +2437,7 @@ function extInit() {
 		}
 
 		// Faves: short comment marker
-		if(dataStore['short_comment_marker'] == 'true'&& isLoggedIn() ) {
+		if(dataStore['short_comment_marker'] == 'true' && isLoggedIn() ) {
 			short_comment_marker.activated();
 		}
 
