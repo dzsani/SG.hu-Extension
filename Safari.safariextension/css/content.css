@@ -180,7 +180,7 @@
 	position: fixed;
 	bottom: 119px;
 	left: 50px;
-	
+	opacity: 0.8;
 	font: normal normal bold 12px/14px Arial, serif;
 	background-color: #c0c0c0;
 	-webkit-border-radius: 5px;
@@ -191,6 +191,16 @@
 
 #ext_overlay_search input:nth-child(1) {
 	width: 225px;
+}
+
+#ext_overlay_search_arrow {
+	position: fixed;
+	bottom: 139px;
+	left: 30px;
+	opacity: 0.8;
+	border-color: transparent #c0c0c0 transparent transparent;
+	border-style: solid;
+	border-width: 10px;
 }
 
 #ext_whitelist {
@@ -240,7 +250,7 @@
 
 #ext_nav_faves_arrow {
 	position: fixed;
-	bottom: 64px;
+	bottom: 66px;
 	left: 30px;
 	opacity: 0.8;
 	border-color: transparent #c0c0c0 transparent transparent;

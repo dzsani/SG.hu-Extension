@@ -625,37 +625,8 @@ var show_navigation_buttons = {
 		
 		// Create faves button event
 		$('#ext_nav_faves').toggle(
-			
-			function() {
-				
-				$.ajax({
-					url : 'ajax/kedvencdb.php',
-					mimeType : 'text/html;charset=utf-8',
-					success : function(data) {
-						
-						// Write data into wrapper
-						$('#ext_nav_faves_wrapper div:last-child').html(data);
-						
-						// Remove rows background
-						$('#ext_nav_faves_wrapper div:last-child .cikk-bal-etc2').css('background', 'transparent');
-						
-						// Hide topics that doesnt have unreaded messages
-						fav_show_only_unreaded.activated();
-						
-						// Faves: short comment marker
-						if(dataStore['short_comment_marker'] == true ) {
-							short_comment_marker.activated();
-						}
-						
-						// Show the container
-						$('#ext_nav_faves_wrapper').show();
-					}
-				});
-			},
-			
-			function() {
-				$('#ext_nav_faves_wrapper').hide();
-			}
+			function() { show_navigation_buttons.showFaves(); },
+			function() { show_navigation_buttons.hideFaves(); }
 		);
 	},
 	
@@ -673,10 +644,44 @@ var show_navigation_buttons = {
 		
 		// Add class
 		clone.attr('id', 'ext_overlay_search');
+		
+		// Place arrow
+		$('<div id="ext_overlay_search_arrow"></div>').appendTo('#ext_overlay_search');
 	},
 	
 	hideSearch : function() {
 		$('#ext_overlay_search').remove();
+	},
+	
+	showFaves : function() {
+		
+		$.ajax({
+			url : 'ajax/kedvencdb.php',
+			mimeType : 'text/html;charset=utf-8',
+			success : function(data) {
+						
+				// Write data into wrapper
+				$('#ext_nav_faves_wrapper div:last-child').html(data);
+						
+				// Remove rows background
+				$('#ext_nav_faves_wrapper div:last-child .cikk-bal-etc2').css('background', 'transparent');
+						
+				// Hide topics that doesnt have unreaded messages
+				fav_show_only_unreaded.activated();
+						
+				// Faves: short comment marker
+				if(dataStore['short_comment_marker'] == true ) {
+					short_comment_marker.activated();
+				}
+						
+				// Show the container
+				$('#ext_nav_faves_wrapper').show();
+			}
+		});
+	},
+	
+	hideFaves : function() {
+		$('#ext_nav_faves_wrapper').hide();
 	}
 };
 
