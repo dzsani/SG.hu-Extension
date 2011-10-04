@@ -672,7 +672,7 @@ var show_navigation_buttons = {
 				fav_show_only_unreaded.activated();
 						
 				// Faves: short comment marker
-				if(dataStore['short_comment_marker'] == true ) {
+				if(dataStore['short_comment_marker'] == 'true' ) {
 					short_comment_marker.activated();
 				}
 						
