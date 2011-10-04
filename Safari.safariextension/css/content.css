@@ -194,9 +194,9 @@
 }
 
 #ext_overlay_search_arrow {
-	position: fixed;
-	bottom: 139px;
-	left: 30px;
+	position: absolute;
+	bottom: 19px;
+	left: -20px;
 	opacity: 0.8;
 	border-color: transparent #c0c0c0 transparent transparent;
 	border-style: solid;
@@ -249,9 +249,9 @@
 }
 
 #ext_nav_faves_arrow {
-	position: fixed;
-	bottom: 66px;
-	left: 30px;
+	position: absolute;
+	bottom: 15px;
+	left: -20px;
 	opacity: 0.8;
 	border-color: transparent #c0c0c0 transparent transparent;
 	border-style: solid;
@@ -265,6 +265,8 @@
 #ext_nav_faves_wrapper div:last-child .cikk-bal-etc2 {
 	background: none !important;
 }
+
+
 
 /* Overlay commentbox */
 .ext_hidden_layer {
