@@ -397,6 +397,10 @@
 	text-align: left;
 }
 
+.ext_mc_messages img {
+	max-width: 400px;
+}
+
 .ext_mc_messages.ident {
 	margin-left: 20px;
 	background-color: #eee;
