@@ -615,16 +615,16 @@ var show_navigation_buttons = {
 		});
 		
 		// Create faves button
-		$('<div id="ext_mav_faves"></div>').prependTo('body');
+		$('<div id="ext_nav_faves"></div>').prependTo('body');
 		
 		// Place the faves icon
-		$('#ext_mav_faves').css('background-image', 'url('+safari.extension.baseURI+'img/content/star.png)');
+		$('#ext_nav_faves').css('background-image', 'url('+safari.extension.baseURI+'img/content/star.png)');
 		
 		// Place faves opened cotainer
-		$('<div id="ext_mav_faves_wrapper"><p id="ext_mav_faves_arrow"></p><div class="ext_faves"></div><div></div></div>').prependTo('body');
+		$('<div id="ext_nav_faves_wrapper"><p id="ext_nav_faves_arrow"></p><div class="ext_faves"></div><div></div></div>').prependTo('body');
 		
 		// Create faves button event
-		$('#ext_mav_faves').toggle(
+		$('#ext_nav_faves').toggle(
 			
 			function() {
 				
@@ -634,10 +634,10 @@ var show_navigation_buttons = {
 					success : function(data) {
 						
 						// Write data into wrapper
-						$('#ext_mav_faves_wrapper div:last-child').html(data);
+						$('#ext_nav_faves_wrapper div:last-child').html(data);
 						
 						// Remove rows background
-						$('#ext_mav_faves_wrapper div:last-child .cikk-bal-etc2').css('background', 'transparent');
+						$('#ext_nav_faves_wrapper div:last-child .cikk-bal-etc2').css('background', 'transparent');
 						
 						// Hide topics that doesnt have unreaded messages
 						fav_show_only_unreaded.activated();
@@ -648,13 +648,13 @@ var show_navigation_buttons = {
 						}
 						
 						// Show the container
-						$('#ext_mav_faves_wrapper').show();
+						$('#ext_nav_faves_wrapper').show();
 					}
 				});
 			},
 			
 			function() {
-				$('#ext_mav_faves_wrapper').hide();
+				$('#ext_nav_faves_wrapper').hide();
 			}
 		);
 	},

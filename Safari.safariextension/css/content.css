@@ -209,7 +209,7 @@
 	font: normal normal bold 16px/26px Arial, serif;
 }
 
-#ext_mav_faves {
+#ext_nav_faves {
 	width: 26px;
 	height: 26px;
 	position: fixed;
@@ -223,7 +223,7 @@
 	background-position: center center;
 }
 
-#ext_mav_faves_wrapper {
+#ext_nav_faves_wrapper {
 	width: 200px;
 	min-height: 27px;
 	display: none;
@@ -238,7 +238,7 @@
 	text-align:left;
 }
 
-#ext_mav_faves_arrow {
+#ext_nav_faves_arrow {
 	position: fixed;
 	bottom: 64px;
 	left: 30px;
@@ -248,7 +248,7 @@
 	border-width: 10px;
 }
 
-#ext_mav_faves_wrapper .ext_faves {
+#ext_nav_faves_wrapper .ext_faves {
 	display: none;
 }
 
