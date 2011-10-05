@@ -666,7 +666,11 @@ var show_navigation_buttons = {
 						
 				// Write data into wrapper
 				$('#ext_nav_faves_wrapper div:last-child').html(data);
-						
+				
+				if(dataStore['jump_unreaded_messages'] == true) {
+					jump_unreaded_messages.activated();
+				}
+					
 				// Hide topics that doesnt have unreaded messages
 				fav_show_only_unreaded.activated();
 						
@@ -674,7 +678,8 @@ var show_navigation_buttons = {
 				if(dataStore['short_comment_marker'] == true ) {
 					short_comment_marker.activated();
 				}
-						
+				
+					
 				// Show the container
 				$('#ext_nav_faves_wrapper').show();
 			}
