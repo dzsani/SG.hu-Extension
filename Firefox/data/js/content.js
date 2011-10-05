@@ -627,7 +627,7 @@ var show_navigation_buttons = {
 			$('#ext_nav_faves').css('background-image', 'url(data:image/png;base64,'+faveImg+')');
 		
 			// Place faves opened cotainer
-			$('<div id="ext_nav_faves_wrapper"><p id="ext_nav_faves_arrow"></p><div class="ext_faves"></div><div></div></div>').prependTo('body');
+			$('<p id="ext_nav_faves_arrow"></p><div id="ext_nav_faves_wrapper"><div class="ext_faves"></div><div></div></div>').prependTo('body');
 		
 			// Create faves button event
 			$('#ext_nav_faves').toggle(
@@ -684,12 +684,14 @@ var show_navigation_buttons = {
 						
 				// Show the container
 				$('#ext_nav_faves_wrapper').show();
+				$('#ext_nav_faves_arrow').show();
 			}
 		});
 	},
 	
 	hideFaves : function() {
 		$('#ext_nav_faves_wrapper').hide();
+		$('#ext_nav_faves_arrow').hide();
 	}
 };
 
