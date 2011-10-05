@@ -614,20 +614,24 @@ var show_navigation_buttons = {
 			
 		});
 		
-		// Create faves button
-		$('<div id="ext_nav_faves"></div>').prependTo('body');
+		// Execute when the user is logged in
+		if(isLoggedIn()) {
 		
-		// Place the faves icon
-		$('#ext_nav_faves').css('background-image', 'url('+safari.extension.baseURI+'img/content/star.png)');
+			// Create faves button
+			$('<div id="ext_nav_faves"></div>').prependTo('body');
 		
-		// Place faves opened cotainer
-		$('<div id="ext_nav_faves_wrapper"><p id="ext_nav_faves_arrow"></p><div class="ext_faves"></div><div></div></div>').prependTo('body');
+			// Place the faves icon
+			$('#ext_nav_faves').css('background-image', 'url('+safari.extension.baseURI+'img/content/star.png)');
 		
-		// Create faves button event
-		$('#ext_nav_faves').toggle(
-			function() { show_navigation_buttons.showFaves(); },
-			function() { show_navigation_buttons.hideFaves(); }
-		);
+			// Place faves opened cotainer
+			$('<div id="ext_nav_faves_wrapper"><p id="ext_nav_faves_arrow"></p><div class="ext_faves"></div><div></div></div>').prependTo('body');
+		
+			// Create faves button event
+			$('#ext_nav_faves').toggle(
+				function() { show_navigation_buttons.showFaves(); },
+				function() { show_navigation_buttons.hideFaves(); }
+			);
+		}
 	},
 	
 	disabled : function() {
