@@ -1994,6 +1994,7 @@ var wysiwyg_editor = {
 
 };
 
+
 var message_center = {
 	
 	init : function() {
@@ -2100,12 +2101,49 @@ var message_center = {
 		$('.ext_mc_tabs').eq(n).find('.hasab-head-b').removeClass('hasab-head-b').addClass('hasab-head-o');
 		
 		// Store last selected tag for initial status
-		self.postMessage({ name : "setMCSelectedTab", message : n });
+		self.postMessage({ name : "setMCSelectedTab", message : n });
 	},
 	
 	log : function() {
 		
 		// Check the latest comment for getting the comment ID
+		if(getCookie('updateComment')) {
+
+			// Get messages for MC
+			var messages = JSON.parse(dataStore['mc_messages']);
+			
+			// Get the comment ID
+			var id = getCookie('updateComment');
+			
+			// Get message contents
+			var message = $('.topichead a:contains("#'+id+'")').closest('center').find('.maskwindow').html();
+
+			// Filter out html-s
+			$.each([
+				[/<div align="RIGHT">([\s\S]*?)<\/div>/img, '']
+			], function(index, item) {
+				message = message.replace(item[0], item[1]);
+			});	
+			
+			for(c = 0; c < messages.length; c++) {
+				if(messages[c]['comment_id'] == id) {
+				
+					// Update message content
+					messages[c]['message'] = message;
+				}
+			}
+
+			// Store new messages object in LocalStorage
+			self.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
+			
+			// Store in dataStore var
+			dataStore['mc_messages'] = JSON.stringify(messages);
+			
+			// Remove marker for getting an ID
+			removeCookie('updateComment');
+		}
+
+		// Check for update marker
 		if(getCookie('getCommentID') == '1') {
 
 			// Get messages for MC
@@ -2114,8 +2152,21 @@ var message_center = {
 			// Get the comment ID
 			var id = $('.topichead:first a:last').html().match(/\d+/g);
 			
+			// Get message contents
+			var message = $('.topichead:first').next().find('.maskwindow').html();
+			
+			// Filter out html-s
+			$.each([
+				[/<div align="RIGHT">([\s\S]*?)<\/div>/img, '']
+			], function(index, item) {
+				message = message.replace(item[0], item[1]);
+			});	
+			
 			// Store the ID for the latest message
 			messages[0]['comment_id'] = id[0];
+
+			// Update message content
+			messages[0]['message'] = message;
 
 			// Store new messages object in LocalStorage
 			self.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
@@ -2126,60 +2177,74 @@ var message_center = {
 			// Remove marker for getting an ID
 			removeCookie('getCommentID');
 		}
-		
+	
 		// Catch comment event
-		$('form[name="newmessage"]').submit(function(e) {
+		if(!document.location.href.match('szerkcode')) {
+		
+			$('form[name="newmessage"]').submit(function() {
 
-			// Get topic name
-			var topic_name = $('select[name="id"] option:selected').text();
+				// Get topic name
+				var topic_name = $('select[name="id"] option:selected').text();
 			
-			// Get topic ID
-			var topic_id	= $('select[name="id"] option:selected').val();
+				// Get topic ID
+				var topic_id	= $('select[name="id"] option:selected').val();
 			
-			// Get comment time
-			var time = Math.round(new Date().getTime() / 1000);
+				// Get comment time
+				var time = Math.round(new Date().getTime() / 1000);
 			
-			// Get message
-			var message = $(this).find('textarea').val();
+				// Get message
+				var message = $(this).find('textarea').val();
 			
-			// Build the message object
-			var tmp = {
+				// Build the message object
+				var tmp = {
 			
-				topic_name : topic_name,
-				topic_id : topic_id,
-				time : time,
-				message : message,
-				checked : time,
-				answers : new Array()
-			};
+					topic_name : topic_name,
+					topic_id : topic_id,
+					time : time,
+					message : message,
+					checked : time,
+					answers : new Array()
+				};
 			
 			
-			// If theres no previous messages
-			if(dataStore['mc_messages'] == '') {
-				var messages = new Array();
-					messages.push(tmp);
+				// If theres no previous messages
+				if(dataStore['mc_messages'] == '') {
+					var messages = new Array();
+						messages.push(tmp);
 			
-			// There is other messages
-			} else {
+				// There is other messages
+				} else {
 			
-				// Get the previous messages from localStorage
-				var messages = JSON.parse(dataStore['mc_messages']);
+					// Get the previous messages from localStorage
+					var messages = JSON.parse(dataStore['mc_messages']);
 				
-				// Unshift the new message
-				messages.unshift(tmp);
+					// Unshift the new message
+					messages.unshift(tmp);
 				
-				// Check for max entries
-				if(messages.length > 10) {
-					messages.splice(9);
+					// Check for max entries
+					if(messages.length > 10) {
+						messages.splice(9);
+					}
 				}
-			}
 			
-			// Store in localStorage
-			self.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
+				// Store in localStorage
+				self.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
 			
-			// Set a marker for gettni the comment ID
-			setCookie('getCommentID', '1', 1);	
-		});
+				// Set a marker for gettni the comment ID
+				setCookie('getCommentID', '1', 1);	
+			});
+		} else {
+			
+			$('form[name="newmessage"]').submit(function() {
+			
+				// Get comment ID
+				var comment_id = parseInt($('.std1:first').find('b').html().match(/\d+/g));
+				
+				// Set marker to be update this comment
+				setCookie('updateComment', comment_id, 1);	
+			});
+		
+		}
 	},
 	
 	search : function() {
@@ -2600,7 +2665,12 @@ function extInit() {
 		
 			// Monitor the new comments notification
 			monitorNewCommentsNotification();
-		
+
+			// Message Center
+			if(dataStore['message_center'] == true) {
+				message_center.topic();
+			}
+	
 			// gradual_comments
 			if(dataStore['threaded_comments'] == true) {
 				threaded_comments.activated();
@@ -2649,11 +2719,6 @@ function extInit() {
 			// WYSIWYG Editor
 			if(dataStore['wysiwyg_editor'] == true) {
 				wysiwyg_editor.activated();
-			}
-
-			// Message Center
-			if(dataStore['message_center'] == true) {
-				message_center.log();
 			}
 
 			// Openable spoiler blocks
