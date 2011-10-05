@@ -236,6 +236,7 @@
 #ext_nav_faves_wrapper {
 	width: 200px;
 	min-height: 27px;
+	max-height: 500px;
 	display: none;
 	padding: 10px;
 	position: fixed;
@@ -246,6 +247,7 @@
 	opacity: 0.8;
 	z-index: 105;
 	text-align:left;
+	overflow-y: auto;
 }
 
 #ext_nav_faves_arrow {
