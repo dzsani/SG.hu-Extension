@@ -2008,7 +2008,7 @@ var message_center = {
 		// HTML code to insert
 		var html = '';
 		
-			html += '<tr>';
+			html += '<tr id="ext_mc_wrapper">';
 				html += '<td colspan="4">';
 					html += '<div>';
 						html += '<div class="b-h-o-head ext_mc_tabs">';
@@ -2030,6 +2030,8 @@ var message_center = {
 			html += '</tr>';
 		
 		// Insert tabs
+		$('.cikk-2').closest('td').css({ 'padding-top' :  20 });
+		
 		$('.cikk-2').closest('tr').before(html);
 		
 		// Create DIV for each pages

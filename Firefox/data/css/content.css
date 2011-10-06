@@ -427,6 +427,10 @@
 
 /* MESSAGE CENTER */
 
+#ext_mc_wrapper {
+	position: absolute;
+}
+
 .ext_mc_tabs {
 	float: left;
 	cursor: pointer;
