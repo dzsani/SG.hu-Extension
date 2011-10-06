@@ -1619,7 +1619,7 @@ var custom_blocks = {
 		if($('#'+id).find('.b-h-o-head').length == 0) {
 		
 			// Move the block
-			$('#'+id).prependTo('table:eq(3) td:eq(0)');
+			$('#'+id).prependTo('#ext_left_sidebar');
 
 			// Maintain style settings
 			$('#ext_left_sidebar').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
@@ -1637,7 +1637,7 @@ var custom_blocks = {
 		if($('#'+id).find('.b-h-b-head').length == 0) {
 		
 			// Move the block
-			$('#'+id).prependTo('table:eq(3) td:eq(2) table:first tr > td:eq(2)');
+			$('#'+id).prependTo('#ext_right_sidebar');
 
 			// Maintain style settings
 			$('#ext_right_sidebar').find('.b-h-o-head').removeClass('b-h-o-head').addClass('b-h-b-head');

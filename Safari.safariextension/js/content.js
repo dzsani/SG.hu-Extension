@@ -1609,7 +1609,7 @@ var custom_blocks = {
 		if($('#'+id).find('.b-h-o-head').length == 0) {
 		
 			// Move the block
-			$('#'+id).prependTo('table:eq(3) td:eq(0)');
+			$('#'+id).prependTo('#ext_left_sidebar');
 
 			// Maintain style settings
 			$('#ext_left_sidebar').find('.b-h-b-head').removeClass('b-h-b-head').addClass('b-h-o-head');
