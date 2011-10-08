@@ -1278,20 +1278,82 @@ var threaded_comments = {
 	}
 };
 
-function monitorNewCommentsNotification() {
+
+var fetch_new_comments_in_topic = {
 	
-	setInterval(function(){
+	counter : 0,
+	
+	init : function() {
 		
-		if($('#ujhszjott a').length > 0) {	
+		// Monitor new comments nofification
+		setInterval(function(){
 		
-			var topic_url = $('#ujhszjott a').attr('href').substring(0, 27);
-			var comment_c = $('#ujhszjott a').text().match(/\d+/g);
+			if($('#ujhszjott').css('display') != 'none') {	
+				fetch_new_comments_in_topic.rewrite();
+				
+				if(dataStore['fetch_new_comments'] == 'true') {
+					fetch_new_comments_in_topic.fetch();
+				}
+			}
+		}, 1000);
+	},
+	
+	rewrite : function() {
+	
+		var topic_url = $('#ujhszjott a').attr('href').substring(0, 27);
+		var comment_c = $('#ujhszjott a').text().match(/\d+/g);
 			
-			$('#ujhszjott a').attr('href',  topic_url + '&newmsg=' + comment_c);
-		}
+		$('#ujhszjott a').attr('href',  topic_url + '&newmsg=' + comment_c);
+	},
 	
-	}, 1000);
-}
+	fetch : function() {
+		
+		// Check the page number
+		var page = parseInt($('.lapozo:last span.current:first').html());
+		
+		// Do nothing if we not in the first page
+		if(page != 1) {
+			return false;
+		}
+		
+		// Get new comments counter
+		var newmsg = parseInt($('#ujhszjott a').text().match(/\d+/g));
+
+		// Get the topik ID
+		var id = $('select[name="id"] option:selected').val();
+		
+		// Get topic contents
+		$.ajax({
+			url : 'listazas.php3?id=' + id,
+			mimeType : 'text/html;charset=iso-8859-2',
+			success : function(data) {
+				
+				// Increase the counter
+				fetch_new_comments_in_topic.counter++;
+				
+				// Append horizonal line
+				if(fetch_new_comments_in_topic.counter == 1) {
+					$('<hr>').insertAfter( $('.std1:first').parent() ).addClass('ext_unreaded_hr');
+				}
+				
+				// Parse the content
+				var tmp = $(data);
+				
+				// Fetch new comments
+				var comments = $(tmp).find('.topichead:lt('+newmsg+')').closest('center');
+				
+				// Append new comments
+				comments.each(function() {
+					$(this).insertAfter( $('.std1:first').parent() );
+				});
+				
+				// Finally, remove the notification
+				$('#ujhszjott').css('display', 'none');
+			}
+		})
+	}
+};
+
 
 var show_mentioned_comments = {
 
@@ -2640,7 +2702,7 @@ function extInit() {
 			setPredefinedVars();
 		
 			// Monitor the new comments notification
-			monitorNewCommentsNotification();
+			fetch_new_comments_in_topic.init();
 
 			// Message Center
 			if(dataStore['message_center'] == 'true') {
