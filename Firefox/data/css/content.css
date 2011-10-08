@@ -479,6 +479,13 @@
 	text-decoration: none;
 }
 
+.ext_mc_messages p a.ext_mc_jump_to {
+	margin-left: 10px;
+	font: normal normal normal 12px/16px Arial, serif;
+	text-decoration: none;
+	color: #999;
+}
+
 .ext_mc_messages a {
 	color: #666;
 	font: normal normal bold 12px/16px Arial, serif;

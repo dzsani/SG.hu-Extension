@@ -1,0 +1,126 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+</head>
+<body>
+
+<!--
+
+<form method="post">
+	<input type="TEXT" size="50" name="title" value="SG.hu bővítmény">
+	<textarea name="topic" cols="50" rows="6"></textarea>
+<br><br><input type="hidden" name="ellenorzokod" value="ce89a522f6ec2c0d24a50775893a269e"><input type="hidden" name="extraflags" value="1"><br><input type="submit" value="Mehet!">&nbsp;<input type="reset" value="Vissza"><input type="hidden" name="id" value="1308399664"><input type="hidden" name="action" value="tkar"><input type="hidden" name="status" value="1"><input type="hidden" name="identid" value="57481-67515-1315241924">
+</form>
+
+-->
+
+<style type="text/css">
+#ext_wrapper {
+	width: 750px;
+	margin: 10px auto;
+	padding: 10px;
+	position: relative;
+	background-color: white;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-webkit-box-shadow: 0px 0px 5px 1px #6F7A87;
+	-moz-box-shadow: 0px 0px 5px 1px #6F7A87;
+	box-shadow: 0px 0px 5px 1px #6F7A87;
+	filter: progid:DXImageTransform.Microsoft.Glow(Color=#6F7A87,Strength=4);
+	text-align: left !important;
+}
+
+#ext_branches a, #ext_branches span {
+	font: normal normal bold 13px/16px Arial, serif;
+	text-shadow: #999 1px 1px 1px;
+	margin-right: 10px;
+}
+
+.ext_download {
+	float: right;
+}
+
+
+#ext_desc {
+	margin-top: 10px;
+	text-align: justify;
+	font: normal normal normal 12px/16px Arial, serif;
+	color: #999;
+}
+
+.ext_h3 {
+	font: normal normal normal 16px/18px Arial, serif;
+	text-transform: uppercase;
+	color: #ccc;
+}
+
+#ext_bugpeport_anchor {
+	color: red;
+	margin-left: 40px;
+}
+
+#ext_bugreport_iframe {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	z-index: 900;
+	border: 0px;
+}
+</style>
+
+<script type="text/javascript" src="http://bugtracker.dev.kreatura.hu/static/js/topic.js"></script>
+
+<div id="ext_wrapper">
+	<div id="ext_branches">
+		<span>Branches:</span>
+		<a href="https://github.com/dzsani/SG.hu-Extension" target="_blank">Master</a>
+		<a href="https://github.com/dzsani/SG.hu-Extension/tree/develop" target="_blank">Develop</a>
+		<a href="https://github.com/dzsani/SG.hu-Extension/tree/nightly" target="_blank">Nightly</a>
+		
+		<a href="#" id="ext_bugpeport_anchor" class="ext_download">Hibanapló/Hibajelentés</a>
+		
+		<a href="https://github.com/downloads/dzsani/SG.hu-Extension/SG_Safari_Ext_v1.6.0.safariextz" class="ext_download">Safari</a>
+		<a href="https://addons.opera.com/en/addons/extensions/details/sg-forum-plus/" target="_blank" class="ext_download">Opera</a>
+		<a href="https://addons.mozilla.org/en-US/firefox/addon/sg-forum-plus/" target="_blank" class="ext_download">Firefox</a>
+		<a href="https://chrome.google.com/webstore/detail/kjjpmpppganmopmjbkkbkjgglglejnll" target="_blank" class="ext_download">Chrome</a>
+		<span class="ext_download">Letöltés:</span>
+	</div>
+	<div id="ext_desc">
+		<h3 class="ext_h3">Fejlesztői változatok:</h3>
+		<p>
+			Három fejlesztői ág létezik: Master, Develop, Nightly. Ezeket hívjuk branchoknak. 
+			A Master mindig az alaposan letesztelt, hiba nélküli változatot takarja. 
+			A Develop a stabilnak jelölt, de még az alapos teszten át nem ment verziót takarja.
+			 A Nightly-ban találjátok mindig a legfrissebb verziót, ami sok újdonságot hoz magával, 
+			 azonban sok hibát is tartalmazhat. Mindenki saját belátása szerint válassza a neki kellőt. 
+			 Ha nem fontos hogy azonnal hozzájuss a legújabb funkciókhoz akkor a Master-t válaszd. 
+			 Ha nem tudsz várni, akkor a Nightly is nagy valószínűséggel használható.
+		</p>
+		<h3 class="ext_h3">Telepítés:</h3>
+		<p>
+			A fejlesztői változatok telepítési útmutatóját a GitHub README fájljában találjátok.
+			A Chrome verzió egyszerűen telepíthető a Webstoreból, ez később automatikusan frissíti is magát.
+			Az Opera és Safari verzióra elég duplán kattintani/futtatni az állományt, a böngészők felismerik és automatikusan telepítik a bővítményt.
+			A Firefox verziónál az XPI állományt rá kell húzni a böngésző ablakára, majd ezután települ az is.
+		</p>
+		<h3 class="ext_h3">Egyéb megjegyzések:</h3>
+		<p>
+			Egyelőre a Chrome kivételével a többi böngészőhöz szánt extension nem frissíti magát automatikusan.
+			Ebben a topikban mindig be lesz jelentve ha új verzió született, ezt kézzel kell frissítenie mindenkinek.
+			A későbbiek folyamán ez változhat, van terv arra, hogy a többi böngésző hivatalos Extension Galériájába 
+			is felkerüljön a fejlesztés..
+		</p>
+		<h3 class="ext_h3">Firefox kompatibilitás</h3>
+		<p>
+			A Firefox port kompatibilitása 4.0-tól 8.*-ig terjed. Régebbi (3.*) verziók nem lesznek támogatva.
+			Észben kell tartani, hogy noha a támogatás kiterjed a béta változatokra is, mindig az aktuális stabil 
+			kiadás alatt lesz tesztelve a bővítmény. Béta és Nightly verziók támogatása csak azért lesz jelen, hogy
+			senki se szenvedjen hiányt, ugyanakkor ezek a változatokban előfordulhatnak nem várt hibák.
+		</p>
+	</div>
+</div>
+
+</body>
+</html>

@@ -2055,6 +2055,8 @@ var message_center = {
 		setInterval(function() {
 			message_center.search();
 		}, 300000);
+		
+		message_center.jump();
 	},
 	
 	tab : function(n) {
@@ -2078,7 +2080,34 @@ var message_center = {
 		// Store last selected tag for initial status
 		safari.self.tab.dispatchMessage("setMCSelectedTab", n);
 	},
-	
+
+	jump : function() {
+		
+		// Check for message ID in the url
+		// Do nothing if not find any comment id
+		if(!document.location.href.match('#komment')) {
+			return false;
+		}
+		
+		// Fetch comment ID
+		var url = document.location.href.split('#komment=');
+		var id = url[1];
+		
+		// Find the comment in DOM
+		var target = $('.topichead a:contains("#'+id+'")').closest('center');
+
+		// Target offsets
+		var windowHalf = $(window).height() / 2;
+		var targetHalf = $(target).outerHeight() / 2;
+		var targetTop = $(target).offset().top;
+		var targetOffset = targetTop - (windowHalf - targetHalf);
+		
+		// Scroll to target element
+		$('body').delay(1000).animate({ scrollTop : targetOffset}, 500, function() {
+			$(target).css({ border: '2px solid red', margin : '10px 0px', 'padding-bottom' : 10 });
+		});
+	},
+
 	log : function() {
 		
 		// Check the latest comment for getting the comment ID
@@ -2240,7 +2269,7 @@ var message_center = {
 			
 			// Check last searched state
 			if(time < messages[key].checked + 60 * 10) {
-				continue;
+				//continue;
 			}
 
 			function doAjax(messages, key) {
@@ -2274,8 +2303,10 @@ var message_center = {
 							
 							var message = $(TmpAnswers[c]).find('.maskwindow').html();
 
+							var id = $(TmpAnswers[c]).find('.topichead a:last').html().match(/\d+/g)[0];
 							
 							var AD = {
+								id : id,
 								author : nick,
 								message : message
 							};
@@ -2434,7 +2465,10 @@ var message_center = {
 			for(a = 0; a < messages[c]['answers'].length; a++) {
 			
 				html += '<div class="ext_mc_messages ident">';
-					html += '<p>'+messages[c]['answers'][a]['author']+'</p>';
+					html += '<p>';
+						html += ''+messages[c]['answers'][a]['author']+'';
+						html += ' - <a href="http://www.sg.hu/listazas.php3?id='+messages[c]['topic_id']+'#komment='+messages[c]['answers'][a]['id']+'" class="ext_mc_jump_to">ugrás a hozzászólásra</a>';
+					html +='</p>';
 					html += '<div>'+messages[c]['answers'][a]['message']+'</div>';
 				html += '</div>';
 			}
