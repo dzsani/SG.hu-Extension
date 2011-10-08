@@ -77,7 +77,7 @@ var jump_unreaded_messages = {
 				var page = Math.ceil( newMsg / 80 );
 				
 				// Rewrite the url
-				$(this).attr('href', $(this).attr('href') + '&order=reverse&index='+page+'&newmsg='+newMsg+'');
+				$(this).attr('href', $(this).attr('href') + '&order=reverse&index='+page+'#newmsg='+newMsg+'');
 			
 			// Remove newmsg var from link
 			} else if( $(this).attr('href').indexOf('&order') != -1) {
@@ -105,7 +105,7 @@ var jump_unreaded_messages = {
 	topic : function() {
 	
 		// Get new messages counter
-		var newMsg = document.location.href.split('&newmsg=')[1];
+		var newMsg = document.location.href.split('#newmsg=')[1];
 		
 		// Return if there is not comment counter set
 		if(typeof newMsg == "undefined" || newMsg == '' || newMsg == 0) {
@@ -137,7 +137,10 @@ var jump_unreaded_messages = {
 			
 		// Remove original hr tag
 		$('a[name=pirosvonal]').remove();
-				
+		
+		// Reset hash
+		window.location.hash = '';
+		
 		// Call the jump method with 1 sec delay
 		setTimeout(function(){ 
 			jump_unreaded_messages.jump();
