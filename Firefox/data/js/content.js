@@ -1413,6 +1413,11 @@ var show_mentioned_comments = {
 			
 			// Add a special class to not run again this comment
 			$(this).addClass('checked');
+
+			// Remove links from signature
+			if($(this).find('.msg-copyright').length > 0) {
+				$(this).find('.msg-copyright').html( $(this).find('.msg-copyright').html().replace(/<span class="ext_mentioned">(.*?)<\/span>/,"$1") );
+			}
 		});
 		
 		// Attach click events
