@@ -2722,7 +2722,7 @@ function extInit() {
 		}
 		
 		// Message center
-		if(dataStore['message_center'] == true) {
+		if(dataStore['message_center'] == true && isLoggedIn() ) {
 			message_center.init();
 		}
 
@@ -2750,7 +2750,7 @@ function extInit() {
 			fetch_new_comments_in_topic.init();
 
 			// Message Center
-			if(dataStore['message_center'] == true) {
+			if(dataStore['message_center'] == true && isLoggedIn() ) {
 				message_center.topic();
 			}
 		
