@@ -1295,6 +1295,7 @@ var threaded_comments = {
 var fetch_new_comments_in_topic = {
 	
 	counter : 0,
+	last_new_msg : 0,
 	
 	init : function() {
 		
@@ -1331,7 +1332,19 @@ var fetch_new_comments_in_topic = {
 		
 		// Get new comments counter
 		var newmsg = parseInt($('#ujhszjott a').text().match(/\d+/g));
-
+		
+		// Check last new msg, do nothing if the two are the same
+		if(newmsg < fetch_new_comments_in_topic.last_new_msg + 1) {
+			$('#ujhszjott').css('display', 'none');
+			return false;
+		}
+		
+		// Update the newmsg
+		var new_comments = newmsg - fetch_new_comments_in_topic.last_new_msg;
+		
+		// Update the last new msg number
+		fetch_new_comments_in_topic.last_new_msg = newmsg;
+		
 		// Get the topik ID
 		var id = $('select[name="id"] option:selected').val();
 		
@@ -1353,7 +1366,7 @@ var fetch_new_comments_in_topic = {
 				var tmp = $(data);
 				
 				// Fetch new comments
-				var comments = $(tmp).find('.topichead:lt('+newmsg+')').closest('center');
+				var comments = $(tmp).find('.topichead:lt('+new_comments+')').closest('center');
 				
 				// Append new comments
 				comments.each(function() {
@@ -1366,6 +1379,7 @@ var fetch_new_comments_in_topic = {
 		})
 	}
 };
+
 
 
 var show_mentioned_comments = {
