@@ -2201,7 +2201,11 @@ var message_center = {
 		// Fetch comment ID
 		var url = document.location.href.split('#komment=');
 		var id = url[1];
-		
+
+		// Reset hash
+		window.location.hash = '';
+
+
 		// Find the comment in DOM
 		var target = $('.topichead a:contains("#'+id+'")').closest('center');
 

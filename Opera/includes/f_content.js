@@ -148,7 +148,7 @@ var jump_unreaded_messages = {
 		$('a[name=pirosvonal]').remove();
 
 		// Url to rewrite
-		var url = document.location.href.substring(0, 66);
+		var url = document.location.href.replace(/&newmsg=\d+/gi, "");
 
 		// Update the url to avoid re-jump
 		window.history.replaceState({ page : url }, '', url);
@@ -2137,6 +2137,9 @@ var message_center = {
 		// Fetch comment ID
 		var url = document.location.href.split('#komment=');
 		var id = url[1];
+		
+		// Reset hash
+		window.location.hash = '';
 		
 		// Find the comment in DOM
 		var target = $('.topichead a:contains("#'+id+'")').closest('center');
