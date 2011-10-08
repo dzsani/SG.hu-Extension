@@ -2027,7 +2027,7 @@ var message_center = {
 		// HTML code to insert
 		var html = '';
 		
-			html += '<tr>';
+			html += '<tr id="ext_message_center_wrapper" style="display:none;">';
 				html += '<td colspan="4">';
 					html += '<div>';
 						html += '<div class="b-h-o-head ext_mc_tabs">';

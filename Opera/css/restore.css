@@ -23,3 +23,7 @@
 .ext_comments_for_me_indicator {
 	display: block !important;
 }
+
+#ext_message_center_wrapper {
+	display: table-row !important;
+}
