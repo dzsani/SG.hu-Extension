@@ -140,6 +140,7 @@
 
 /* navigation buttons */
 #ext_scrolltop {
+	display: block !important;
 	width: 26px;
 	height: 26px;
 	position: fixed;
@@ -153,6 +154,7 @@
 }
 
 #ext_back {
+	display: block !important;
 	width: 26px;
 	height: 26px;
 	position: fixed;
@@ -166,6 +168,7 @@
 }
 
 #ext_search {
+	display: block !important;
 	width: 26px;
 	height: 26px;
 	position: fixed;
@@ -211,6 +214,7 @@
 }
 
 #ext_whitelist {
+	display: block !important;
 	width: 26px;
 	height: 26px;
 	position: fixed;
@@ -227,6 +231,7 @@
 }
 
 #ext_nav_faves {
+	display: block !important;
 	width: 26px;
 	height: 26px;
 	position: fixed;
@@ -329,6 +334,7 @@
 
 /* Comments for me indicator */
 .ext_comments_for_me_indicator {
+	display: block !important;
 	width: 12px;
 	height: 12px;
 	position: absolute;
@@ -426,6 +432,10 @@
 }
 
 /* MESSAGE CENTER */
+
+#ext_message_center_wrapper {
+	display: table-row !important;
+}
 
 .ext_mc_tabs {
 	float: left;
