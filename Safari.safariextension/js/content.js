@@ -1254,7 +1254,7 @@ var threaded_comments = {
 	
 		// Set .topichead class to message headers
 		if(document.location.href.match('cikkek')) {
-			$('.b-h-o-head').addClass('topichead');
+			$('.b-h-o-head').attr('class', 'b-h-o-head topichead');
 			$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
 			$('.b-h-o-head .msg-dateicon a').css('color', '#444');
 		}
@@ -2156,6 +2156,26 @@ var message_center = {
 		message_center.jump();
 	},
 	
+	article : function() {
+		
+		$('.b-h-o-head').attr('class', 'b-h-o-head topichead');
+		$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
+		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
+		
+		// Set-up post logger
+		message_center.log();
+		
+		// Start searching ..
+		message_center.search();
+		
+		// Set auto-search in 5 mins
+		setInterval(function() {
+			message_center.search();
+		}, 300000);
+		
+		message_center.jump();	
+	},
+	
 	tab : function(n) {
 		
 		// Hide all pages
@@ -2219,16 +2239,9 @@ var message_center = {
 			// Get the comment ID
 			var id = getCookie('updateComment');
 			
-			if(document.location.href.match('cikkek')) {
+			// Get message contents
+			var message = $('.topichead a:contains("#'+id+'")').closest('center').find('.maskwindow').html();
 
-				// Get message contents
-				var message = $('.hasab-head-o a:contains("#'+id+'")').closest('center').find('.maskwindow').html();
-			} else {
-			
-				// Get message contents
-				var message = $('.topichead a:contains("#'+id+'")').closest('center').find('.maskwindow').html();
-			}
-			
 			// Filter out html-s
 			$.each([
 				[/<div align="RIGHT">([\s\S]*?)<\/div>/img, '']
@@ -2259,24 +2272,13 @@ var message_center = {
 
 			// Get messages for MC
 			var messages = JSON.parse(dataStore['mc_messages']);
-			
-			if(document.location.href.match('cikkek')) {
-			
-				// Get the comment ID
-				var id = $('form[name="newmessage"] .b-h-o-head a:last').next().html().match(/\d+/g);
-			
-				// Get message contents
-				var message = $('form[name="newmessage"]').next().find('.maskwindow').html();
-			
-			} else {
 
-				// Get the comment ID
-				var id = $('.topichead:first a:last').html().match(/\d+/g);
+			// Get the comment ID
+			var id = $('.topichead:first a:last').html().match(/\d+/g);
 			
-				// Get message contents
-				var message = $('.topichead:first').next().find('.maskwindow').html();
-			}
-	
+			// Get message contents
+			var message = $('.topichead:first').next().find('.maskwindow').html();
+
 			// Filter out html-s
 			$.each([
 				[/<div align="RIGHT">([\s\S]*?)<\/div>/img, '']
@@ -2747,7 +2749,7 @@ function extInit() {
 
 		// Message Center
 		if(dataStore['message_center'] == true && isLoggedIn() ) {
-			message_center.topic();
+			message_center.article();
 		}
 
 		// Threaded_comments
