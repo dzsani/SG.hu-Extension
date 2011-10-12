@@ -20,9 +20,14 @@ function setPredefinedVars() {
 }
 
 function isLoggedIn() {
-
+	
+	// Article page
+	if(document.location.href.match('cikkek')) {
+		return $('form[name="newmessage"]').length ? true : false;
+	
+	
 	// Forum main page
-	if(document.location.href.match('forum.php')) {
+	} else if(document.location.href.match('forum.php')) {
 		return $('.std1').length ? true : false;
 	
 	// Topic page
@@ -33,8 +38,13 @@ function isLoggedIn() {
 }
 
 function getUserName() {
+
+	// Article page
+	if(document.location.href.match('cikkek')) {
+		return $('#msg-head b a').html();
+
 	// Forum main page
-	if(document.location.href.match('forum.php')) {
+	} else if(document.location.href.match('forum.php')) {
 		return $('.std1 b').text().match(/Szia (.*)!/)[1];
 	
 	// Topic page
@@ -2240,8 +2250,15 @@ var message_center = {
 			// Get the comment ID
 			var id = getCookie('updateComment');
 			
-			// Get message contents
-			var message = $('.topichead a:contains("#'+id+'")').closest('center').find('.maskwindow').html();
+			if(document.location.href.match('cikkek')) {
+
+				// Get message contents
+				var message = $('.hasab-head-o a:contains("#'+id+'")').closest('center').find('.maskwindow').html();
+			} else {
+			
+				// Get message contents
+				var message = $('.topichead a:contains("#'+id+'")').closest('center').find('.maskwindow').html();
+			}
 
 			// Filter out html-s
 			$.each([
@@ -2274,11 +2291,22 @@ var message_center = {
 			// Get messages for MC
 			var messages = JSON.parse(dataStore['mc_messages']);
 			
-			// Get the comment ID
-			var id = $('.topichead:first a:last').html().match(/\d+/g);
+			if(document.location.href.match('cikkek')) {
 			
-			// Get message contents
-			var message = $('.topichead:first').next().find('.maskwindow').html();
+				// Get the comment ID
+				var id = $('form[name="newmessage"] .b-h-o-head a:last').next().html().match(/\d+/g);
+			
+				// Get message contents
+				var message = $('form[name="newmessage"]').next().find('.maskwindow').html();
+			
+			} else {
+
+				// Get the comment ID
+				var id = $('.topichead:first a:last').html().match(/\d+/g);
+			
+				// Get message contents
+				var message = $('.topichead:first').next().find('.maskwindow').html();
+			}
 			
 			// Filter out html-s
 			$.each([
@@ -2308,11 +2336,25 @@ var message_center = {
 		
 			$('form[name="newmessage"]').submit(function() {
 
-				// Get topic name
-				var topic_name = $('select[name="id"] option:selected').text();
+				// Article
+				if(document.location.href.match('cikkek')) {
+
+					// Get topic name
+					var topic_name = $('.cikk-title:first').html();
 			
-				// Get topic ID
-				var topic_id	= $('select[name="id"] option:selected').val();
+					// Get topic ID
+					var topic_id	= $('.std2:last a').attr('href');
+						topic_id	= topic_id.split('?id=')[1];
+				
+				// Topic
+				} else {
+				
+					// Get topic name
+					var topic_name = $('select[name="id"] option:selected').text();
+			
+					// Get topic ID
+					var topic_id	= $('select[name="id"] option:selected').val();
+				}
 			
 				// Get comment time
 				var time = Math.round(new Date().getTime() / 1000);
@@ -2715,9 +2757,34 @@ var topic_whitelist = {
 };
 
 function extInit() {
+
+	// SG index.php
+	if(document.location.href == 'http://www.sg.hu/' || document.location.href.match('index.php')) {
 	
+		// Settings
+		cp.init(3);
+
+
+	// Articles
+	} else if(document.location.href.match('cikkek')) {
+	
+		// Settings
+		cp.init(2);
+
+		// setPredefinedVars
+		setPredefinedVars();
+
+		// Monitor the new comments
+		fetch_new_comments_in_topic.init();
+
+		// Message Center
+		if(dataStore['message_center'] == true && isLoggedIn() ) {
+			message_center.topic();
+		}
+
 	// FORUM.PHP
-	if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
+	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
+
 
 		// Settings
 		cp.init(1);
