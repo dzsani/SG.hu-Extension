@@ -2892,7 +2892,9 @@ function extInit() {
 		}
 
 		// Show navigation buttons
-		show_navigation_buttons.activated();
+		if(dataStore['show_navigation_buttons'] == 'true') {
+			show_navigation_buttons.activated();
+		}
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
@@ -3001,7 +3003,9 @@ function extInit() {
 			}
 		
 			// Scroll to page top button
-			show_navigation_buttons.activated();
+			if(dataStore['show_navigation_buttons'] == 'true') {
+				show_navigation_buttons.activated();
+			}
 
 		
 			// Animated replyto

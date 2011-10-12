@@ -2846,7 +2846,9 @@ function extInit() {
 		}
 
 		// Show navigation buttons
-		show_navigation_buttons.activated();
+		if(dataStore['show_navigation_buttons'] == 'true') {
+			show_navigation_buttons.activated();
+		}
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
@@ -2956,7 +2958,9 @@ function extInit() {
 			}
 		
 			// Scroll to page top button
-			show_navigation_buttons.activated();
+			if(dataStore['show_navigation_buttons'] == 'true') {
+				show_navigation_buttons.activated();
+			}
 		
 			// Animated replyto
 			replyTo();
@@ -2986,12 +2990,7 @@ function extInit() {
 			if(dataStore['spoiler_blocks'] == 'true') {
 				spoiler_blocks.activated();
 			}
-			
-		// Topic is whitelisted, place the navigation buttons 
-		// to have the ability of whitelist removal
-		} else {
-			show_navigation_buttons.activated();
-		}
+		} 
 
 	}
 

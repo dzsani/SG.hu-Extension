@@ -128,6 +128,11 @@ var cp = {
 					html += '<p>Amíg egy topikban tartózkodsz, a bővítmény automatikusan kinyeri az olvasás ideje alatt érkező új üezenteket.</p>';
 					html += '<div class="button" id="fetch_new_comments"></div>';
 				html += '</div>';
+				html += '<div>';
+					html += '<h3>Navigációs gombok megjelenítése</h3>';
+					html += '<p>Egy topikban vagy a cikkeknél gyors elérést biztosító funkciógombok</p>';
+					html += '<div class="button" id="show_navigation_buttons"></div>';
+				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';

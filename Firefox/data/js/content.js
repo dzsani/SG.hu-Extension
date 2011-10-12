@@ -2915,6 +2915,11 @@ function extInit() {
 			autoload_next_page.activated();
 		}
 
+		// Show navigation buttons
+		if(dataStore['show_navigation_buttons'] == true) {
+			show_navigation_buttons.activated();
+		}
+
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
 
@@ -2971,10 +2976,6 @@ function extInit() {
 		if(dataStore['message_center'] == true && isLoggedIn() ) {
 			message_center.init();
 		}
-
-		// Show navigation buttons
-		show_navigation_buttons.activated();
-
 	}
 	
 	// LISTAZAS.PHP
@@ -3025,11 +3026,12 @@ function extInit() {
 			if(dataStore['autoload_next_page'] == true) {
 				autoload_next_page.activated();
 			}
-		
-			// Scroll to page top button
-			show_navigation_buttons.activated();
 
-		
+			// Scroll to page top button
+			if(dataStore['show_navigation_buttons'] == true) {
+				show_navigation_buttons.activated();
+			}
+
 			// Animated replyto
 			replyTo();
 
@@ -3057,12 +3059,8 @@ function extInit() {
 			if(dataStore['spoiler_blocks'] == true) {
 				spoiler_blocks.activated();
 			}
-	
-		// Topic is whitelisted, place the navigation buttons 
-		// to have the ability of whitelist removal
-		} else {
-			show_navigation_buttons.activated();
-		}
+
+		} 
 	}
 	
 	// GLOBAL SCRIPTS
