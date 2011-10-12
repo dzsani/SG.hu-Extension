@@ -556,8 +556,19 @@ var autoload_next_page = {
 			
 		// Date DESC order
 		} else {
-			var url = document.location.href.substring(0, 44);
-				url = url+'&index='+(autoload_next_page.currPage+1)+'';
+			if(document.location.href.match('cikkek')) {
+			
+				// Get topic ID
+				var topic_id = $('.std2 a').attr('href').split('?id=')[1];		
+				
+				// Url to call	
+				var url = 'listazas.php3?id='+topic_id;
+					url =  url+'&index='+(autoload_next_page.currPage+1)+'';
+			
+			} else { 
+				var url = document.location.href.substring(0, 44);
+					url = url+'&index='+(autoload_next_page.currPage+1)+'';
+			}
 		}
 		
 		// Make the ajax query
