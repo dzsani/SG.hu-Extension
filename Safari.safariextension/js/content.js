@@ -1018,7 +1018,13 @@ function replyTo() {
 function ext_valaszmsg(target, id, no, callerid) {
 	
 	if ($('#'+target).css('display') != 'block') {
-		var url = '/listazas_egy.php3?callerid=2&id=' + id + '&no=' + no;
+	
+		if(document.location.href.match('cikkek')) {
+			var url = '/listazas_egy.php3?callerid=1&id=' + id + '&no=' + no;
+		} else {
+			var url = '/listazas_egy.php3?callerid=2&id=' + id + '&no=' + no;
+		}
+
 		$.get(url, function(data) {
 			
 			// Show the comment
@@ -2881,6 +2887,9 @@ function extInit() {
 		if(dataStore['show_navigation_buttons'] == true) {
 			show_navigation_buttons.activated();
 		}
+
+		// Animated replyto
+		replyTo();
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
