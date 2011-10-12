@@ -1260,6 +1260,14 @@ var threaded_comments = {
 	},
 	
 	sort : function() {
+
+		// Set .topichead class to message headers
+		if(document.location.href.match('cikkek')) {
+			$('.b-h-o-head').addClass('topichead');
+			$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
+			$('.b-h-o-head .msg-dateicon a').css('color', '#444');
+		}
+
 		// Sort to thread
 		$( $('.topichead:not(.checked)').closest('center').get().reverse() ).each(function() {
 		

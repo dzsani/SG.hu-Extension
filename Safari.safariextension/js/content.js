@@ -1251,6 +1251,14 @@ var threaded_comments = {
 	},
 	
 	sort : function() {
+	
+		// Set .topichead class to message headers
+		if(document.location.href.match('cikkek')) {
+			$('.b-h-o-head').addClass('topichead');
+			$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
+			$('.b-h-o-head .msg-dateicon a').css('color', '#444');
+		}
+	
 		// Sort to thread
 		$( $('.topichead:not(.checked)').closest('center').get().reverse() ).each(function() {
 		
@@ -1273,7 +1281,7 @@ var threaded_comments = {
 		
 			// Set style settings
 			$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
-			$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
+			$(this).find('.topichead').parent().css('width', 700 - ($(this).parents('center').length-2) * 30);
 			$(this).find('.msg-replyto').hide();
 			
 			// Add checked class
@@ -2742,6 +2750,11 @@ function extInit() {
 			message_center.topic();
 		}
 
+		// Threaded_comments
+		if(dataStore['threaded_comments'] == true) {
+			threaded_comments.activated();
+		}
+
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
 
@@ -2825,7 +2838,7 @@ function extInit() {
 				message_center.topic();
 			}
 		
-			//gradual_comments
+			// gradual_comments
 			if(dataStore['threaded_comments'] == true) {
 				threaded_comments.activated();
 			}
