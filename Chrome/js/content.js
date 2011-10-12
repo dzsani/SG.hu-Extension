@@ -686,46 +686,56 @@ var show_navigation_buttons = {
 		
 		// Add event to back button
 		$('#ext_back').click(function() {
-			document.location.href = 'forum.php';
-		});
-
-		// Create search button
-		$('<div id="ext_search"></div>').prependTo('body');
-		
-		// Place search icon background
-		$('#ext_search').css('background-image', 'url('+chrome.extension.getURL('/img/content/search.png')+')');
-		
-		// Create the search event
-		$('#ext_search').toggle(
-			function() { show_navigation_buttons.showSearch(); },
-			function() { show_navigation_buttons.hideSearch(); }	
-		);
-
-		// Get topic ID
-		var id = $('select[name="id"] option:selected').val();
-		
-		// Determining current status
-		var status, title = '';
-		var whitelist = new Array();
-			whitelist = dataStore['topic_whitelist'].split(',');
-
-			if(whitelist.indexOf(id) == -1) {
-				status = '+';
-				title = 'Téma hozzáadása a fehérlistához';
+			if(document.location.href.match('cikkek')) {
+				document.location.href = 'index.php';
 			} else {
-				status = '-';
-				title = 'Téma eltávolítása a fehérlistából';
+				document.location.href = 'forum.php';
 			}
-		
-		// Create the whitelist button
-		$('<div id="ext_whitelist" title="'+title+'">'+status+'</div>').prependTo('body');
-		
-		// Create whitelist event
-		$('#ext_whitelist').click(function() { 
-		
-			topic_whitelist.execute(this);
-			
 		});
+		
+		if(!document.location.href.match('cikkek')) {
+		
+			// Create search button
+			$('<div id="ext_search"></div>').prependTo('body');
+		
+			// Place search icon background
+			$('#ext_search').css('background-image', 'url('+chrome.extension.getURL('/img/content/search.png')+')');
+		
+			// Create the search event
+			$('#ext_search').toggle(
+				function() { show_navigation_buttons.showSearch(); },
+				function() { show_navigation_buttons.hideSearch(); }	
+			);
+
+			// Get topic ID
+			var id = $('select[name="id"] option:selected').val();
+		
+			// Determining current status
+			var status, title = '';
+			var whitelist = new Array();
+				whitelist = dataStore['topic_whitelist'].split(',');
+
+				if(whitelist.indexOf(id) == -1) {
+					status = '+';
+					title = 'Téma hozzáadása a fehérlistához';
+				} else {
+					status = '-';
+					title = 'Téma eltávolítása a fehérlistából';
+				}
+		
+			// Create the whitelist button
+			$('<div id="ext_whitelist" title="'+title+'">'+status+'</div>').prependTo('body');
+		
+			// Create whitelist event
+			$('#ext_whitelist').click(function() { 
+		
+				topic_whitelist.execute(this);
+			
+			});
+		} else {
+			$('#ext_scrolltop').css('bottom', 138);
+			$('#ext_back').css('bottom', 100);
+		}
 
 		// Execute when the user is logged in
 		if(isLoggedIn()) {
@@ -2880,6 +2890,9 @@ function extInit() {
 		if(dataStore['autoload_next_page'] == 'true') {
 			autoload_next_page.activated();
 		}
+
+		// Show navigation buttons
+		show_navigation_buttons.activated();
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
