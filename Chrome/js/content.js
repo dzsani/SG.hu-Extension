@@ -581,8 +581,40 @@ var autoload_next_page = {
 			
 			if(document.location.href.match('cikkek')) {
 				tmp.each(function() {
-					$(this).closest('center').insertBefore('.std2:last').find('.topichead').parent().css('width', 700);
 					
+					// Place the element
+					var ele = $(this).closest('center').insertBefore('.std2:last');
+					
+					// Set new width
+					ele.find('.topichead').parent().css('width', 700);
+					
+					// Remove the online status TD
+					ele.find('.offlinecs').remove();
+					
+					// Restore A tag
+						
+						// Move A tag
+						$(ele).find('.topichead a:first').prependTo('body').addClass('a_tmp');
+						
+						// Empty the TD
+						ele.find('.topichead td.left td:first').html('');;
+						
+						// Place new container
+						$('<div class="hasab-head-o"></div>').prependTo( ele.find('.topichead td.left td:first') );
+						
+						// Put back the A tag
+						$('.a_tmp').prependTo( ele.find('.hasab-head-o:first') ).removeClass('a_tmp');	
+
+					// Place corner image
+					$('<img src="images/ful_o_l.png" width="1" height="21" vspace="0" hspace="0" align="left">').insertBefore( ele.find('.hasab-head-o') );
+					
+					// Restore background image
+					$(ele).find('.topichead').css('background', 'url(images/ful_o_bgbg.gif)');
+					
+					// Restore anchors color
+					$(ele).find('.topichead .right a').css('color', '#444');
+					$(ele).find('.topichead .right').css('color', '#444');
+
 				});
 			} else {
 				tmp.each(function() {
