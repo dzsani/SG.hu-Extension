@@ -397,7 +397,7 @@ var blocklist =  {
 			}
 			
 			for(var i = 0; i < deletelist.length; i++) {
-				if(nick != null && nick.toLowerCase() == deletelist[i].toLowerCase()) {
+				if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
 					$(this).closest('center').hide();
 				}
 			}
@@ -452,7 +452,7 @@ var blocklist =  {
 					nick = nick.replace(/ - VIP/, "");
 			}
 
-			if(nick != null && nick.toLowerCase() == user.toLowerCase()) {
+			if(nick.toLowerCase() == user.toLowerCase()) {
 
 				// Show temporary the comment height
 				$(this).closest('center').css({ display : 'block', height : 'auto' });
@@ -2770,7 +2770,7 @@ function extInit() {
 		setPredefinedVars();
 
 		// Maintain style settings
-		$('.b-h-o-head').attr('class', 'b-h-o-head topichead');
+		$('.b-h-o-head a').closest('.b-h-o-head').attr('class', 'b-h-o-head topichead');
 		$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
 		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
 
