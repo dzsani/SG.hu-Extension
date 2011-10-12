@@ -497,11 +497,40 @@ var autoload_next_page = {
 	
 	activated : function() {
 		
-		// Current page index
-		autoload_next_page.currPage = parseInt($('.lapozo:last span.current:first').html());
+		// Artcile
+		if(document.location.href.match('cikkek')) {
 		
-		// Get max page number 
-		autoload_next_page.maxPage = parseInt($('.lapozo:last a:last').prev().html());
+			// Current page index
+			autoload_next_page.currPage = 1;
+			
+			// Get topic ID
+			var topic_id = $('.std2 a').attr('href').split('?id=')[1];
+			
+			// Get the topic page to determinate max page number
+			$.ajax({
+				url : 'listazas.php3?id=' + topic_id,
+				success : function(data) {
+					
+					// Parse the response HTML
+					var tmp = $(data);
+					
+					// Fetch the max page number
+					autoload_next_page.maxPage = parseInt($(tmp).find('.lapozo:last a:last').prev().html());
+				}
+			});
+			
+			// Get max page number 
+			autoload_next_page.maxPage = parseInt($('.lapozo:last a:last').prev().html());
+
+		// Topic
+		} else {
+			
+			// Current page index
+			autoload_next_page.currPage = parseInt($('.lapozo:last span.current:first').html());
+		
+			// Get max page number 
+			autoload_next_page.maxPage = parseInt($('.lapozo:last a:last').prev().html());
+		}
 		
 		$(document).scroll(function() {
 			
@@ -539,18 +568,27 @@ var autoload_next_page = {
 		$.get(url, function(data) {
 			
 			// Create the 'next page' indicator
-			if(dataStore['threaded_comments'] != 'true') {
-				$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+			if(dataStore['threaded_comments'] != true) {
+				if(document.location.href.match('cikkek')) {
+					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std2:last');
+				} else {
+					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std1:last');
+				}
 			}
 			
 			var tmp = $(data);
 			var tmp = tmp.find('.topichead');
 			
-			tmp.each(function() {
-				
-				$(this).closest('center').insertBefore('.std1:last');
-			
-			});
+			if(document.location.href.match('cikkek')) {
+				tmp.each(function() {
+					$(this).closest('center').insertBefore('.std2:last').find('.topichead').parent().css('width', 700);
+					
+				});
+			} else {
+				tmp.each(function() {
+					$(this).closest('center').insertBefore('.std1:last');
+				});
+			}
 			
 			autoload_next_page.progress = false;
 			autoload_next_page.currPage++;
@@ -2793,6 +2831,11 @@ function extInit() {
 		// Block users/messages
 		if(dataStore['block_list'] != '') {
 			blocklist.hidemessages();
+		}
+
+		// Load next page when scrolling down
+		if(dataStore['autoload_next_page'] == true) {
+			autoload_next_page.activated();
 		}
 
 	// FORUM.PHP
