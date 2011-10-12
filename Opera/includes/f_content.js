@@ -367,7 +367,12 @@ var blocklist =  {
 			
 			// Insert the block button
 			$('<a href="#" class="block_user">letiltás</a> <span>| </span> ').insertBefore(this);
-			
+
+			// Restore anchor color settings
+			if(document.location.href.match('cikkek')) {
+				$('a.block_user').css('color', '#444');
+			}
+
 			// Add "blockbutton" class to avoid duplicates on re-init
 			$(this).closest('.topichead').addClass('blockbutton');
 		});
@@ -389,13 +394,20 @@ var blocklist =  {
 		var deletelist = dataStore['block_list'].split(',');
 
 		$(".topichead").each( function() {
-		
-			var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
-				nick = nick.replace(/ - VIP/, "");
-		
+			
+			if(document.location.href.match('cikkek')) {
+			
+				var nick = $(this).find('a:first').html();
+
+			} else {
+			
+				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+					nick = nick.replace(/ - VIP/, "");
+			}
+			
 			for(var i = 0; i < deletelist.length; i++) {
-				if(nick.toLowerCase() == deletelist[i].toLowerCase()) {
-					$(this).parent().hide();
+				if(nick != null && nick.toLowerCase() == deletelist[i].toLowerCase()) {
+					$(this).closest('center').hide();
 				}
 			}
 		});
@@ -439,11 +451,17 @@ var blocklist =  {
 	unblock : function(user) {
 
 		$(".topichead").each( function() {
-		
-			var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
-				nick = nick.replace(/ - VIP/, "");
+			
+			if(document.location.href.match('cikkek')) {
+			
+				var nick = $(this).find('a:first').html();
+			} else {
+			
+				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+					nick = nick.replace(/ - VIP/, "");
+			}
 
-			if(nick.toLowerCase() == user.toLowerCase()) {
+			if(nick != null && nick.toLowerCase() == user.toLowerCase()) {
 
 				// Show temporary the comment height
 				$(this).closest('center').css({ display : 'block', height : 'auto' });
@@ -1257,13 +1275,6 @@ var threaded_comments = {
 	},
 	
 	sort : function() {
-	
-		// Set .topichead class to message headers
-		if(document.location.href.match('cikkek')) {
-			$('.b-h-o-head').attr('class', 'b-h-o-head topichead');
-			$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
-			$('.b-h-o-head .msg-dateicon a').css('color', '#444');
-		}	
 	
 		// Sort to thread
 		$( $('.topichead:not(.checked)').closest('center').get().reverse() ).each(function() {
@@ -2130,10 +2141,6 @@ var message_center = {
 
 	article : function() {
 		
-		$('.b-h-o-head').attr('class', 'b-h-o-head topichead');
-		$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
-		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
-		
 		// Set-up post logger
 		message_center.log();
 		
@@ -2717,6 +2724,11 @@ function extInit() {
 		// setPredefinedVars
 		setPredefinedVars();
 
+		// Maintain style settings
+		$('.b-h-o-head').attr('class', 'b-h-o-head topichead');
+		$('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
+		$('.b-h-o-head .msg-dateicon a').css('color', '#444');
+
 		// Monitor the new comments
 		fetch_new_comments_in_topic.init();
 
@@ -2728,6 +2740,14 @@ function extInit() {
 		// Threaded_comments
 		if(dataStore['threaded_comments'] == 'true') {
 			threaded_comments.activated();
+		}
+
+		// Set-up block buttons
+		blocklist.init();
+
+		// Block users/messages
+		if(dataStore['block_list'] != '') {
+			blocklist.hidemessages();
 		}
 
 	// FORUM.PHP
