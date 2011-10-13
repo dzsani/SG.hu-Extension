@@ -159,7 +159,6 @@ if( typeof ss.storage.hide_blocks_buttons					== 'undefined') ss.storage.hide_bl
 if( typeof ss.storage.show_navigation_buttons				== 'undefined') ss.storage.show_navigation_buttons				= true;
 if( typeof ss.storage.remove_ads							== 'undefined') ss.storage.remove_ads							= false;
 if( typeof ss.storage.wysiwyg_editor						== 'undefined') ss.storage.wysiwyg_editor						= false;
-if( typeof ss.storage.spoiler_blocks						== 'undefined') ss.storage.spoiler_blocks						= true;
 if( typeof ss.storage.topic_whitelist						== 'undefined') ss.storage.topic_whitelist						= '';
 if( typeof ss.storage.fetch_new_comments					== 'undefined') ss.storage.fetch_new_comments					= true;
 

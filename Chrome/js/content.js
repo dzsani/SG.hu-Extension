@@ -656,12 +656,6 @@ var autoload_next_page = {
 				if(dataStore['show_mentioned_comments'] == 'true') {
 					show_mentioned_comments.activated();
 				}
-
-
-				// Openable spoiler blocks
-				if(dataStore['spoiler_blocks'] == 'true') {
-					spoiler_blocks.activated();
-				}
 			
 		});
 	}
@@ -1034,13 +1028,6 @@ function ext_valaszmsg(target, id, no, callerid) {
 			if(dataStore['show_mentioned_comments'] == 'true') {
 				show_mentioned_comments.activated();
 			}
-
-
-			// Openable spoiler blocks
-			if(dataStore['spoiler_blocks'] == 'true') {
-				spoiler_blocks.activated();
-			}
-
 		});
 	}
 	else { $('#'+target).slideUp(); }
@@ -2765,53 +2752,6 @@ function removeCookie( name, path, domain ) {
 }
 
 
-var spoiler_blocks = {
-
-	activated : function() {
-		
-		// Iterate over the spoilers
-		$('.topichead').closest('center').find('.msg-text div:contains("SPOILER!"):not(.ext_spoiler)').each(function() {
-			
-			// Get the message
-			var message = $(this).find('div').html();
-			
-			// Html to insert
-			var html = '';
-				
-				html += '<b>SPOILER!</b>';
-				html += '<a href="#">Kattints ide a szöveg megtekintéséhez!</a>';
-				html += '<div>'+message+'</div>';
-			
-			// Override original contents
-			$(this).html(html);
-			
-			// Add class to the container
-			$(this).addClass('ext_spoiler');
-		});
-		
-		// Add toggle event
-		$('.ext_spoiler a').unbind('toggle').toggle(
-		
-			function(e) {
-			
-				// Prevent borowser default action
-				e.preventDefault();
-
-				// Open the contents
-				$(this).next().slideDown();
-			},
-			
-			function(e) {
-	
-				// Prevent borowser default action
-				e.preventDefault();
-			
-				// Open the contents
-				$(this).next().slideUp();
-			}
-		);
-	},
-};
 
 var topic_whitelist = {
 
@@ -2904,6 +2844,11 @@ function extInit() {
 	
 		// Animated replyto
 		replyTo();
+
+		// Overlay reply-to
+		if(dataStore['overlay_reply_to'] == 'true') {
+			overlay_reply_to.activated();
+		}
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
@@ -3039,17 +2984,7 @@ function extInit() {
 			if(dataStore['wysiwyg_editor'] == 'true') {
 				wysiwyg_editor.activated();
 			}
-
-			// Openable spoiler blocks
-			if(dataStore['spoiler_blocks'] == 'true') {
-				spoiler_blocks.activated();
-			}
-	
-		// Topic is whitelisted, place the navigation buttons 
-		// to have the ability of whitelist removal
-		} else {
-			show_navigation_buttons.activated();
-		}
+		} 
 
 	}
 

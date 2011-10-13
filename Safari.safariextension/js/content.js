@@ -657,11 +657,6 @@ var autoload_next_page = {
 				if(dataStore['show_mentioned_comments'] == true) {
 					show_mentioned_comments.activated();
 				}
-			
-				// Openable spoiler blocks
-				if(dataStore['spoiler_blocks'] == true) {
-					spoiler_blocks.activated();
-				}
 		});
 	}
 
@@ -1035,11 +1030,6 @@ function ext_valaszmsg(target, id, no, callerid) {
 				show_mentioned_comments.activated();
 			}
 
-			// Openable spoiler blocks
-			if(dataStore['spoiler_blocks'] == true) {
-				spoiler_blocks.activated();
-			}
-
 		});
 	}
 	else { $('#'+target).slideUp(); }
@@ -1111,71 +1101,141 @@ var overlay_reply_to = {
 		// Remove quoted subcomments
 		comment_clone.find('center').parent('div').remove();
 		
+		if(document.location.href.match('cikkek')) {
+			comment_clone.css('width', 700);
+		}
+		
 		// Create textarea clone
 		
 		// WYSIWYG editor
 		if(dataStore['wysiwyg_editor'] == true) {
-			var textarea_clone = $('form[name="newmessage"]').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
-				textarea_clone.find('.cleditorMain').remove();
-				textarea_clone.find('form div:eq(0)').append('<textarea cols="50" rows="10" name="message"></textarea>');
+			
+			if(document.location.href.match('cikkek')) {
+			
+				var textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
+				$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
 
-				// Copy textarea original comment to the tmp element
-				textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
-
-				// Remove div padding
-				textarea_clone.find('form div:eq(0)').css('padding', 0);
+				// Add 'article' class to the clone
+				textarea_clone.addClass('article');
+					
+				// Remove username line
+				textarea_clone.find('b').remove();
+					
+				// Maintain style settings 
+				textarea_clone.find('div:first').removeAttr('id');
 				
-				// Apply some styles
-				textarea_clone.css({'background' : 'none', 'border' : 'none' });
+				// Remove div padding
+				textarea_clone.find('form div div').css('padding', 0);
+
+			} else {
+				var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+		
+				// Add 'article' class to the clone
+				textarea_clone.addClass('topic');
 				
 				// Remove username
 				textarea_clone.find('.std1').remove();
 				
-				// Fix buttons
-				textarea_clone.find('a:eq(0)').css({ position : 'absolute', top : 220, left : 0 });
-				textarea_clone.find('a:eq(1)').css({ position : 'absolute', top : 220, left : 90 });
-				textarea_clone.find('a:eq(4)').css({ position : 'absolute', top : 220, left : 180 });
-				textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 270 });
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
+				// Remove div padding
+				textarea_clone.find('form div:eq(0)').css('padding', 0);
+			}
+			
+			textarea_clone.find('.cleditorMain').remove();
+			textarea_clone.find('form div:eq(0)').append('<textarea cols="50" rows="10" name="message"></textarea>');
+
+			// Copy textarea original comment to the tmp element
+			textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
+
 				
-				// Fix smile list
-				textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
-				textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
+			// Apply some styles
+			textarea_clone.css({'background' : 'none', 'border' : 'none' });
+				
+				
+			// Fix buttons
+			textarea_clone.find('a:eq(0)').css({ position : 'absolute', top : 220, left : 0 });
+			textarea_clone.find('a:eq(1)').css({ position : 'absolute', top : 220, left : 90 });
+			textarea_clone.find('a:eq(2)').css({ display: 'none' });
+			textarea_clone.find('a:eq(3)').css({ display: 'none' });
+			textarea_clone.find('a:eq(4)').css({ display: 'none' });
+			textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 270 });
+			textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
+				
+			// Fix smile list
+			textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
+			textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
 			
-				// CLEditor init	
+			// CLEditor init
+			if(document.location.href.match('cikkek')) {
+				$(".ext_clone_textarea textarea").cleditor({ width : 696, height: 200 })[0].focus();
+			} else {
 				$(".ext_clone_textarea textarea").cleditor({ width : 806 })[0].focus();
-			
+			}
+
 		
 		// Normal textarea
 		} else {
-			var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 		
-				// Copy textarea original comment to the tmp element
-				textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
 				
+			if(document.location.href.match('cikkek')) {
+
+				var textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
+				$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
+
+
+				// Add 'article' class to the clone
+				textarea_clone.addClass('article');
+					
 				// Remove username line
-				textarea_clone.find('.std1').remove();
-				
-				// Fix buttons
-				textarea_clone.find('a:eq(0)').css({ position : 'absolute',  left : 0 });
-				textarea_clone.find('a:eq(1)').css({ position : 'absolute',  left : 90 });
-				textarea_clone.find('a:eq(2)').css({ position : 'absolute',  left : 180 });
-				textarea_clone.find('a:eq(3)').css({ position : 'absolute',  left : 270 });
-				textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
-				textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute',  right : 0 });
-			
+				textarea_clone.find('b').remove();
+					
+				// Maintain style settings 
+				textarea_clone.find('div:first').removeAttr('id');
+
 				// Create a container element around the textarea for box-shadow
 				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
 				
 				// Put textarea the container
 				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
+									
+			} else {
+	
+				var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+
+				// Add 'topic' class to the clone
+				textarea_clone.addClass('topic');
+					
+				// Remove username line
+				textarea_clone.find('.std1').remove();
+			
+				// Create a container element around the textarea for box-shadow
+				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
+				
+				// Put textarea the container
+				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');		
+			}
+		
+			// Copy textarea original comment to the tmp element
+			textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
+				
+			// Fix buttons
+			textarea_clone.find('a:eq(0)').css({ position : 'absolute',  left : 0 });
+			textarea_clone.find('a:eq(1)').css({ position : 'absolute',  left : 90 });
+			textarea_clone.find('a:eq(2)').css({ position : 'absolute',  left : 180 });
+			textarea_clone.find('a:eq(3)').css({ position : 'absolute',  left : 270 });
+			textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
+			textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
+			textarea_clone.find('a:eq(6)').css({ position : 'absolute',  right : 0 });
 		}
 		
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
 		
-		var left = $(document).width() / 2 - 405;
+		if(document.location.href.match('cikkek')) {
+			var left = $(document).width() / 2 - 350;
+		} else {
+			var left = $(document).width() / 2 - 405;
+		}
+
 			textarea_clone.delay(350).css({ top : top + 200, left : left, opacity : 0 }).animate({ top : top + 10, opacity : 1 }, 300);
 			
 		// Change textarea name attr to avoid conflicts
@@ -2752,53 +2812,6 @@ function removeCookie( name, path, domain ) {
 	";expires=Thu, 01-Jan-1970 00:00:01 GMT";
 }
 
-var spoiler_blocks = {
-
-	activated : function() {
-		
-		// Iterate over the spoilers
-		$('.topichead').closest('center').find('.msg-text div:contains("SPOILER!"):not(.ext_spoiler)').each(function() {
-			
-			// Get the message
-			var message = $(this).find('div').html();
-			
-			// Html to insert
-			var html = '';
-				
-				html += '<b>SPOILER!</b>';
-				html += '<a href="#">Kattints ide a szöveg megtekintéséhez!</a>';
-				html += '<div>'+message+'</div>';
-			
-			// Override original contents
-			$(this).html(html);
-			
-			// Add class to the container
-			$(this).addClass('ext_spoiler');
-		});
-		
-		// Add toggle event
-		$('.ext_spoiler a').unbind('toggle').toggle(
-		
-			function(e) {
-			
-				// Prevent borowser default action
-				e.preventDefault();
-
-				// Open the contents
-				$(this).next().slideDown();
-			},
-			
-			function(e) {
-	
-				// Prevent borowser default action
-				e.preventDefault();
-			
-				// Open the contents
-				$(this).next().slideUp();
-			}
-		);
-	},
-};
 
 var topic_whitelist = {
 
@@ -2890,6 +2903,26 @@ function extInit() {
 
 		// Animated replyto
 		replyTo();
+
+		// Overlay reply-to
+		if(dataStore['overlay_reply_to'] == true) {
+			overlay_reply_to.activated();
+		}
+	/*
+		// highlight_comments_for_me
+		if(dataStore['highlight_comments_for_me'] == true && isLoggedIn()) {
+			highlight_comments_for_me.activated();
+		}
+		
+		// show menitoned comment
+		if(dataStore['show_mentioned_comments'] == true) {
+			show_mentioned_comments.activated();
+		}
+	*/
+		// WYSIWYG Editor
+		if(dataStore['wysiwyg_editor'] == true) {
+			wysiwyg_editor.activated();
+		}
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
@@ -3023,11 +3056,6 @@ function extInit() {
 			// WYSIWYG Editor
 			if(dataStore['wysiwyg_editor'] == true) {
 				wysiwyg_editor.activated();
-			}
-		
-			// Openable spoiler blocks
-			if(dataStore['spoiler_blocks'] == true) {
-				spoiler_blocks.activated();
 			}
 		}
 	}
