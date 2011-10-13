@@ -1274,6 +1274,12 @@ var highlight_comments_for_me = {
 			if($(this).find('.ext_comments_for_me_indicator').length == 0) {
 			
 				$(this).css('position', 'relative').append('<img src="'+chrome.extension.getURL('/img/content/comments_for_me_indicator.png')+'" class="ext_comments_for_me_indicator">');
+			
+				if(document.location.href.match('cikkek')) {
+					$(this).find('.ext_comments_for_me_indicator').addClass('article');
+				} else {
+					$(this).find('.ext_comments_for_me_indicator').addClass('topic');
+				}			
 			}
 		});
 	},

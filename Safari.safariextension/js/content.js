@@ -1341,7 +1341,13 @@ var highlight_comments_for_me = {
 		
 			if($(this).find('.ext_comments_for_me_indicator').length == 0) {
 			
-				$(this).css('position', 'relative').append('<img src="'+safari.extension.baseURI+'img/content/comments_for_me_indicator.png" class="ext_comments_for_me_indicator">');
+				var ele = $(this).css('position', 'relative').append('<img src="'+safari.extension.baseURI+'img/content/comments_for_me_indicator.png" class="ext_comments_for_me_indicator">');
+				
+				if(document.location.href.match('cikkek')) {
+					$(this).find('.ext_comments_for_me_indicator').addClass('article');
+				} else {
+					$(this).find('.ext_comments_for_me_indicator').addClass('topic');
+				}
 			}
 		});
 	},
@@ -2908,12 +2914,12 @@ function extInit() {
 		if(dataStore['overlay_reply_to'] == true) {
 			overlay_reply_to.activated();
 		}
-	/*
+	
 		// highlight_comments_for_me
 		if(dataStore['highlight_comments_for_me'] == true && isLoggedIn()) {
 			highlight_comments_for_me.activated();
 		}
-		
+	/*	
 		// show menitoned comment
 		if(dataStore['show_mentioned_comments'] == true) {
 			show_mentioned_comments.activated();
