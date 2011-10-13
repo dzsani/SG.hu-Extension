@@ -1543,14 +1543,25 @@ var show_mentioned_comments = {
 		// Get comment number
 		var no = $(ele).html().match(/\d+/g);
 		
-		// Get topic ID
-		var id = document.location.href.split('?id=')[1];
-			id = id.split('#')[0];
-			id = id.split('&')[0];
+		if(document.location.href.match('cikkek')) {
+		
+			var id = $('.std2 a').attr('href').split('?id=')[1];
+		
+		} else {
+	
+			// Get topic ID
+			var id = document.location.href.split('?id=')[1];
+				id = id.split('#')[0];
+				id = id.split('&')[0];
+		}
 		
 		var target = $(ele).closest('.msg-text').next().next().attr('id');
 		
-		eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);");
+		if(document.location.href.match('cikkek')) {
+			eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 1);");
+		} else {
+			eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 2);");
+		}
 	}
 };
 
@@ -2854,6 +2865,21 @@ function extInit() {
 		// Overlay reply-to
 		if(dataStore['overlay_reply_to'] == 'true') {
 			overlay_reply_to.activated();
+		}
+	
+		// highlight_comments_for_me
+		if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
+			highlight_comments_for_me.activated();
+		}
+
+		// show menitoned comment
+		if(dataStore['show_mentioned_comments'] == true) {
+			show_mentioned_comments.activated();
+		}
+
+		// WYSIWYG Editor
+		if(dataStore['wysiwyg_editor'] == 'true') {
+			wysiwyg_editor.activated();
 		}
 
 	// FORUM.PHP
