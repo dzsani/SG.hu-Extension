@@ -336,15 +336,19 @@
 }
 
 .ext_clone_textarea .cleditorMain {
-
 	-webkit-box-shadow: #333 0px 0px 10px;
 }
+
+.cleditorMain {
+	margin: 0px auto !important;
+}
+
 
 .ext_overlay_close {
 	width: 16px;
 	height: 16px;
 	position: absolute;
-	top: 11px;
+	top: 14px;
 	right: 6px;
 	cursor: pointer;
 	z-index: 100;

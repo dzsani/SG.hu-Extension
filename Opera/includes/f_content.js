@@ -1129,9 +1129,48 @@ var overlay_reply_to = {
 		
 		// Remove quoted subcomments
 		comment_clone.find('center').parent('div').remove();
-		
-		// Create textarea clone
-		var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone().prependTo('body').addClass('ext_clone_textarea');
+
+		if(document.location.href.match('cikkek')) {
+			comment_clone.css('width', 700);
+		}
+
+		if(document.location.href.match('cikkek')) {
+
+			var textarea_clone = $('<div class="ext_clone_textarea"></div>').prependTo('body');
+			$('form[name="newmessage"]').clone(true, true).prependTo('.ext_clone_textarea:first');
+
+
+			// Add 'article' class to the clone
+			textarea_clone.addClass('article');
+					
+			// Remove username line
+			textarea_clone.find('b').remove();
+					
+			// Maintain style settings 
+			textarea_clone.find('div:first').removeAttr('id');
+
+			// Create a container element around the textarea for box-shadow
+			$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
+				
+			// Put textarea the container
+			textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
+									
+			} else {
+	
+				var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+
+				// Add 'topic' class to the clone
+				textarea_clone.addClass('topic');
+					
+				// Remove username line
+				textarea_clone.find('.std1').remove();
+			
+				// Create a container element around the textarea for box-shadow
+				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
+				
+				// Put textarea the container
+				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');		
+			}
 
 		// Fix smile list
 		if(dataStore['group_smiles'] == 'true') {
@@ -1152,32 +1191,27 @@ var overlay_reply_to = {
 			textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
 		}
 
-				// Copy textarea original comment to the tmp element
-				textarea_clone.find('textarea').val( $('form[name=newmessage]:gt(0) textarea').val() );
 				
-				// Remove username line
-				textarea_clone.find('.std1').remove();
-				
-				// Fix buttons
-				textarea_clone.find('a:eq(0)').css({ position : 'absolute',  left : 0 });
-				textarea_clone.find('a:eq(1)').css({ position : 'absolute',  left : 90 });
-				textarea_clone.find('a:eq(2)').css({ position : 'absolute',  left : 180 });
-				textarea_clone.find('a:eq(3)').css({ position : 'absolute',  left : 270 });
-				textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
-				textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
-				textarea_clone.find('a:eq(6)').css({ position : 'absolute',  right : 0 });
+		// Fix buttons
+		textarea_clone.find('a:eq(0)').css({ position : 'absolute',  left : 0 });
+		textarea_clone.find('a:eq(1)').css({ position : 'absolute',  left : 90 });
+		textarea_clone.find('a:eq(2)').css({ position : 'absolute',  left : 180 });
+		textarea_clone.find('a:eq(3)').css({ position : 'absolute',  left : 270 });
+		textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
+		textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
+		textarea_clone.find('a:eq(6)').css({ position : 'absolute',  right : 0 });
 			
-				// Create a container element around the textarea for box-shadow
-				$('<div id="ext_clone_textarea_shadow"></div>').insertAfter(textarea_clone.find('textarea'));
-				
-				// Put textarea the container
-				textarea_clone.find('textarea').appendTo('#ext_clone_textarea_shadow');
+
 
 		// Textarea position
 		var top = $(comment_clone).offset().top + $(comment_clone).height();
 	
+		if(document.location.href.match('cikkek')) {
+			var left = $(document).width() / 2 - 350;
+		} else {
+			var left = $(document).width() / 2 - 405;
+		}
 		
-		var left = $(document).width() / 2 - 405;
 			textarea_clone.delay(350).css({ top : top + 200, left : left, opacity : 0 }).animate({ top : top + 10, opacity : 1 }, 300);
 			
 		// Change textarea name attr to avoid conflicts
@@ -1958,7 +1992,10 @@ var remove_adds = {
 var group_smiles = {
 
 	activated : function() {
-				
+		
+		// Remove username
+		$('form[name="newmessage"] b').remove();	
+		
 		// Create smiles container
 		$('<div id="ext_smiles" style="display: none;"></div>').insertAfter('form[name="newmessage"]');
 		
@@ -2831,7 +2868,7 @@ function extInit() {
 		}
 
 		// show menitoned comment
-		if(dataStore['show_mentioned_comments'] == true) {
+		if(dataStore['show_mentioned_comments'] == 'true') {
 			show_mentioned_comments.activated();
 		}
 

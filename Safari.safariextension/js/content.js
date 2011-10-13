@@ -1128,7 +1128,7 @@ var overlay_reply_to = {
 				textarea_clone.find('form div div').css('padding', 0);
 
 			} else {
-				var textarea_clone = $('form[name="newmessage"] textarea').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
+				var textarea_clone = $('form[name="newmessage"]').closest('div').clone(true, true).prependTo('body').addClass('ext_clone_textarea');
 		
 				// Add 'article' class to the clone
 				textarea_clone.addClass('topic');
@@ -1153,11 +1153,11 @@ var overlay_reply_to = {
 				
 			// Fix buttons
 			textarea_clone.find('a:eq(0)').css({ position : 'absolute', top : 220, left : 0 });
-			textarea_clone.find('a:eq(1)').css({ position : 'absolute', top : 220, left : 90 });
+			textarea_clone.find('a:eq(1)').css({ position : 'absolute', top : 220, left : 90, visibility : 'visible' });
 			textarea_clone.find('a:eq(2)').css({ display: 'none' });
 			textarea_clone.find('a:eq(3)').css({ display: 'none' });
-			textarea_clone.find('a:eq(4)').css({ display: 'none' });
-			textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 270 });
+			textarea_clone.find('a:eq(4)').css({ position : 'absolute', top : 220, left : 180 });
+			textarea_clone.find('a:eq(5)').css({ position : 'absolute', top : 220, left : 270, right : 'auto' });
 			textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
 				
 			// Fix smile list
@@ -1167,8 +1167,9 @@ var overlay_reply_to = {
 			// CLEditor init
 			if(document.location.href.match('cikkek')) {
 				$(".ext_clone_textarea textarea").cleditor({ width : 696, height: 200 })[0].focus();
+				textarea_clone.find('.cleditorMain').css({ position : 'relative', top : -10 });
 			} else {
-				$(".ext_clone_textarea textarea").cleditor({ width : 806 })[0].focus();
+				$(".ext_clone_textarea textarea").cleditor({ width : 800 })[0].focus();
 			}
 
 		
@@ -2019,20 +2020,30 @@ var wysiwyg_editor = {
 
 	activated : function() {
 		
-		// CLEditor init
-		$('textarea[name="message"]').cleditor();
-		
-		// Hide unwanted buttons
-		$('form[name="newmessage"] a:eq(2)').css('visibility', 'hidden');
-		$('form[name="newmessage"] a:eq(3)').css('visibility', 'hidden');
-		
 		// Rearrange buttons
+		if(document.location.href.match('cikkek')) {
+		
+			// Remove username
+			$('form[name="newmessage"] b').remove();		
+		
+			// CLEditor init
+			$('textarea[name="message"]').cleditor({ width: 660 });
+		
+		} else {
+
+			// CLEditor init
+			$('textarea[name="message"]').cleditor();
+		}
+		
 		$('form[name="newmessage"]').css('position', 'relative');
 		$('form[name="newmessage"] a:eq(0)').css({ 'position' : 'absolute', 'left' : 20 });
 		$('form[name="newmessage"] a:eq(1)').css({ 'position' : 'absolute', 'left' : 110 });
+		$('form[name="newmessage"] a:eq(2)').css('visibility', 'hidden');
+		$('form[name="newmessage"] a:eq(3)').css('visibility', 'hidden');
 		$('form[name="newmessage"] a:eq(4)').css({ 'position' : 'absolute', 'left' : 200 });
 		$('form[name="newmessage"] a:eq(5)').css({ 'position' : 'absolute', 'left' : 290 });
-		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });
+		$('form[name="newmessage"] a:eq(6)').css({ 'position' : 'absolute', 'right' : 22 });		
+
 		
 		// Insert video
 		$('form[name="newmessage"] a:eq(4)').click(function(e) {
@@ -2241,7 +2252,7 @@ var wysiwyg_editor = {
 			var tag = $(this).attr('src').replace(/.*ep\/faces\/(.*?)\..*/ig, "$1");
 	
 			var bhtml = '[#' + tag + ']';
-			var ihtml = '<img src="kep/faces/' + tag + '.gif">';
+			var ihtml = '<img src="/kep/faces/' + tag + '.gif">';
 
 			var tarea = $('textarea[name="message"]:first').val() + bhtml;
 			var imod = $(".cleditorMain:first iframe").contents().find('body').html() + ihtml;
