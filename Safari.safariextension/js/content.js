@@ -1504,11 +1504,17 @@ var fetch_new_comments_in_topic = {
 		fetch_new_comments_in_topic.last_new_msg = newmsg;
 		
 		// Get the topik ID
-		var id = $('select[name="id"] option:selected').val();
+		if(document.location.href.match('cikkek')) {
+			var id = $('.std2 a').attr('href').split('?id=')[1];
+			var url = 'listazas.php3?id='+id+'&callerid=1';
+		} else {
+			var id = $('select[name="id"] option:selected').val();
+			var url = 'listazas.php3?id=' + id;
+		}
 		
 		// Get topic contents
 		$.ajax({
-			url : 'listazas.php3?id=' + id,
+			url : url,
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
 				
@@ -1517,24 +1523,42 @@ var fetch_new_comments_in_topic = {
 				
 				// Append horizonal line
 				if(fetch_new_comments_in_topic.counter == 1) {
-					$('<hr>').insertAfter( $('.std1:first').parent() ).addClass('ext_unreaded_hr');
+					if(document.location.href.match('cikkek')) {
+						$('<hr>').insertAfter('form[name="newmessage"]').addClass('ext_unreaded_hr');
+					} else {
+						$('<hr>').insertAfter( $('.std1:first').parent() ).addClass('ext_unreaded_hr');
+					}
 				}
 				
 				// Parse the content
 				var tmp = $(data);
 				
-				// Fetch new comments
-				var comments = $(tmp).find('.topichead:lt('+new_comments+')').closest('center');
+				$('.b-h-o-head a').closest('.b-h-o-head')
 				
-				// Append new comments
-				comments.each(function() {
-					$(this).insertAfter( $('.std1:first').parent() );
-				});
+				// Fetch new comments
+				if(document.location.href.match('cikkek')) {
+					var comments = $(tmp).find('.b-h-o-head a').closest('.b-h-o-head').addClass('topichead');
+						comments = $(tmp).find('.topichead:lt('+new_comments+')').closest('center');
+						
+					// Append new comments
+					comments.each(function() {
+						$(this).insertAfter('form[name="newmessage"]');
+					});
+				
+				} else {
+					var comments = $(tmp).find('.topichead:lt('+new_comments+')').closest('center');
+
+					// Append new comments
+					comments.each(function() {
+						$(this).insertAfter( $('.std1:first').parent() );
+					});
+				}
+				
 				
 				// Finally, remove the notification
 				$('#ujhszjott').css('display', 'none');
 			}
-		})
+		});
 	}
 };
 
@@ -2893,7 +2917,9 @@ function extInit() {
 		$('.topichead .msg-dateicon a').css('color', '#444');
 
 		// Monitor the new comments
-		fetch_new_comments_in_topic.init();
+		if(dataStore['fetch_new_comments'] == true) {
+			fetch_new_comments_in_topic.init();
+		}
 
 		// Message Center
 		if(dataStore['message_center'] == true && isLoggedIn() ) {
@@ -3022,7 +3048,9 @@ function extInit() {
 			setPredefinedVars();
 		
 			// Monitor the new comments
-			fetch_new_comments_in_topic.init();
+			if(dataStore['fetch_new_comments'] == true) {
+				fetch_new_comments_in_topic.init();
+			}
 
 			// Message Center
 			if(dataStore['message_center'] == true && isLoggedIn() ) {
