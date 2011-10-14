@@ -1508,6 +1508,7 @@ var fetch_new_comments_in_topic = {
 					$(comments.reverse()).each(function() {
 						$(this).insertAfter('form[name="newmessage"]');
 						$(this).parent().css('width', 700);
+						$(this).removeClass('topichead');
 					});
 				
 				} else {
