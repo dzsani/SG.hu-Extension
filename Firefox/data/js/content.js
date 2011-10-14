@@ -2657,7 +2657,21 @@ var message_center = {
 
 						// Iterate over the answers
 						if(TmpAnswers.length == 0) {
+
+							// Get current time
+							var time = Math.round(new Date().getTime() / 1000);
+					
+							// Set new checked date
+							messages[key]['checked'] = time;						
+
+							// Store in localStorage
+							self.postMessage({ name : "setMCMessages", message : JSON.stringify(messages) });
+						
+							// Store in dataStore
+							dataStore['mc_messages'] = JSON.stringify(messages);
+
 							return false;
+
 						}
 
 						for(c = 0; c < TmpAnswers.length; c++) {

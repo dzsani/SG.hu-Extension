@@ -2598,7 +2598,7 @@ var message_center = {
 			var time = Math.round(new Date().getTime() / 1000);
 			
 			// Check last searched state
-			if(time < messages[key].checked + 60 * 10) {
+			if(time < messages[key].checked + 60 * 10) {	
 				continue;
 			}
 
@@ -2623,6 +2623,20 @@ var message_center = {
 
 						// Iterate over the answers
 						if(TmpAnswers.length == 0) {
+						
+
+							// Get current time
+							var time = Math.round(new Date().getTime() / 1000);
+					
+							// Set new checked date
+							messages[key]['checked'] = time;						
+
+							// Store in localStorage
+							safari.self.tab.dispatchMessage("setMCMessages", JSON.stringify(messages));
+						
+							// Store in dataStore
+							dataStore['mc_messages'] = JSON.stringify(messages);
+
 							return false;
 						}
 
