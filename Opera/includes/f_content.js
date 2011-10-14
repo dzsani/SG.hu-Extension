@@ -1175,7 +1175,9 @@ var overlay_reply_to = {
 		textarea_clone.find('a:eq(4)').css({ position : 'absolute',  left : 360 });
 		textarea_clone.find('a:eq(5)').css({ position : 'absolute',  left : 450 });
 		textarea_clone.find('a:eq(6)').css({ position : 'absolute',  right : 0 });
-			
+		
+		// Fix smile list
+		textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
 
 
 		// Textarea position
@@ -1404,7 +1406,7 @@ var threaded_comments = {
 				$(this).find('.msg-replyto').hide();
 			} else {
 				$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
-				$(this).find('.topichead').parent().css('width', 700 - ($(this).parents('center').length-2) * 30);
+				$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
 				$(this).find('.msg-replyto').hide();			
 			}
 			
@@ -2004,7 +2006,7 @@ var group_smiles = {
 		$('form[name="newmessage"] b').remove();	
 		
 		// Create smiles container
-		$('<div id="ext_smiles" style="display: none;"></div>').insertAfter('form[name="newmessage"]');
+		$('<div id="ext_smiles" style="display: none;"></div>').appendTo('form[name="newmessage"]');
 		
 		// Add click event to show or hide smile list
 		$('form[name="newmessage"] a:eq(0)').toggle(

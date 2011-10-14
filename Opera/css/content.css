@@ -366,8 +366,8 @@
 	width: 12px;
 	height: 12px;
 	position: absolute;
-	top: -15px;
-	left: 0px;
+	top: 20px;
+	left: -15px;
 }
 
 .ext_comments_for_me_indicator.topic {
