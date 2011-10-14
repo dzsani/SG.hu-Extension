@@ -1423,9 +1423,15 @@ var threaded_comments = {
 			$( $(this) ).appendTo( $('.topichead a:contains("#'+commentNum+'"):last').closest('center') );
 		
 			// Set style settings
-			$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
-			$(this).find('.topichead').parent().css('width', 810 - ($(this).parents('center').length-2) * 30);
-			$(this).find('.msg-replyto').hide();
+			if(document.location.href.match('cikkek')) {
+				$(this).css({ 'margin-left' : 0, 'padding-left' : 30, 'border-left' : '1px solid #ddd' });
+				$(this).find('.topichead').parent().css('width', 700 - $(this).parents('center').length * 30);
+				$(this).find('.msg-replyto').hide();
+			} else {
+				$(this).css({ 'margin-left' : 15, 'padding-left' : 15, 'border-left' : '1px solid #ddd' });
+				$(this).find('.topichead').parent().css('width', 700 - ($(this).parents('center').length-2) * 30);
+				$(this).find('.msg-replyto').hide();			
+			}
 			
 			// Add checked class
 			$(this).find('.topichead:first').addClass('checked');
