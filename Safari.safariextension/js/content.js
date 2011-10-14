@@ -615,7 +615,12 @@ var autoload_next_page = {
 						$('<div class="hasab-head-o"></div>').prependTo( ele.find('.topichead td.left td:first') );
 						
 						// Put back the A tag
-						$('.a_tmp').prependTo( ele.find('.hasab-head-o:first') ).removeClass('a_tmp');	
+						$('.a_tmp').prependTo( ele.find('.hasab-head-o:first') ).removeClass('a_tmp');
+						
+						// Remove the image if any
+						if(ele.find('.hasab-head-o:first a img').length) {
+							ele.find('.hasab-head-o:first a').html( ele.find('.hasab-head-o:first a img').attr('title') );
+						}
 
 					// Place corner image
 					$('<img src="images/ful_o_l.png" width="1" height="21" vspace="0" hspace="0" align="left">').insertBefore( ele.find('.hasab-head-o') );
@@ -1468,6 +1473,7 @@ var threaded_comments = {
 				$(this).find('.topichead').parent().css('width', 700 - ($(this).parents('center').length-2) * 30);
 				$(this).find('.msg-replyto').hide();			
 			}
+			
 			// Add checked class
 			$(this).find('.topichead:first').addClass('checked');
 

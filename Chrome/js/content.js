@@ -616,6 +616,11 @@ var autoload_next_page = {
 						// Put back the A tag
 						$('.a_tmp').prependTo( ele.find('.hasab-head-o:first') ).removeClass('a_tmp');	
 
+						// Remove the image if any
+						if(ele.find('.hasab-head-o:first a img').length) {
+							ele.find('.hasab-head-o:first a').html( ele.find('.hasab-head-o:first a img').attr('title') );
+						}
+
 					// Place corner image
 					$('<img src="images/ful_o_l.png" width="1" height="21" vspace="0" hspace="0" align="left">').insertBefore( ele.find('.hasab-head-o') );
 					
