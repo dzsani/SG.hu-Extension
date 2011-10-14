@@ -1539,8 +1539,9 @@ var fetch_new_comments_in_topic = {
 						comments = $(tmp).find('.topichead:lt('+new_comments+')').closest('center');
 						
 					// Append new comments
-					comments.each(function() {
+					$(comments.reverse()).each(function() {
 						$(this).insertAfter('form[name="newmessage"]');
+						$(this).parent().css('width', 700);
 					});
 				
 				} else {
