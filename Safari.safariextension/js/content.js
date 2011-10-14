@@ -595,6 +595,11 @@ var autoload_next_page = {
 			if(document.location.href.match('cikkek')) {
 				var tmp = tmp.find('.b-h-o-head a').closest('.b-h-o-head');
 				tmp.each(function() {
+					
+					// Maintain style settings
+					$(this).addClass('topichead');
+					$(this).css('background', 'url(images/ful_o_bgbg.gif)');
+					$(this).find('.msg-dateicon a').css('color', '#444');
 					$(this).closest('center').insertBefore('.std2:last');
 					$(this).parent().css('width', 700);
 				
