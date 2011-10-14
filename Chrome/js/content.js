@@ -1272,8 +1272,8 @@ var overlay_reply_to = {
 	
 		
 		// Add close button
-		var close_btm = $('<img src="'+safari.extension.baseURI+'img/content/overlay_close.png" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
-		
+		var close_btm = $('<img src="'+chrome.extension.getURL('img/content/overlay_close.png')+'" id="ext_close_overlay">').prependTo(textarea_clone).addClass('ext_overlay_close');
+
 		// Change close button position if WYSIWYG editor is disabled
 		if(dataStore['wysiwyg_editor'] != true) {
 			close_btm.css({ 'right' : 4, 'top' : 9 });
