@@ -669,7 +669,7 @@ var show_navigation_buttons = {
 		});
 		
 		
-		if(!document.location.href.match('cikkek')) {
+		if(!document.location.href.match('cikkek') && !document.location.href.match('listazas_msg.php')) {
 			
 			// Create search button
 			$('<div id="ext_search"></div>').prependTo('body');
