@@ -747,6 +747,8 @@ var show_navigation_buttons = {
 		$('#ext_scrolltop').remove();
 		$('#ext_back').remove();
 		$('#ext_search').remove();
+		$('#ext_whitelist').remove();
+		$('#ext_nav_faves').remove();
 	},
 	
 	showSearch : function() {

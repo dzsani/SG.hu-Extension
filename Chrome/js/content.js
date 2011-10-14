@@ -730,6 +730,8 @@ var show_navigation_buttons = {
 		$('#ext_scrolltop').remove();
 		$('#ext_back').remove();
 		$('#ext_search').remove();
+		$('#ext_whitelist').remove();
+		$('#ext_nav_faves').remove();
 	},
 	
 	showSearch : function() {
@@ -1133,7 +1135,11 @@ var overlay_reply_to = {
 			textarea_clone.find('a:eq(6)').css({ position : 'absolute', top : 220, right : 0 });
 				
 			// Fix smile list
-			textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
+			if(document.location.href.match('cikkek')) {
+				textarea_clone.find('#ext_smiles').css({ 'padding-left' : 50, 'padding-right' : 50, 'margin-top' : 20 });
+			} else {
+				textarea_clone.find('#ext_smiles').css({ 'padding-left' : 100, 'padding-right' : 100, 'margin-top' : 15 });
+			}
 			textarea_clone.find('.ext_smiles_block h3').css('color', 'black');
 			
 			// CLEditor init
@@ -1242,7 +1248,7 @@ var overlay_reply_to = {
 		});
 
 		// Block default tab action in a WYSIWYG editor
-		if(dataStore['wysiwyg_editor'] == true) {
+		if(dataStore['wysiwyg_editor'] == 'true') {
 			$(textarea_clone.find('iframe')[0].contentDocument.body).keydown(function(event) {
 				if (event.keyCode == '9') {
     				 event.preventDefault();
@@ -2088,7 +2094,7 @@ var wysiwyg_editor = {
 		});
 		
 		// Create smiles container
-		$('<div id="ext_smiles"></div>').insertAfter('form[name="newmessage"]');
+		$('<div id="ext_smiles"></div>').appendTo('form[name="newmessage"]');
 		
 		// Add click event to show or hide smile list
 		$('form[name="newmessage"] a:eq(0)').toggle(
