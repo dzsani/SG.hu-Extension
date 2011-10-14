@@ -600,6 +600,8 @@ var autoload_next_page = {
 					$(this).addClass('topichead');
 					$(this).css('background', 'url(images/ful_o_bgbg.gif)');
 					$(this).find('.msg-dateicon a').css('color', '#444');
+					
+					// Insert
 					$(this).closest('center').insertBefore('.std2:last');
 					$(this).parent().css('width', 700);
 				
@@ -713,7 +715,7 @@ var show_navigation_buttons = {
 	
 		
 		// Execute when the user is logged in
-		if(isLoggedIn()) {
+		if(isLoggedIn() || document.location.href.match('listazas_msg.php')) {
 		
 			// Create faves button
 			$('<div id="ext_nav_faves"></div>').prependTo('body');
@@ -1469,17 +1471,19 @@ var fetch_new_comments_in_topic = {
 	
 	init : function() {
 		
-		// Monitor new comments nofification
-		setInterval(function(){
+		// Monitor new comments nofification if any
+		if($('#ujhszjott').length) {
+			setInterval(function(){
 		
-			if($('#ujhszjott').css('display') != 'none') {	
-				fetch_new_comments_in_topic.rewrite();
+				if($('#ujhszjott').css('display') != 'none') {	
+					fetch_new_comments_in_topic.rewrite();
 				
-				if(dataStore['fetch_new_comments'] == true) {
-					fetch_new_comments_in_topic.fetch();
+					if(dataStore['fetch_new_comments'] == true) {
+						fetch_new_comments_in_topic.fetch();
+					}
 				}
-			}
-		}, 1000);
+			}, 1000);
+		}
 	},
 	
 	rewrite : function() {
@@ -3044,7 +3048,7 @@ function extInit() {
 	}
 	
 	// LISTAZAS.PHP
-	else if(document.location.href.match(/listazas.php3\?id/gi)) {
+	else if(document.location.href.match(/listazas.php3\?id/gi) || document.location.href.match('listazas_msg.php')) {
 
 		// Settings
 		cp.init(2);
