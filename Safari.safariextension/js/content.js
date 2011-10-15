@@ -1468,22 +1468,41 @@ var fetch_new_comments_in_topic = {
 	
 	counter : 0,
 	last_new_msg : 0,
+	locked : false,
 	
 	init : function() {
 		
-		// Monitor new comments nofification if any
-		if($('#ujhszjott').length) {
-			setInterval(function(){
-		
-				if($('#ujhszjott').css('display') != 'none') {	
-					fetch_new_comments_in_topic.rewrite();
-				
-					if(dataStore['fetch_new_comments'] == true) {
-						fetch_new_comments_in_topic.fetch();
-					}
-				}
-			}, 1000);
+		if($('#ujhszjott').length == 0) {
+			return false;
 		}
+		
+		// Set new messages number to zero
+		$('#ujhszjott a').html('0 új hozzászólás érkezett!');
+		
+		// Hide the notification when fetch new comments settgngs is enabled
+		if(dataStore['fetch_new_comments'] == true) {
+			$('#ujhszjott').css('display', 'none !important');
+		}
+		
+		// Monitor new comments nofification 
+		setInterval(function(){
+			
+			// Get new comments counter
+			var newmsg = parseInt($('#ujhszjott a').text().match(/\d+/g));
+			
+			if(newmsg > fetch_new_comments_in_topic.last_new_msg && fetch_new_comments_in_topic.locked == false) {
+				
+				// Rewrite the notification url
+				fetch_new_comments_in_topic.rewrite();
+				
+				// Fetch the comments if this option is enabled
+				// Set locked status to prevent multiple requests
+				if(dataStore['fetch_new_comments'] == true) {
+					fetch_new_comments_in_topic.locked = true;
+					fetch_new_comments_in_topic.fetch();
+				}
+			}
+		}, 1000);
 	},
 	
 	rewrite : function() {
@@ -1495,6 +1514,8 @@ var fetch_new_comments_in_topic = {
 	},
 	
 	fetch : function() {
+	
+		alert('fetch');
 		
 		// Check the page number
 		var page = parseInt($('.lapozo:last span.current:first').html());
@@ -1507,26 +1528,15 @@ var fetch_new_comments_in_topic = {
 		// Get new comments counter
 		var newmsg = parseInt($('#ujhszjott a').text().match(/\d+/g));
 		
-		// Check last new msg, do nothing if the two are the same
-		if(newmsg < fetch_new_comments_in_topic.last_new_msg + 1) {
-			$('#ujhszjott').css('display', 'none');
-			return false;
-		}
-		
 		// Update the newmsg
 		var new_comments = newmsg - fetch_new_comments_in_topic.last_new_msg;
 		
 		// Update the last new msg number
 		fetch_new_comments_in_topic.last_new_msg = newmsg;
 		
-		// Get the topik ID
-		if(document.location.href.match('cikkek')) {
-			var id = $('.std2 a').attr('href').split('?id=')[1];
-			var url = 'listazas.php3?id='+id+'&callerid=1';
-		} else {
-			var id = $('select[name="id"] option:selected').val();
-			var url = 'listazas.php3?id=' + id;
-		}
+		// Get the topik ID and URL
+		var id = $('select[name="id"] option:selected').val();
+		var url = 'listazas.php3?id=' + id;
 		
 		// Get topic contents
 		$.ajax({
@@ -1539,11 +1549,7 @@ var fetch_new_comments_in_topic = {
 				
 				// Append horizonal line
 				if(fetch_new_comments_in_topic.counter == 1) {
-					if(document.location.href.match('cikkek')) {
-						$('<hr>').insertAfter('form[name="newmessage"]').addClass('ext_unreaded_hr');
-					} else {
-						$('<hr>').insertAfter( $('.std1:first').parent() ).addClass('ext_unreaded_hr');
-					}
+					$('<hr>').insertAfter( $('.std1:first').parent() ).addClass('ext_unreaded_hr');
 				}
 				
 				// Parse the content
@@ -1552,29 +1558,30 @@ var fetch_new_comments_in_topic = {
 				$('.b-h-o-head a').closest('.b-h-o-head')
 				
 				// Fetch new comments
-				if(document.location.href.match('cikkek')) {
-					var comments = $(tmp).find('.b-h-o-head a').closest('.b-h-o-head').addClass('topichead');
-						comments = $(tmp).find('.topichead:lt('+new_comments+')').closest('center');
-						
-					// Append new comments
-					$(comments.reverse()).each(function() {
-						$(this).insertAfter('form[name="newmessage"]');
-						$(this).parent().css('width', 700);
-						$(this).removeClass('topichead');
-					});
-				
-				} else {
-					var comments = $(tmp).find('.topichead:lt('+new_comments+')').closest('center');
+				var comments = $(tmp).find('.topichead:lt('+new_comments+')').closest('center');
 
-					// Append new comments
-					comments.each(function() {
-						$(this).insertAfter( $('.std1:first').parent() );
-					});
-				}
+				// Append new comments
+				comments.each(function() {
+					$(this).insertAfter( $('.std1:first').parent() );
+				});
 				
+				// Remove locked status
+				fetch_new_comments_in_topic.locked = false;
 				
-				// Finally, remove the notification
-				$('#ujhszjott').css('display', 'none');
+				// Reinit settings
+
+					// Set-up block buttons
+					blocklist.init();
+
+					// highlight_comments_for_me
+					if(dataStore['highlight_comments_for_me'] == true && isLoggedIn()) {
+						highlight_comments_for_me.activated();
+					}
+				
+					// show menitoned comment
+					if(dataStore['show_mentioned_comments'] == true) {
+						show_mentioned_comments.activated();
+					}
 			}
 		});
 	}
@@ -2934,10 +2941,6 @@ function extInit() {
 		$('.topichead').css('background', 'url(images/ful_o_bgbg.gif)');
 		$('.topichead .msg-dateicon a').css('color', '#444');
 
-		// Monitor the new comments
-		if(dataStore['fetch_new_comments'] == true) {
-			fetch_new_comments_in_topic.init();
-		}
 
 		// Message Center
 		if(dataStore['message_center'] == true && isLoggedIn() ) {
