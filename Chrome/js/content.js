@@ -1005,11 +1005,21 @@ function ext_valaszmsg(target, id, no, callerid) {
 
 			// Show the comment
 			$('#'+target).html(data).hide().slideDown();
-			
+
+			// Maintain style settings
+			if(document.location.href.match('cikkek')) {
+				$('#'+target).find('.b-h-o-head a').closest('.b-h-o-head').attr('class', 'b-h-o-head topichead');
+				$('#'+target).find('.b-h-o-head').css('background', 'url(images/ful_o_bgbg.gif)');
+				$('#'+target).find('.b-h-o-head .msg-dateicon a').css('color', '#444');
+			}
+
 			// show menitoned comment
 			if(dataStore['show_mentioned_comments'] == 'true') {
 				show_mentioned_comments.activated();
 			}
+
+			// Set-up block buttons
+			blocklist.init();
 		});
 	}
 	else { $('#'+target).slideUp(); }
@@ -1477,7 +1487,7 @@ var fetch_new_comments_in_topic = {
 		
 		// Hide the notification when fetch new comments settgngs is enabled
 		if(dataStore['fetch_new_comments'] == 'true') {
-			$('#ujhszjott').css('display', 'none !important');
+			$('#ujhszjott').css({ display : 'none !important', visibility : 'hidden', height : 0, margin : 0, padding : 0, border : 0 });
 		}
 		
 		// Monitor new comments nofification 
@@ -1510,8 +1520,6 @@ var fetch_new_comments_in_topic = {
 	},
 	
 	fetch : function() {
-	
-		alert('fetch');
 		
 		// Check the page number
 		var page = parseInt($('.lapozo:last span.current:first').html());
@@ -1551,13 +1559,11 @@ var fetch_new_comments_in_topic = {
 				// Parse the content
 				var tmp = $(data);
 				
-				$('.b-h-o-head a').closest('.b-h-o-head')
-				
 				// Fetch new comments
 				var comments = $(tmp).find('.topichead:lt('+new_comments+')').closest('center');
 
 				// Append new comments
-				comments.each(function() {
+				$(comments.get().reverse()).each(function() {
 					$(this).insertAfter( $('.std1:first').parent() );
 				});
 				
