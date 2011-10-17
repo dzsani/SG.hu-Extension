@@ -1254,6 +1254,11 @@ var overlay_reply_to = {
 
 		// Set the textarea focus
 		textarea_clone.find('textarea').focus();
+		
+		// Set the iframe focus
+		if(dataStore['wysiwyg_editor'] == 'true') {
+			textarea_clone.find('iframe')[0].focus();
+		}
 
 		// Block default tab action in non-WYSIWYG editor
 		$('body').keydown(function(event) {
