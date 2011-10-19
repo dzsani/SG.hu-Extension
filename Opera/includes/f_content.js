@@ -2845,6 +2845,59 @@ var topic_whitelist = {
 	},
 };
 
+var textarea_auto_resize = {
+	
+	height : 150,
+	
+	init : function() {
+		
+		// Create the text holder element
+		$('<div id="ext_textheight"></div>').prependTo('body');
+		
+		// Create the keyup event
+		$('form[name="newmessage"] textarea').live('keyup', function() {
+			textarea_auto_resize.setHeight(this);
+		});
+		
+		textarea_auto_resize.height = $('form[name="newmessage"] textarea').height();
+	},
+	
+	setHeight : function(ele) {
+		
+		// Get element value
+		var val = $(ele).val();
+		
+		// Escape the value
+		val = val.replace(/</gi, '&lt;');
+		val = val.replace(/>/gi, '&gt');
+		//val = val.replace(/\ /gi, '&nbsp;');
+		val = val.replace(/\n/gi, '<br>');
+		
+		// Set the textholder element width
+		$('#ext_textheight').css('width', $(ele).width());
+		
+		// Set the text holder element's HTML
+		$('#ext_textheight').html(val);
+		
+		// Get the text holder element's height
+		var height = $('#ext_textheight').height() + 14;
+		
+		// Check for expand
+		if(height > $(ele).height()) {
+			$(ele).height( $(ele).height() + 50);
+		}
+		
+		// Check for shrink
+		if( $(ele).height() > textarea_auto_resize.height && height < $(ele).height() ) {
+		
+			var newHeight = height < textarea_auto_resize.height ? textarea_auto_resize.height : height;
+			
+			$(ele).height( newHeight );
+		}
+		
+	}
+};
+
 function extInit() {
 	
 	// SG index.php
@@ -2918,6 +2971,9 @@ function extInit() {
 		if(dataStore['group_smiles'] == 'true') {
 			group_smiles.activated();
 		}
+
+		// Auto resizing textarea
+		textarea_auto_resize.init();
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
@@ -3055,6 +3111,9 @@ function extInit() {
 			if(dataStore['group_smiles'] == 'true') {
 				group_smiles.activated();
 			}
+
+			// Auto resizing textarea
+			textarea_auto_resize.init();
 		} 
 
 	}

@@ -565,3 +565,19 @@
 	padding: 5px;
 	display: none;
 }
+
+/* Auto-resize textarea */
+textarea[name="message"] {
+	width: 600px;
+	font: normal normal normal 12px/14px Arial, serif;
+	padding: 5px;
+}
+
+#ext_textheight {
+	width: 600px;
+	padding: 5px;
+	display: none;
+	border: 1px solid black;
+	font: normal normal normal 12px/14px Arial, serif;
+	text-align: left;
+}
