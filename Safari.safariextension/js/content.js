@@ -674,6 +674,9 @@ var show_navigation_buttons = {
 			// Create search button
 			$('<div id="ext_search"></div>').prependTo('body');
 			
+			// Place search overlay arrow
+			$('<div id="ext_overlay_search_arrow"></div>').appendTo('body');
+			
 			// Place search icon background
 			$('#ext_search').css('background-image', 'url('+safari.extension.baseURI+'img/content/search.png)');
 		
@@ -708,9 +711,6 @@ var show_navigation_buttons = {
 				topic_whitelist.execute(this);
 			
 			});			
-		} else {
-			$('#ext_scrolltop').css('bottom', 138);
-			$('#ext_back').css('bottom', 100);
 		}
 	
 		
@@ -732,6 +732,76 @@ var show_navigation_buttons = {
 				function() { show_navigation_buttons.hideFaves(); }
 			);
 		}
+		
+		// Set the button positions
+			
+			// Gather visible buttons
+			var buttons = new Array();
+				
+				if($('#ext_scrolltop').length) {
+					buttons.push('ext_scrolltop');
+				}
+
+				if($('#ext_back').length) {
+					buttons.push('ext_back');
+				}
+
+				if($('#ext_search').length) {
+					buttons.push('ext_search');
+				}
+
+				if($('#ext_whitelist').length) {
+					buttons.push('ext_whitelist');
+				}
+
+				if($('#ext_nav_faves').length) {
+					buttons.push('ext_nav_faves');
+				}
+			
+			// Reverse the array order for bottom positioning
+			if(dataStore['navigation_buttons_position'].match('bottom')) {
+				buttons = buttons.reverse();
+			}
+			
+			// Calculate buttons height 
+			var height = buttons.length * 36;
+			
+			// Calculate the top position
+			var top = ( $(window).height() / 2 ) - ( height / 2);
+
+			// Iterate over the buttons
+			for(c = 0; c < buttons.length; c++) {
+				
+				if(dataStore['navigation_buttons_position'] == 'lefttop') {
+				
+					$('#'+buttons[c]).css({ left : 10, right : 'auto', top : 30 + (36*c), bottom : 'auto' });
+				}
+
+				if(dataStore['navigation_buttons_position'] == 'leftcenter') {
+					
+					$('#'+buttons[c]).css({ left : 10, right : 'auto', top : top + (36*c), bottom : 'auto' });
+				}
+
+				if(dataStore['navigation_buttons_position'] == 'leftbottom') {
+				
+					$('#'+buttons[c]).css({ left : 10, right : 'auto', bottom : 30 + (36*c), top : 'auto' });
+				}
+
+				if(dataStore['navigation_buttons_position'] == 'righttop') {
+				
+					$('#'+buttons[c]).css({ right : 10, left : 'auto', top : 50 + (36*c), bottom : 'auto' });
+				}
+
+				if(dataStore['navigation_buttons_position'] == 'rightcenter') {
+					
+					$('#'+buttons[c]).css({ right : 10, left : 'auto', top : top + (36*c), bottom : 'auto' });
+				}
+
+				if(dataStore['navigation_buttons_position'] == 'rightbottom') {
+
+					$('#'+buttons[c]).css({ right : 10, left : 'auto', bottom : 30 + (36*c), top : 'auto' });
+				}
+			}
 	},
 	
 	disabled : function() {
@@ -751,12 +821,18 @@ var show_navigation_buttons = {
 		// Add class
 		clone.attr('id', 'ext_overlay_search');
 		
-		// Place arrow
-		$('<div id="ext_overlay_search_arrow"></div>').appendTo('#ext_overlay_search');
+		// Set position
+		show_navigation_buttons.findArrowPosition( $('#ext_overlay_search_arrow'), $('#ext_search') );
+		show_navigation_buttons.findPosition( $('#ext_overlay_search'), $('#ext_search') );
+		
+		// Show the elements
+		$('#ext_overlay_search_arrow').show();
+		$('#ext_overlay_search').show();
 	},
 	
 	hideSearch : function() {
 		$('#ext_overlay_search').remove();
+		$('#ext_overlay_search_arrow').hide();
 	},
 	
 	showFaves : function() {
@@ -781,6 +857,9 @@ var show_navigation_buttons = {
 					short_comment_marker.activated();
 				}
 				
+				// Set position
+				show_navigation_buttons.findArrowPosition( $('#ext_nav_faves_arrow'), $('#ext_nav_faves') );
+				show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
 					
 				// Show the container
 				$('#ext_nav_faves_wrapper').show();
@@ -792,7 +871,81 @@ var show_navigation_buttons = {
 	hideFaves : function() {
 		$('#ext_nav_faves_wrapper').hide();
 		$('#ext_nav_faves_arrow').hide();
-	}
+	},
+	
+	findArrowPosition : function(ele, target) {
+
+		
+		// Top
+		if(dataStore['navigation_buttons_position'].match('bottom')) {
+			var vPos = parseInt($(target).css('bottom').replace('px', '')) + $(target).height() / 2- $(ele).outerHeight() / 2;
+		} else {
+			var vPos = parseInt($(target).css('top').replace('px', '')) + $(target).height() / 2- $(ele).outerHeight() / 2;
+		}
+		
+		// Left
+		if(dataStore['navigation_buttons_position'].match('left')) {
+			
+			if(dataStore['navigation_buttons_position'].match('bottom')) {
+				$(ele).css({ 'border-color' : 'transparent #c0c0c0 transparent transparent', top : 'auto', bottom : vPos, left : 30, right : 'auto' });
+			} else {
+				$(ele).css({ 'border-color' : 'transparent #c0c0c0 transparent transparent', top : vPos, bottom : 'auto', left : 30, right : 'auto' });
+			}
+		// Right
+		} else {
+			if(dataStore['navigation_buttons_position'].match('bottom')) {
+				$(ele).css({ 'border-color' : 'transparent transparent transparent #c0c0c0', top : 'auto', bottom : vPos, left : 'auto', right : 30 });
+			} else {
+				$(ele).css({ 'border-color' : 'transparent transparent transparent #c0c0c0', top : vPos, bottom : 'auto', left : 'auto', right : 30 });
+			}
+		}
+	},
+	
+	findPosition : function(ele, target) {
+
+		
+		if(dataStore['navigation_buttons_position'] == 'lefttop') {
+			
+			var top = parseInt($(target).css('top').replace('px', '')) - 15;
+
+			$(ele).css({ left : 50, right : 'auto', top : top, bottom : 'auto' });
+		}
+
+		if(dataStore['navigation_buttons_position'] == 'leftcenter') {
+			
+			var top = parseInt($(target).css('top').replace('px', '')) + $(target).height() / 2- $(ele).outerHeight() / 2;
+			
+			$(ele).css({ left : 50, right : 'auto', top : top, bottom : 'auto' });
+		}
+
+		if(dataStore['navigation_buttons_position'] == 'leftbottom') {
+			
+			var bottom = parseInt($(target).css('bottom').replace('px', '')) - 15;
+			
+			$(ele).css({ left : 50, right : 'auto', top : 'auto', bottom : bottom });
+		}
+
+		if(dataStore['navigation_buttons_position'] == 'righttop') {
+			
+			var top = parseInt($(target).css('top').replace('px', '')) - 15;
+
+			$(ele).css({ left : 'auto', right : 50, top : top, bottom : 'auto' });
+		}
+
+		if(dataStore['navigation_buttons_position'] == 'rightcenter') {
+			
+			var top = parseInt($(target).css('top').replace('px', '')) + $(target).height() / 2- $(ele).outerHeight() / 2;
+			
+			$(ele).css({ left : 'auto', right : 50, top : top, bottom : 'auto' });
+		}
+
+		if(dataStore['navigation_buttons_position'] == 'rightbottom') {
+			
+			var bottom = parseInt($(target).css('bottom').replace('px', '')) - 15;
+			
+			$(ele).css({ left : 'auto', right : 50, top : 'auto', bottom : bottom });
+		}
+	} 
 };
 
 var update_fave_list = {
@@ -3193,7 +3346,12 @@ function extInit() {
 			
 			// Auto resizing textarea
 			textarea_auto_resize.init();
-		}
+		
+		// Topic if whitelisted, show the navigation
+		// buttons for removal
+		} else {
+			show_navigation_buttons.activated();
+		}	
 	}
 	
 	// GLOBAL SCRIPTS

@@ -157,6 +157,7 @@ if( typeof ss.storage.show_mentioned_comments_in_links		== 'undefined') ss.stora
 if( typeof ss.storage.blocks_config							== 'undefined') ss.storage.blocks_config						= '';
 if( typeof ss.storage.hide_blocks_buttons					== 'undefined') ss.storage.hide_blocks_buttons					= false;
 if( typeof ss.storage.show_navigation_buttons				== 'undefined') ss.storage.show_navigation_buttons				= true;
+if( typeof ss.storage.navigation_buttons_position			== 'undefined') ss.storage.navigation_buttons_position			= 'leftcenter';
 if( typeof ss.storage.remove_ads							== 'undefined') ss.storage.remove_ads							= false;
 if( typeof ss.storage.wysiwyg_editor						== 'undefined') ss.storage.wysiwyg_editor						= false;
 if( typeof ss.storage.topic_whitelist						== 'undefined') ss.storage.topic_whitelist						= '';

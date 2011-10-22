@@ -143,11 +143,11 @@
 	position: fixed;
 	bottom: 208px;
 	left: 10px;
-	background-color: #999;
+	background-color: #bbb;
 	border-radius: 5px;
-	opacity: 0.5;
 	font: normal normal normal 14px/26px Arial;
 	cursor: pointer;
+	opacity: 0.6;
 }
 
 #ext_back {
@@ -156,11 +156,11 @@
 	position: fixed;
 	bottom: 172px;
 	left: 10px;
-	background-color: #999;
+	background-color: #bbb;
 	border-radius: 5px;
-	opacity: 0.5;
 	font: normal normal normal 14px/26px Arial;
 	cursor: pointer;
+	opacity: 0.6;
 }
 
 #ext_search {
@@ -169,23 +169,23 @@
 	position: fixed;
 	bottom: 136px;
 	left: 10px;
-	background-color: #999;
+	background-color: #bbb;
 	border-radius: 5px;
-	opacity: 0.5;
 	font: normal normal normal 14px/26px Arial;
 	cursor: pointer;
 	background-repeat: no-repeat;
 	background-position: center center;
+	opacity: 0.6;
 }
 
 #ext_overlay_search {
+	display: none;
 	width: 300px;
 	height: 40px;
 	padding: 10px !important;
 	position: fixed;
 	bottom: 119px;
 	left: 50px;
-	opacity: 0.8;
 	font: normal normal bold 12px/14px Arial, serif;
 	background-color: #c0c0c0;
 	-webkit-border-radius: 5px;
@@ -199,10 +199,10 @@
 }
 
 #ext_overlay_search_arrow {
-	position: absolute;
+	display: none;
+	position: fixed;
 	bottom: 19px;
 	left: -20px;
-	opacity: 0.8;
 	border-color: transparent #c0c0c0 transparent transparent;
 	border-style: solid;
 	border-width: 10px;
@@ -214,14 +214,14 @@
 	position: fixed;
 	bottom: 100px;
 	left: 10px;
-	background-color: #999;
+	background-color: #bbb;
 	border-radius: 5px;
-	opacity: 0.5;
 	font: normal normal normal 14px/26px Arial;
 	cursor: pointer;
 	background-repeat: no-repeat;
 	background-position: center center;
 	font: normal normal bold 16px/26px Arial, serif;
+	opacity: 0.6;
 }
 
 #ext_nav_faves {
@@ -230,12 +230,12 @@
 	position: fixed;
 	bottom: 64px;
 	left: 10px;
-	background-color: #999;
+	background-color: #bbb;
 	border-radius: 5px;
-	opacity: 0.5;
 	cursor: pointer;
 	background-repeat: no-repeat;
 	background-position: center center;
+	opacity: 0.6;
 }
 
 #ext_nav_faves_wrapper {
@@ -249,7 +249,6 @@
 	left: 50px;
 	background-color: #c0c0c0;
 	border-radius: 5px;
-	opacity: 0.8;
 	z-index: 105;
 	text-align:left;
 	overflow-y: auto;
@@ -260,7 +259,6 @@
 	position: fixed;
 	bottom: 65px;
 	left: 30px;
-	opacity: 0.8;
 	border-color: transparent #c0c0c0 transparent transparent;
 	border-style: solid;
 	border-width: 10px;

@@ -138,6 +138,17 @@ var cp = {
 				html += '</div>';
 				html += '<div>';
 					html += '<h3>Navigációs gombok megjelenítése</h3>';
+					html += '<p class="sub">';
+						html += 'Gombok helye: ';
+						html += '<select id="navigation_buttons_position">';
+							html += '<option value="lefttop">Bal felül</option>';
+							html += '<option value="leftcenter">Bal középen</option>';
+							html += '<option value="leftbottom">Bal alul</option>';
+							html += '<option value="righttop">Jobb felül</option>';
+							html += '<option value="rightcenter">Jobb középen</option>';
+							html += '<option value="rightbottom">Jobb alul</option>';
+						html += '</select>';
+					html += '</p>';
 					html += '<p>Egy topikban vagy a cikkeknél gyors elérést biztosító funkciógombok</p>';
 					html += '<div class="button" id="show_navigation_buttons"></div>';
 				html += '</div>';
@@ -196,9 +207,15 @@ var cp = {
 		});
 		
 		// Set checkboxes
-		$('input:checkbox').click(function() {
+		$('.settings_page input:checkbox').click(function() {
 			settings.save(this);
-		})
+		});
+
+
+		// Set select boxes
+		$('.settings_page select').change(function() {
+			settings.select(this);
+		});
 		
 		
 		// Reset blocks config
@@ -375,6 +392,12 @@ var settings = {
 				$(this).attr('checked', true);
 			}
 		});
+
+		// Restore settings for select boxes
+		$('.settings_page select').each(function() {
+			
+			$(this).find('option[value="'+dataStore[ $(this).attr('id') ]+'"]').attr('selected', true);
+		});
 	},
 	
 	save : function(ele) {
@@ -405,5 +428,17 @@ var settings = {
 			// Set new value to dataStore var
 			dataStore[$(ele).attr('id')] = 'false';
 		}
+	},
+
+	select : function(ele) {
+		
+		// Get the settings value
+		var val = $(ele).find('option:selected').val();
+		
+		// Update in dataStore
+		dataStore[ $(ele).attr('id') ] = val;
+		
+		// Update in localStorage
+		opera.extension.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : val });
 	}
 };
