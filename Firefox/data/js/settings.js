@@ -143,6 +143,11 @@ var cp = {
 					html += '<p>Egy topikban vagy a cikkeknél gyors elérést biztosító funkciógombok</p>';
 					html += '<div class="button" id="show_navigation_buttons"></div>';
 				html += '</div>';
+				html += '<div>';
+					html += '<h3>Pontrendszer letiltása</h3>';
+					html += '<p>Ez az opció eltávolítja a pontozó gombokat és minden rejtett hozzászólást láthatóvá tesz.</p>';
+					html += '<div class="button" id="disable_point_system"></div>';
+				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';

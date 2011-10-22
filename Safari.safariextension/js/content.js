@@ -638,6 +638,10 @@ var autoload_next_page = {
 				if(dataStore['show_mentioned_comments'] == true) {
 					show_mentioned_comments.activated();
 				}
+
+				if(dataStore['disable_point_system'] == true) {
+					disable_point_system.activated();
+				}
 		});
 	}
 
@@ -1203,7 +1207,11 @@ function ext_valaszmsg(target, id, no, callerid) {
 			if(dataStore['show_mentioned_comments'] == true) {
 				show_mentioned_comments.activated();
 			}
-			
+
+			if(dataStore['disable_point_system'] == true) {
+				disable_point_system.activated();
+			}
+
 			// Set-up block buttons
 			blocklist.init();			
 
@@ -3161,6 +3169,20 @@ var textarea_auto_resize = {
 	}
 };
 
+var disable_point_system = {
+
+	activated : function() {
+		
+		$('.topichead .ertekelkep, .topichead span[id*="rates"]').hide();
+		$('.msg-text').show();
+		$('.msg-text').each(function() {
+			if( $(this).next().attr('id') == 'leful') {
+				$(this).next().hide();
+			}
+		});
+	}
+};
+
 function extInit() {
 	
 	// SG index.php
@@ -3238,6 +3260,10 @@ function extInit() {
 
 		// Auto resizing textarea
 		textarea_auto_resize.init();
+
+		if(dataStore['disable_point_system'] == true) {
+			disable_point_system.activated();
+		}
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
@@ -3377,7 +3403,11 @@ function extInit() {
 			
 			// Auto resizing textarea
 			textarea_auto_resize.init();
-		
+
+			if(dataStore['disable_point_system'] == true) {
+				disable_point_system.activated();
+			}
+
 		// Topic if whitelisted, show the navigation
 		// buttons for removal
 		} else {

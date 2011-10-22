@@ -636,7 +636,11 @@ var autoload_next_page = {
 				if(dataStore['show_mentioned_comments'] == 'true') {
 					show_mentioned_comments.activated();
 				}
-			
+
+				if(dataStore['disable_point_system'] == 'true') {
+					disable_point_system.activated();
+				}
+
 		});
 	}
 
@@ -1202,6 +1206,10 @@ function ext_valaszmsg(target, id, no, callerid) {
 			// show menitoned comment
 			if(dataStore['show_mentioned_comments'] == 'true') {
 				show_mentioned_comments.activated();
+			}
+
+			if(dataStore['disable_point_system'] == 'true') {
+				disable_point_system.activated();
 			}
 
 			// Set-up block buttons
@@ -3171,6 +3179,20 @@ var textarea_auto_resize = {
 	}
 };
 
+var disable_point_system = {
+
+	activated : function() {
+		
+		$('.topichead .ertekelkep, .topichead span[id*="rates"]').hide();
+		$('.msg-text').show();
+		$('.msg-text').each(function() {
+			if( $(this).next().attr('id') == 'leful') {
+				$(this).next().hide();
+			}
+		});
+	}
+};
+
 function extInit() {
 	
 	// SG index.php
@@ -3236,7 +3258,7 @@ function extInit() {
 		}
 
 		// show menitoned comment
-		if(dataStore['show_mentioned_comments'] == true) {
+		if(dataStore['show_mentioned_comments'] == 'true') {
 			show_mentioned_comments.activated();
 		}
 
@@ -3245,6 +3267,9 @@ function extInit() {
 			wysiwyg_editor.activated();
 		}
 
+		if(dataStore['disable_point_system'] == 'true') {
+			disable_point_system.activated();
+		}
 
 		// Auto resizing textarea
 		textarea_auto_resize.init();
@@ -3386,6 +3411,9 @@ function extInit() {
 				wysiwyg_editor.activated();
 			}
 
+			if(dataStore['disable_point_system'] == 'true') {
+				disable_point_system.activated();
+			}
 
 			// Auto resizing textarea
 			textarea_auto_resize.init();
