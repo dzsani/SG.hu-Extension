@@ -264,14 +264,38 @@
 	border-width: 10px;
 }
 
-#ext_nav_faves_wrapper .ext_faves {
-	display: none;
-}
-
 #ext_nav_faves_wrapper div:last-child .cikk-bal-etc2 {
 	background: none !important;
 }
 
+#ext_nav_faves_wrapper #ext_show_filtered_faves {
+	width: 18px;
+ 	position: absolute;
+ 	right: 0px;
+ 	top: 0px;
+ 	border-top-right-radius: 2px;
+ 	cursor: pointer;
+}
+
+#ext_show_filtered_faves_arrow {
+	width: 0px;
+    height: 0px; 	
+	display: block;
+}	
+
+#ext_nav_faves_wrapper #ext_show_filtered_faves_arrow.show {
+	margin: 5px 6px 5px 7px;
+	border-color: transparent transparent transparent #fff;
+	border-style: solid;
+	border-width: 4px;
+}
+
+#ext_nav_faves_wrapper #ext_show_filtered_faves_arrow.hide {
+	margin:6px 8px 3px 5px;
+	border-color: #fff transparent transparent transparent;
+	border-style: solid;
+	border-width: 4px;	
+}
 
 
 /* Overlay commentbox */

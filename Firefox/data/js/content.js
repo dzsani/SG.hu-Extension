@@ -258,7 +258,7 @@ var fav_show_only_unreaded = {
 		$('#ext_show_filtered_faves_arrow').attr('class', 'show');
 
 		// Set event handling
-		$('#ext_show_filtered_faves').click(function() {
+		$('#ext_show_filtered_faves').live('click', function() {
 		
 			if(fav_show_only_unreaded.opened == false) {
 				$('#ext_filtered_faves_error').hide();
@@ -728,7 +728,7 @@ var show_navigation_buttons = {
 			$('#ext_nav_faves').css('background-image', 'url(data:image/png;base64,'+faveImg+')');
 		
 			// Place faves opened cotainer
-			$('<p id="ext_nav_faves_arrow"><div id="ext_nav_faves_wrapper"></p><div class="ext_faves"></div><div></div></div>').prependTo('body');
+			$('<p id="ext_nav_faves_arrow"></p><div id="ext_nav_faves_wrapper"><div id="ext_show_filtered_faves"></div><div class="ext_faves"></div><div></div></div>').prependTo('body');
 		
 			// Create faves button event
 			$('#ext_nav_faves').toggle(
