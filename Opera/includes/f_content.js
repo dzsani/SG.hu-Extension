@@ -694,10 +694,13 @@ var show_navigation_buttons = {
 			$('#ext_search').css('background-image', 'url(data:image/png;base64,'+seachImg+')');
 		
 			// Create the search event
-			$('#ext_search').toggle(
-				function() { show_navigation_buttons.showSearch(); },
-				function() { show_navigation_buttons.hideSearch(); }	
-			);
+			$('#ext_search').click( function() {
+				if($('#ext_overlay_search').length) {
+					show_navigation_buttons.removeOverlay();
+				} else {
+					show_navigation_buttons.showSearch();
+				}
+			});
 			
 			// Get topic ID
 			var id = $('select[name="id"] option:selected').val();
@@ -742,10 +745,14 @@ var show_navigation_buttons = {
 			$('<p id="ext_nav_faves_arrow"></p><div id="ext_nav_faves_wrapper"><div id="ext_show_filtered_faves"></div><div class="ext_faves"></div><div></div></div>').prependTo('body');
 		
 			// Create faves button event
-			$('#ext_nav_faves').toggle(
-				function() { show_navigation_buttons.showFaves(); },
-				function() { show_navigation_buttons.hideFaves(); }
-			);
+			$('#ext_nav_faves').click( function() {
+				
+				if($('#ext_nav_faves_wrapper').css('display') == 'none') {
+					show_navigation_buttons.showFaves();
+				} else {
+					show_navigation_buttons.removeOverlay();
+				}
+			});		
 		}
 		
 		// Set the button positions
@@ -829,7 +836,10 @@ var show_navigation_buttons = {
 	},
 	
 	showSearch : function() {
-		
+
+		// Hide opened overlays
+		show_navigation_buttons.removeOverlay();
+
 		// Clone and append the original search form to body
 		var clone = $('.lapozo:last').next().next().clone().appendTo('body');
 		
@@ -843,11 +853,9 @@ var show_navigation_buttons = {
 		// Show the elements
 		$('#ext_overlay_search_arrow').show();
 		$('#ext_overlay_search').show();
-	},
-	
-	hideSearch : function() {
-		$('#ext_overlay_search').remove();
-		$('#ext_overlay_search_arrow').hide();
+
+		// Create the hiding overlay
+		show_navigation_buttons.createOverlay();
 	},
 	
 	showFaves : function() {
@@ -875,19 +883,20 @@ var show_navigation_buttons = {
 				// Set position
 				show_navigation_buttons.findArrowPosition( $('#ext_nav_faves_arrow'), $('#ext_nav_faves') );
 				show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
-					
+
+				// Hide opened overlays
+				show_navigation_buttons.removeOverlay();
+				
 				// Show the container
 				$('#ext_nav_faves_wrapper').show();
 				$('#ext_nav_faves_arrow').show();
+
+				// Create the hiding overlay
+				show_navigation_buttons.createOverlay();
 			}
 		});
 	},
-	
-	hideFaves : function() {
-		$('#ext_nav_faves_wrapper').hide();
-		$('#ext_nav_faves_arrow').hide();
-	},
-	
+
 	findArrowPosition : function(ele, target) {
 
 		
@@ -960,7 +969,27 @@ var show_navigation_buttons = {
 			
 			$(ele).css({ left : 'auto', right : 50, top : 'auto', bottom : bottom });
 		}
-	} 
+	},
+	
+	createOverlay : function() {
+		$('<div id="ext_nav_overlay"></div>').prependTo('body').css({ position : 'fixed', height : '100%', width : '100%', zIndex : 80 });
+		$('#ext_nav_overlay').click(function() {
+			show_navigation_buttons.removeOverlay();
+		});
+	},
+
+	removeOverlay : function() {
+		
+		// Hide buttons overlays
+		$('#ext_nav_faves_wrapper').hide();
+		$('#ext_nav_faves_arrow').hide();
+		
+		$('#ext_overlay_search').remove();
+		$('#ext_overlay_search_arrow').hide();
+		
+		// Remove the overlay
+		$('#ext_nav_overlay').remove();
+	}
 };
 
 var update_fave_list = {
