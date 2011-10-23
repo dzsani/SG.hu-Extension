@@ -657,7 +657,7 @@ var show_navigation_buttons = {
 		
 		// Add click event to scrolltop button
 		$('#ext_scrolltop').click(function() {
-			$('body').animate({ scrollTop : 0 }, 1000);
+			$('html').animate({ scrollTop : 0 }, 1000);
 		});
 
 		// Created the back button
