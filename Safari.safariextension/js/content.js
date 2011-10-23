@@ -261,7 +261,7 @@ var fav_show_only_unreaded = {
 		$('#ext_show_filtered_faves_arrow').attr('class', 'show');
 
 		// Set event handling
-		$('#ext_show_filtered_faves').live('click', function() {
+		$('#ext_show_filtered_faves').die('click').live('click', function() {
 		
 			if(fav_show_only_unreaded.opened == false) {
 				$('#ext_filtered_faves_error').hide();
