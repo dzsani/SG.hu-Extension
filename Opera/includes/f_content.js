@@ -281,7 +281,12 @@ var fav_show_only_unreaded = {
 
 				// Update last state in LocalStorage
 				opera.extension.postMessage({ name : "updateFavesFilterLastState", message : true });
-			
+
+				// Reposition the popup if any
+				if( $(this).closest('#ext_nav_faves_wrapper').length) {
+					show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
+				}
+							
 			} else {
 				$('#ext_filtered_faves_error').show();
 				$('#ext_show_filtered_faves_arrow').attr('class', 'show');
@@ -291,6 +296,11 @@ var fav_show_only_unreaded = {
 
 				// Update last state in LocalStorage
 				opera.extension.postMessage({ name : "updateFavesFilterLastState", message : false });
+
+				// Reposition the popup if any
+				if( $(this).closest('#ext_nav_faves_wrapper').length) {
+					show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
+				}
 			}
 		});
 

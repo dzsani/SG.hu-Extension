@@ -273,6 +273,11 @@ var fav_show_only_unreaded = {
 
 				// Update last state in LocalStorage
 				port.postMessage({ name : "updateFavesFilterLastState", message : true });
+
+				// Reposition the popup if any
+				if( $(this).closest('#ext_nav_faves_wrapper').length) {
+					show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
+				}
 			
 			} else {
 				$('#ext_filtered_faves_error').show();
@@ -283,6 +288,11 @@ var fav_show_only_unreaded = {
 
 				// Update last state in LocalStorage
 				port.postMessage({ name : "updateFavesFilterLastState", message : false });
+
+				// Reposition the popup if any
+				if( $(this).closest('#ext_nav_faves_wrapper').length) {
+					show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
+				}
 			}
 		});
 
@@ -1746,7 +1756,7 @@ var fetch_new_comments_in_topic = {
 			url : url,
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
-				
+				alert('fetched');
 				// Increase the counter
 				fetch_new_comments_in_topic.counter++;
 				

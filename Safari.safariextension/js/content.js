@@ -272,6 +272,11 @@ var fav_show_only_unreaded = {
 				
 				// Update last state in LocalStorage
 				safari.self.tab.dispatchMessage("updateFavesFilterLastState", true);
+				
+				// Reposition the popup if any
+				if( $(this).closest('#ext_nav_faves_wrapper').length) {
+					show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
+				}
 			
 			} else {
 				$('#ext_filtered_faves_error').show();
@@ -282,6 +287,11 @@ var fav_show_only_unreaded = {
 
 				// Update last state in LocalStorage
 				safari.self.tab.dispatchMessage("updateFavesFilterLastState", false);
+
+				// Reposition the popup if any
+				if( $(this).closest('#ext_nav_faves_wrapper').length) {
+					show_navigation_buttons.findPosition( $('#ext_nav_faves_wrapper'), $('#ext_nav_faves') );
+				}
 			}
 		});
 
