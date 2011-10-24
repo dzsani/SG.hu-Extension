@@ -248,8 +248,6 @@
 
 #ext_nav_faves_wrapper {
 	width: 200px;
-	min-height: 27px;
-	max-height: 500px;
 	display: none;
 	padding: 10px;
 	position: fixed;
@@ -259,6 +257,20 @@
 	border-radius: 5px;
 	z-index: 90;
 	text-align:left;
+}
+
+#ext_nav_faves_wrapper .ext_faves h5 {
+	margin: 0px;
+	padding: 0px;
+	font: normal normal bold 12px/12px Arial, serif;
+	text-align: center;
+	color: #333;
+}
+
+#ext_nav_faves_wrapper .ext_nav_fave_list {
+	margin-top: 10px;
+	min-height: 27px;
+	max-height: 500px;
 	overflow-y: auto;
 }
 

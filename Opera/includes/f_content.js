@@ -263,7 +263,11 @@ var fav_show_only_unreaded = {
 		$('#ext_show_filtered_faves').remove();
 		
 		// Set the toggle button
-		$('.ext_faves').append('<div id="ext_show_filtered_faves"></div>');
+		if($('#ext_nav_faves_wrapper').length) {
+			$('#ext_nav_faves_wrapper').prepend('<div id="ext_show_filtered_faves"></div>');
+		} else {
+			$('.ext_faves').append('<div id="ext_show_filtered_faves"></div>');
+		}
 		$('#ext_show_filtered_faves').append('<span id="ext_show_filtered_faves_arrow"></span>');
 	
 		// Apply some styles
@@ -757,7 +761,10 @@ var show_navigation_buttons = {
 			$('#ext_nav_faves').css('background-image', 'url(data:image/png;base64,'+faveImg+')');
 		
 			// Place faves opened cotainer
-			$('<p id="ext_nav_faves_arrow"></p><div id="ext_nav_faves_wrapper"><div id="ext_show_filtered_faves"></div><div class="ext_faves"></div><div></div></div>').prependTo('body');
+			$('<p id="ext_nav_faves_arrow"></p>').prependTo('body');
+			$('<div id="ext_nav_faves_wrapper"></div>').prependTo('body');
+			$('<div class="ext_faves"><h5>Kedvencek</h5></div>').appendTo('#ext_nav_faves_wrapper');
+			$('<div class="ext_nav_fave_list"></div>').appendTo('#ext_nav_faves_wrapper');
 		
 			// Create faves button event
 			$('#ext_nav_faves').click( function() {
@@ -881,7 +888,7 @@ var show_navigation_buttons = {
 			success : function(data) {
 						
 				// Write data into wrapper
-				$('#ext_nav_faves_wrapper div:last-child').html(data);
+				$('#ext_nav_faves_wrapper .ext_nav_fave_list').html(data);
 				
 				if(dataStore['jump_unreaded_messages'] == 'true') {
 					jump_unreaded_messages.activated();
