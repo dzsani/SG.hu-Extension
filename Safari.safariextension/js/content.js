@@ -1760,7 +1760,7 @@ var fetch_new_comments_in_topic = {
 			url : url,
 			mimeType : 'text/html;charset=iso-8859-2',
 			success : function(data) {
-				alert('fetch');
+
 				// Increase the counter
 				fetch_new_comments_in_topic.counter++;
 				
