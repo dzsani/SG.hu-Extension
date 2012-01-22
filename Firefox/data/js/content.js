@@ -652,6 +652,10 @@ var autoload_next_page = {
 						disable_point_system.activated();
 					}
 
+					if(dataStore['profiles'] != '') {
+						profiles.init();
+					}
+
 				autoload_next_page.progress = false;
 				autoload_next_page.currPage++;
 				autoload_next_page.counter++;
@@ -3239,6 +3243,63 @@ var disable_point_system = {
 	}
 };
 
+var profiles = {
+
+	init : function() {
+
+		// Get the profiles object
+		var profiles = JSON.parse(dataStore['profiles']);
+		
+		// Check empty
+		if(!profiles.length) {
+			return false;
+		}
+		
+		// Iterate over the comments
+		$('.topichead:not(.checked)').each(function() {
+			
+			// Get nickname
+			if(document.location.href.match('cikkek')) {
+
+				var nick = $(this).find('a:first').html();
+
+			} else {
+
+				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+					nick = nick.replace(/ - VIP/, "");
+			}
+	
+			// Iterate over the profile settings
+			// Search for nickname match
+			for(c = 0; c < profiles.length; c++) {
+				for(u = 0; u < profiles[c]['users'].length; u++) {
+					if( jQuery.trim(profiles[c]['users'][u]) == nick) {
+						
+						// WE GOT A MATCH
+						
+						// Title
+						var placeholder = $('<span>'+profiles[c]['title']+'</span>').appendTo( $(this).find('td.left:eq(1)') );
+							placeholder.parent().css('padding-left', 10);
+						
+						// Border
+						var border = $(this).parent().find('.msg-text');
+							border.css('border-left', '5px solid #'+profiles[c]['color'][0]+'');
+						
+						// Background
+						if(profiles[c]['background']) {
+							$(this).parent().find('.msg-text').css('background-color', '#'+profiles[c]['color'][1]);
+						}
+							
+					}
+				}
+			}
+			
+			// Add checked marker
+			$(this).addClass('checked');
+		});
+	}
+};
+
 function extInit() {
 
 	// SG index.php
@@ -3319,6 +3380,11 @@ function extInit() {
 		if(dataStore['disable_point_system'] == true) {
 			disable_point_system.activated();
 		}
+
+		if(dataStore['profiles'] != '') {
+			profiles.init();
+		}
+
 
 	// FORUM.PHP
 	} else if(document.location.href.match('forum.php') && !document.location.href.match('forum.php3')) {
@@ -3462,6 +3528,10 @@ function extInit() {
 			
 			if(dataStore['disable_point_system'] == true) {
 				disable_point_system.activated();
+			}
+	
+			if(dataStore['profiles'] != '') {
+				profiles.init();
 			}
 					
 		// Topic if whitelisted, show the navigation

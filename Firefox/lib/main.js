@@ -17,7 +17,7 @@ pageMod.PageMod({
 			// Send back the settings object
 			if(event.name == 'getSettings') {
 
-				worker.postMessage({ name : "setSettings", message : ss.storage, file : __url__ });
+				worker.postMessage({ name : "setSettings", message : ss.storage });
 			
 			} else if(event.name == 'getCSS') {
 
@@ -163,6 +163,7 @@ if( typeof ss.storage.wysiwyg_editor						== 'undefined') ss.storage.wysiwyg_edi
 if( typeof ss.storage.topic_whitelist						== 'undefined') ss.storage.topic_whitelist						= '';
 if( typeof ss.storage.fetch_new_comments					== 'undefined') ss.storage.fetch_new_comments					= true;
 if( typeof ss.storage.disable_point_system					== 'undefined') ss.storage.disable_point_system					= false;
+if( typeof ss.storage.profiles								== 'undefined') ss.storage.profiles								= '';
 
 // Message Center
 if( typeof ss.storage.message_center						== 'undefined') ss.storage.message_center						= false;

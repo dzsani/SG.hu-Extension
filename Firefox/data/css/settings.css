@@ -102,6 +102,10 @@
 	background-position: -300px 0px;
 }
 
+#ext_settings_header li:nth-child(6) {
+	background-position: -375px 0px;
+}
+
 
 #ext_settings_header li:nth-child(1).on {
 	background-position: 0px -75px;
@@ -121,6 +125,10 @@
 
 #ext_settings_header li:nth-child(5).on {
 	background-position: -300px -75px;
+}
+
+#ext_settings_header li:nth-child(6).on {
+	background-position: -375px -75px;
 }
 
 /* ABOUT */
@@ -180,6 +188,98 @@
 }
 
 .settings_page p.sub {
+}
+
+.settings_page .profiles  {
+	margin: 0px;
+	padding: 0px;
+}
+
+.settings_page .profiles li {
+	list-style-type: none;
+	height: 100px;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px #ddd;
+	margin-bottom: 10px;
+	position: relative;
+}
+
+.settings_page .profiles li.sample {
+	display: none;
+}
+
+.settings_page .profiles li span {
+	display: block;
+	width: 20px;
+	height: 20px;
+	float: left;
+	border-radius: 5px;
+}
+
+.settings_page .profiles li input {
+	float: left;
+	width: 200px;
+	height: 16px;
+	margin: 0px;
+	padding: 2px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	border: 0px;
+	border-radius: 5px;
+}
+
+.settings_page .profiles li ul {
+	float: left;
+	padding: 0px;
+}
+
+.settings_page .profiles li ul li {
+	padding: 0px;
+	list-style-type: none;
+	width: 20px;
+	height: 20px;
+	float: left;
+	margin-left: 10px;
+}
+
+.settings_page .profiles li ul span {
+	display: none;
+}
+
+.settings_page a.new_profile {
+	display: inline-block;
+}
+
+.settings_page .profiles li textarea {
+	display: block;
+	width: 832px;
+	height: 40px;
+	border: 0px;
+	border-radius: 5px;
+}
+
+.settings_page .profiles li p.options {
+	margin-top: 10px !important;
+	
+}
+
+.settings_page .profiles li .background {
+	width: auto !important;
+	height: auto !important;
+	float: none !important;
+	
+}
+
+.settings_page .profiles li .remove {
+	position: absolute;
+	display: inline-block;
+	top: 10px;
+	right: 10px;
+	font: normal normal normal 12px/20px Arial, serif !important;
+	color: #666 !important;
+	text-align: center;
 }
 
 #blocklist {
