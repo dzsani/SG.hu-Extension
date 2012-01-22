@@ -545,6 +545,9 @@ var profiles_cp = {
 		
 		// Append the new group
 		$(clone).appendTo(target).removeClass('sample');
+
+		// Save the new group
+		profiles_cp.save();
 	},
 	
 	removeGroup : function(ele) {

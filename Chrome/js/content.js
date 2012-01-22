@@ -655,6 +655,11 @@ var autoload_next_page = {
 					disable_point_system.activated();
 				}
 
+				// Profiles
+				if(dataStore['profiles'] != '') {
+					profiles.init();
+				}
+
 		});
 	}
 
