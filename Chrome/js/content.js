@@ -3261,7 +3261,7 @@ var profiles = {
 						
 						// Title
 						var placeholder = $('<span>'+profiles[c]['title']+'</span>').appendTo( $(this).find('td.left:eq(1)') );
-							placeholder.parent().css('padding-left', 10);
+							placeholder.css('padding-left', 10);
 						
 						// Border
 						var border = $(this).parent().find('.msg-text');
