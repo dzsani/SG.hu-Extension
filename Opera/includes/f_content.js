@@ -1264,6 +1264,11 @@ function ext_valaszmsg(target, id, no, callerid) {
 			// Set-up block buttons
 			blocklist.init();	
 
+			if(dataStore['profiles'] != '') {
+				profiles.init();
+			}
+
+
 		});
 	}
 	else { $('#'+target).slideUp(); }
@@ -1762,6 +1767,12 @@ var fetch_new_comments_in_topic = {
 					if(dataStore['show_mentioned_comments'] == 'true') {
 						show_mentioned_comments.activated();
 					}
+
+					// User profiles
+					if(dataStore['profiles'] != '') {
+						profiles.init();
+					}
+
 			}
 		});
 	}
