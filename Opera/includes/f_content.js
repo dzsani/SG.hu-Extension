@@ -3175,13 +3175,24 @@ var profiles = {
 							placeholder.css('padding-left', 10);
 						
 						// Border
-						var border = $(this).parent().find('.msg-text');
-							border.css('border-left', '5px solid #'+profiles[c]['color'][0]+'');
+						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('.msg-text') );
+							outline.css({ width : 6, height : $(this).parent().find('.msg-text').height(), float: 'left', backgroundColor : '#'+profiles[c]['color'][0], marginRight : 2, paddingTop : 3 });
 						
 						// Background
 						if(profiles[c]['background']) {
 							$(this).parent().find('.msg-text').css('background-color', '#'+profiles[c]['color'][1]);
 						}
+						
+						// Fix msg-text
+						
+							// Calc outline width 
+							var width = $(this).parent().find('.outline').length * 8;
+							
+							// Calc msg-text new width
+							width = 804 - width;
+							
+							// Set new properties
+							$(this).parent().find('.msg-text').css({ float: 'left', width: width });
 							
 					}
 				}
