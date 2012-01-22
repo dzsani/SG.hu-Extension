@@ -163,7 +163,7 @@ var cp = {
 				html += '<ul class="profiles">';
 			    	html += '<li class="sample">';
 			    		html += '<input type="hidden" name="color" class="color" value="ff4242,ffc9c9">';
-			    		html += '<span class="color" style="background-color: #ff4242"></span>';
+			    		html += '<span style="background-color: #ff4242"></span>';
 			    		html += '<input type="text" name="title" class="title" value="Profil elnevezése">';
 			    		html += '<ul>';
 			    			html += '<li style="background-color: #ffc9c9"><span>ff4242,ffc9c9</span></li>';
@@ -529,7 +529,7 @@ var profiles_cp = {
 			var content = $(clone).appendTo(target).removeClass('sample');
 			
 			// Re-set settings
-			content.find('.color').val( profiles[c]['color'] );
+			content.find('.color').val( profiles[c]['color'].join(',') );
 			content.find('span.color').css('background-color', '#'+profiles[c]['color'][0]);
 			content.find('.title').val( profiles[c]['title'] );
 			content.find('.users').val( profiles[c]['users'] );
@@ -571,7 +571,7 @@ var profiles_cp = {
 	changeColor : function(ele) {
 		
 		// Get selected color
-		var color = $(ele).find('span').html().split(',');
+		var color = $(ele).find('span').html().toString().split(',');
 		
 		// Set the color indicator
 		$(ele).parent().parent().find('span:first').css('background-color', '#'+color[0]);
@@ -593,11 +593,11 @@ var profiles_cp = {
 			
 			// Create an new empty object for the group settings
 			data[index] = {};
-				
+
 			// Prefs
-			data[index]['color'] = $(this).find('.color').val().split(',');
-			data[index]['title'] = $(this).find('.title').val();
-			data[index]['users'] = $(this).find('.users').val().split(',');
+			data[index]['color'] = $(this).find('.color').val().toString().split(',');
+			data[index]['title'] = $(this).find('.title').val().toString();
+			data[index]['users'] = $(this).find('.users').val().toString().split(',');
 			
 			// Options
 			if( $(this).find('.background').attr('checked') == true || $(this).find('.background').attr('checked') == 'checked') {
@@ -608,7 +608,7 @@ var profiles_cp = {
 			
 
 		});
-		
+
 		// Seriaize the form
 		self.postMessage({ name : "setSetting", key : 'profiles', val : JSON.stringify(data) });
 	}
