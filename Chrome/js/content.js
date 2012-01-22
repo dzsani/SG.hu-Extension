@@ -3263,22 +3263,22 @@ var profiles = {
 						if( $(this).parent().find('.wrapper').length == 0) {
 							
 							// Create the wrapper
-							$('<div class="wrapper"></div>').insertAfter( $(this).parent().find('.topichead') );
+							$('<div class="wrapper"></div>').insertAfter( $(this).parent().find('.topichead') ).css('position', 'relative');
 							
 							// Place in other elements
 							$(this).parent().find('.msg-text').appendTo( $(this).parent().find('.wrapper') );
-							
-							// Place clear:both element
-							$('<div style="clear:both;"></div>').insertAfter( $(this).parent().find('.msg-text') );
 						}		
 
 						// Title
 						var placeholder = $('<span>'+profiles[c]['title']+'</span>').appendTo( $(this).find('td.left:eq(1)') );
 							placeholder.css('padding-left', 10);
 						
+						// Calc outline width 
+						var width = (1 + $(this).parent().find('.outline').length) * 8 - 8;
+						
 						// Border
 						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('.msg-text') );
-							outline.css({ width : 6, height : $(this).parent().find('.msg-text').height(), float: 'left', backgroundColor : '#'+profiles[c]['color'][0], marginRight : 2, paddingTop : 3 });
+							outline.css({ width : 6, height : '100%', position : 'absolute', left : width, top : 0, backgroundColor : '#'+profiles[c]['color'][0] });
 						
 						// Background
 						if(profiles[c]['background']) {
@@ -3286,17 +3286,7 @@ var profiles = {
 						}
 						
 						// Fix msg-text
-					
-						
-							// Calc outline width 
-							var width = $(this).parent().find('.outline').length * 8;
-							
-							// Calc msg-text new width
-							width = 804 - width;
-							
-							// Set new properties
-							$(this).parent().find('.msg-text').css({ float: 'left', width: width });
-							
+						$(this).parent().find('.msg-text').css('padding-left', (width+3+8));	
 					}
 				}
 			}
