@@ -3169,7 +3169,20 @@ var profiles = {
 					if( jQuery.trim(profiles[c]['users'][u]) == nick) {
 						
 						// WE GOT A MATCH
-						
+
+						// Create the wrapper if not any
+						if( $(this).parent().find('.wrapper').length == 0) {
+							
+							// Create the wrapper
+							$('<div class="wrapper"></div>').insertAfter( $(this).parent().find('.topichead') );
+							
+							// Place in other elements
+							$(this).parent().find('.msg-text').appendTo( $(this).parent().find('.wrapper') );
+							
+							// Place clear:both element
+							$('<div style="clear:both;"></div>').insertAfter( $(this).parent().find('.msg-text') );
+						}		
+
 						// Title
 						var placeholder = $('<span>'+profiles[c]['title']+'</span>').appendTo( $(this).find('td.left:eq(1)') );
 							placeholder.css('padding-left', 10);
@@ -3184,6 +3197,7 @@ var profiles = {
 						}
 						
 						// Fix msg-text
+					
 						
 							// Calc outline width 
 							var width = $(this).parent().find('.outline').length * 8;
@@ -3203,7 +3217,6 @@ var profiles = {
 		});
 	}
 };
-
 
 function extInit() {
 	
