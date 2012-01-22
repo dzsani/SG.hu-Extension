@@ -27,6 +27,7 @@ var cp = {
 				html += '<li>Főoldal</li>';
 				html += '<li>Topik</li>';
 				html += '<li>Egyéb</li>';
+				html += '<li>Profilok</li>';
 				html += '<li>Tiltólista</li>';
 				html += '<li class="clear"></li>';
 			html += '</ul>';
@@ -155,6 +156,33 @@ var cp = {
 			html += '</div>';
 
 			html += '<div class="settings_page">';
+				html += '<ul class="profiles">';
+			    	html += '<li class="sample">';
+			    		html += '<input type="hidden" name="color" class="color" value="ff4242,ffc9c9">';
+			    		html += '<span class="color" style="background-color: #ff4242"></span>';
+			    		html += '<input type="text" name="title" class="title" value="Profil elnevezése">';
+			    		html += '<ul>';
+			    			html += '<li style="background-color: #ffc9c9"><span>ff4242,ffc9c9</span></li>';
+			    			html += '<li style="background-color: #f2c9ff"><span>d13eff,f2c9ff</span></li>';
+			    			html += '<li style="background-color: #c6c6ff"><span>4242ff,c6c6ff</span></li>';
+			    			html += '<li style="background-color: #c6e9ff"><span>4ebbff,c6e9ff</span></li>';
+			    			html += '<li style="background-color: #d5ffc6"><span>6afe36,d5ffc6</span></li>';
+			    			html += '<li style="background-color: #fdffc6"><span>f8ff34,fdffc6</span></li>';
+			    			html += '<li style="background-color: #ffe7c6"><span>ffa428,ffe7c6</span></li>';
+			    			html += '<li style="background-color: #e1e1e1"><span>a9a9a9,e1e1e1</span></li>';
+			    		html += '</ul>';
+			    		html += '<textarea name="users" class="users">Felhasználók</textarea>';
+			    		html += '<p class="options">';
+			    			html += 'Opciók:';
+			    			html += '<label><input type="checkbox" name="background" class="background"> Hozzászólás hátterének kiemelése</label>';
+			    		html += '</p>';
+			    		html += '<p class="remove">eltávolít</p>';
+			    	html += '</li>';
+			    html += '</ul>';
+			    html += '<a href="#" class="new_profile">Új csoport hozzáadása</a>';
+			html += '</div>';
+
+			html += '<div class="settings_page">';
 				html += '<ul id="ext_blocklist">';
 					html += '<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>';
 				html += '</ul>';
@@ -214,6 +242,9 @@ var cp = {
 		$('#reset_blocks_config').click(function() {
 			port.postMessage({ name : "setSetting", key : 'blocks_config', val : '' });
 		});
+
+		// Init profiles settings
+		profiles_cp.init();
 	},
 	
 	show : function() {
@@ -434,5 +465,142 @@ var settings = {
 		
 		// Update in localStorage
 		port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : val });
+	}
+};
+
+
+var profiles_cp = {
+
+	init : function() {
+		
+		// Add new profile group
+		$('.settings_page a.new_profile').click(function(e) {
+			e.preventDefault();
+			profiles_cp.addGroup();
+		});
+		
+		// Color select
+		$('.settings_page .profiles li ul li').live('click', function() {
+			profiles_cp.changeColor(this);
+		});
+
+		// Remove a group
+		$('.settings_page .profiles li .remove').live('click', function() {
+			profiles_cp.removeGroup(this);
+		});
+		
+		// Keyup event for the form elements
+		$('.settings_page .profiles input, .settings_page .profiles textarea').live('keyup', function() {
+			profiles_cp.save();
+		});
+		
+		// Checkboxes
+		$('.settings_page .profiles input:checkbox').live('click', function() {
+			profiles_cp.save();
+		});
+		
+		// Rebuild profiles
+		profiles_cp.rebuildProfiles();
+	},
+	
+	rebuildProfiles : function() {
+		
+		if(dataStore['profiles'] == '') {
+			return false;
+		}
+		
+		var profiles = JSON.parse(dataStore['profiles']);
+
+		for(c = 0; c < profiles.length; c++) {
+		
+			// Get the clone elementent
+			var clone = $('.settings_page .profiles li.sample').clone();
+		
+			// Get the target element
+			var target = $('.settings_page .profiles');
+			
+			// Append the new group
+			var content = $(clone).appendTo(target).removeClass('sample');
+			
+			// Re-set settings
+			content.find('.color').val( profiles[c]['color'] );
+			content.find('span.color').css('background-color', '#'+profiles[c]['color'][0]);
+			content.find('.title').val( profiles[c]['title'] );
+			content.find('.users').val( profiles[c]['users'] );
+			
+			// Re-set checkboxes
+			if(profiles[c]['background']) {
+				content.find('.background').attr('checked', true);
+			}
+		}
+	},
+	
+	addGroup : function() {
+		
+		// Get the clone elementent
+		var clone = $('.settings_page .profiles li.sample').clone();
+		
+		// Get the target element
+		var target = $('.settings_page .profiles');
+		
+		// Append the new group
+		$(clone).appendTo(target).removeClass('sample');
+	},
+	
+	removeGroup : function(ele) {
+		
+		if(confirm('Biztos törlöd ezt a csoportot?')) {
+		
+			// Remove the group from DOM
+			$(ele).closest('li').remove();
+		
+			// Save changes
+			profiles_cp.save();
+		}
+	},
+	
+	changeColor : function(ele) {
+		
+		// Get selected color
+		var color = $(ele).find('span').html().split(',');
+		
+		// Set the color indicator
+		$(ele).parent().parent().find('span:first').css('background-color', '#'+color[0]);
+		
+		// Set the color input
+		$(ele).parent().parent().find('input.color').val(color.join(','));
+		
+		// Save new settings
+		profiles_cp.save();
+	},
+	
+	save : function() {
+		
+		// Var to store data
+		var data = new Array();
+		
+		// Iterate over the groups
+		$('.settings_page .profiles > li:not(.sample)').each(function(index) {
+			
+			// Create an new empty object for the group settings
+			data[index] = {};
+				
+			// Prefs
+			data[index]['color'] = $(this).find('.color').val().split(',');
+			data[index]['title'] = $(this).find('.title').val();
+			data[index]['users'] = $(this).find('.users').val().split(',');
+			
+			// Options
+			if( $(this).find('.background').attr('checked') == true || $(this).find('.background').attr('checked') == 'checked') {
+				data[index]['background'] = true;
+			} else {
+				data[index]['background'] = false;
+			}
+			
+
+		});
+		
+		// Seriaize the form
+		port.postMessage({ name : "setSetting", key : 'profiles', val : JSON.stringify(data) });
 	}
 };
