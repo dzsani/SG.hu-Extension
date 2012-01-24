@@ -7,6 +7,10 @@
 // @include https://*.sg.hu/*
 // ==/UserScript==
 
+window.valami = function() {
+	alert('alert');
+};
+
 var cp = {
 
 	init : function(page) {
@@ -337,7 +341,7 @@ var cp = {
 		profiles_cp.init();
 
 		// Init sync settings
-		sync_cp.init();
+		window['sync_cp']['init']();
 	},
 	
 	show : function() {
@@ -530,7 +534,7 @@ var settings = {
 	
 			// Sync new settings
 			if(dataStore['sync_status'] == 'true') {
-				sync_cp.save();
+				window['sync_cp']['save']();
 			}
 			
 			// Check for interactive action
@@ -548,7 +552,7 @@ var settings = {
 
 			// Sync new settings
 			if(dataStore['sync_status'] == 'true') {
-				sync_cp.save();
+				window['sync_cp']['save']();
 			}
 
 			// Check for interactive action
@@ -706,7 +710,7 @@ var profiles_cp = {
 		dataStore['profiles'] = JSON.stringify(data);
 		
 		// Save new settings in sync
-		sync_cp.save();
+		window['sync_cp']['save']();
 
 		// Saved indicator
 		$('<p class="profile_status">&#10003;</p>').insertAfter( $('.settings_page .profile_save') );
@@ -720,7 +724,7 @@ var profiles_cp = {
 
 
 
-var sync_cp = {
+window.sync_cp = {
 	
 	init : function() {
 		
@@ -731,10 +735,7 @@ var sync_cp = {
 			e.preventDefault();
 			
 			// POST the data
-			$.post($(this).attr('action'), $(this).serialize(), function(data) {
-				sync_cp.signup(data);
-			});
-		
+			opera.extension.postMessage({ name : 'makeRequest', message : { url : $(this).attr('action'), params : $(this).serialize(), callback : ['sync_cp', 'signup'] } });
 		});
 		
 		// Login
@@ -744,9 +745,7 @@ var sync_cp = {
 			e.preventDefault();
 
 			// POST the data
-			$.post($(this).attr('action'), $(this).serialize(), function(data) {
-				sync_cp.login(data);
-			});
+			opera.extension.postMessage({ name : 'makeRequest', message : { url : $(this).attr('action'), params : $(this).serialize(), callback : ['sync_cp', 'login'] } });
 		});
 		
 		// Sync now button
@@ -756,14 +755,17 @@ var sync_cp = {
 			e.preventDefault();
 			
 			// Get settings 
-			sync_cp.get();
+			window['sync_cp']['get']();
 		});
 		
 		// Ping for settings chances
-		sync_cp.ping();
+		window['sync_cp']['ping']();
 	},
 	
 	signup : function(data) {
+		
+		// Parse JSON data
+		data = $.parseJSON(data);
 		
 		// Show the message
 		alert(data.messages[0]);
@@ -804,12 +806,15 @@ var sync_cp = {
 			signup_pass.val('');
 			
 			// Upload the config data after the signup process
-			sync_cp.save();
+			window['sync_cp']['save']();
 		}
 	},
 	
 	login : function(data) {
-				
+		
+		// Parse JSON data
+		data = $.parseJSON(data);
+		
 		// Show error message if any
 		if(data.errorCount > 0) {
 					
@@ -850,7 +855,7 @@ var sync_cp = {
 			dataStore['sync_status'] = 'true';
 			
 			// Download the config
-			sync_cp.get();
+			window['sync_cp']['get']();
 		}
 	},
 	
@@ -866,11 +871,17 @@ var sync_cp = {
 		var time = Math.round(new Date().getTime() / 1000)
 
 		if(dataStore['sync_last_sync'] < time - 60*10) {
-			$.getJSON('http://sgsync.dev.kreatura.hu/api/ping/', { nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }, function(data) {
-				if(data.date_m > dataStore['sync_last_sync']) {
-					sync_cp.get();
-				}
-			});
+			opera.extension.postMessage({ name : 'makeRequest', message : { url : 'http://sgsync.dev.kreatura.hu/api/ping/', params : $.param({ nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }), callback : ['sync_cp', 'doPing'] } });
+		}
+	},
+	
+	doPing : function(data) {
+		
+		// Parse JSON data
+		data = $.parseJSON(data);
+		
+		if(data.date_m > dataStore['sync_last_sync']) {
+			window['sync_cp']['get']();
 		}
 	},
 	
@@ -886,78 +897,83 @@ var sync_cp = {
 		$(form).find('input[name="data"]').val( JSON.stringify(dataStore) );
 
 		// Make the request
-		$.post( $(form).attr('action'), $(form).serialize() );
+		opera.extension.postMessage({ name : 'makeRequest', message : { url : $(form).attr('action'), params : $(form).serialize(), callback : '' } });
 	},
 	
 	
 	get : function() {
 		
-		$.getJSON('http://sgsync.dev.kreatura.hu/api/get/', { nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }, function(data) {
+		opera.extension.postMessage({ name : 'makeRequest', message : { url : 'http://sgsync.dev.kreatura.hu/api/get/', params : $.param({ nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }), callback : ['sync_cp', 'doGet'] } });
+	},
+	
+	doGet : function(data) {
 		
-			if(data.errorCount > 0) {
-				alert('A szinkronizáció meghiúsult, ellenőrizd a felhasználóneved, jelszavad!');
-				return;
-			}
+		// Parse JSON data
+		data = $.parseJSON(data);
 		
-			// Get current timestamp
-			var time = Math.round(new Date().getTime() / 1000)
+		if(data.errorCount > 0) {
+		    alert('A szinkronizáció meghiúsult, ellenőrizd a felhasználóneved, jelszavad!');
+		    return;
+		}
+		
+		// Get current timestamp
+		var time = Math.round(new Date().getTime() / 1000)
 
-			// Update the last sync time
-			opera.extension.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
-			
-			// Update data in dataStore object
-			dataStore = JSON.parse(data['settings']);
-			
-			// Update settings in localStorage
-			for (var key in dataStore) {
-				
-				if(!key.match('sync')) {
-					opera.extension.postMessage({ name : "setSetting", key : key, val : dataStore[key] });
-				}
-			}
-			
-			// Update settings GUI
-			settings.restore();
-			blocklist_cp.list();
-			profiles_cp.rebuildProfiles();
-			
-			// Update last sync date
-			var month = date('M', time);
+		// Update the last sync time
+		opera.extension.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
+		
+		// Update data in dataStore object
+		dataStore = JSON.parse(data['settings']);
+		
+		// Update settings in localStorage
+		for (var key in dataStore) {
+		    
+		    if(!key.match('sync')) {
+		    	opera.extension.postMessage({ name : "setSetting", key : key, val : dataStore[key] });
+		    }
+		}
+		
+		// Update settings GUI
+		settings.restore();
+		blocklist_cp.list();
+		profiles_cp.rebuildProfiles();
+		
+		// Update last sync date
+		var month = date('M', time);
 
-			// Convert mounts names
-			$.each([
-				['Jan', 'január'],
-				['Feb', 'február'],
-				['Mar', 'március'],
-				['Apr', 'április'],
-				['May', 'május'],
-				['Jun', 'június'],
-				['Jul', 'július'],
-				['Aug', 'augusztus'],
-				['Sep', 'szeptember'],
-				['Oct', 'október'],
-				['Nov', 'november'],
-				['Dec', 'december'],
-			
-			], function(index, item) {
-				month = month.replace(item[0], item[1]);
-			});						
-			
-			// Update last sync date
-			$('.settings_page.sync .log .last_sync').html(''+month+' '+date('d. -  H:i', time)+'');
+		// Convert mounts names
+		$.each([
+		    ['Jan', 'január'],
+		    ['Feb', 'február'],
+		    ['Mar', 'március'],
+		    ['Apr', 'április'],
+		    ['May', 'május'],
+		    ['Jun', 'június'],
+		    ['Jul', 'július'],
+		    ['Aug', 'augusztus'],
+		    ['Sep', 'szeptember'],
+		    ['Oct', 'október'],
+		    ['Nov', 'november'],
+		    ['Dec', 'december'],
+		
+		], function(index, item) {
+		    month = month.replace(item[0], item[1]);
+		});						
+		
+		// Update last sync date
+		$('.settings_page.sync .log .last_sync').html(''+month+' '+date('d. -  H:i', time)+'');
 
-			// HTML for indicator
-			html = '<div class="status">';
-			html += '<div class="loggedin">&#10003;</div>';
-			html += '</div>';
-			
-			// Insert HTML
-			$(html).insertAfter( $('.settings_page.sync .log button') );
-			
-			// Remove the idicator in 2 sec
-			setTimeout(function() {
-				$('.settings_page.sync .log .status').remove();
-			}, 3000);
-		});
+		// HTML for indicator
+		html = '<div class="status">';
+		html += '<div class="loggedin">&#10003;</div>';
+		html += '</div>';
+		
+		// Insert HTML
+		$(html).insertAfter( $('.settings_page.sync .log button') );
+		
+		// Remove the idicator in 2 sec
+		setTimeout(function() {
+		    $('.settings_page.sync .log .status').remove();
+		}, 3000);	
 	}
 };

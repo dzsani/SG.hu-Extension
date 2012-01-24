@@ -3476,7 +3476,19 @@ if (window.top === window) {
 					style.setAttribute('type', 'text/css');            
 					style.appendChild(document.createTextNode(css));
 					document.getElementsByTagName('head')[0].appendChild(style);
-			
+
+			} else if(msg.name == 'ajaxComplete') {
+				
+				// Get response data
+				var data = msg.message.data;
+				
+				// Get the callback 
+				var callback = msg.message.callback;
+
+				// Trigger the callback
+				window[callback[0]][callback[1]](data);
+	
+
 			} else if(msg.name == 'updateDataStore') {
 		
 				// Update dataStore with the new data

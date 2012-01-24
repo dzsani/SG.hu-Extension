@@ -13,5 +13,5 @@
 		
 		<content src="index.html" type="text/html" encoding="utf-8"/>
 		
-		<access origin="http://www.sg.hu" subdomains="true"/>
+		<access origin="*" subdomains="true"/>
 </widget>
