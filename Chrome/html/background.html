@@ -65,6 +65,7 @@
 						// If the blocklist is empty
 						if(localStorage['block_list'] == '') { 
 							localStorage['block_list'] = event.message;
+							port.postMessage({ name : "updateDataStore", message : localStorage });
 		
 						// If the blocklist is not empty
 						} else {

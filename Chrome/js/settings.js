@@ -234,7 +234,33 @@ var cp = {
 				html += '<div class="log">';
 					html += '<h3>Statisztika és lehetőségek</h3>';
 					html += '<strong>Utolsó szinkronizálás: </strong>';
-					html += '<span>január 23. 18:00</span>';
+					if(dataStore['sync_last_sync'] == 0) { 
+					html += '<span class="last_sync">Soha</span>';
+					} else {
+	
+						var month = date('M', dataStore['sync_last_sync']);
+
+						// Convert mounts names
+						$.each([
+							['Jan', 'január'],
+							['Feb', 'február'],
+							['Mar', 'március'],
+							['Apr', 'április'],
+							['May', 'május'],
+							['Jun', 'június'],
+							['Jul', 'július'],
+							['Aug', 'augusztus'],
+							['Sep', 'szeptember'],
+							['Oct', 'október'],
+							['Nov', 'november'],
+							['Dec', 'december'],
+			
+						], function(index, item) {
+							month = month.replace(item[0], item[1]);
+						});						
+					
+					html += '<span class="last_sync">'+month+' '+date('d. -  H:i', dataStore['sync_last_sync'])+'</span>';
+					}
 					html += '<button class="sync">Szinkronizálás most</button>';
 				html += '</div>';
 			html += '</div>';
@@ -582,7 +608,7 @@ var profiles_cp = {
 		}
 		
 		// Empty the list
-		$('.settings_page .profiles li:not(.sample)').remove();
+		$('.settings_page .profiles > li:not(.sample)').remove();
 		
 		var profiles = JSON.parse(dataStore['profiles']);
 
@@ -884,6 +910,31 @@ var sync_cp = {
 			blocklist_cp.list();
 			profiles_cp.rebuildProfiles();
 			
+			// Update last sync date
+			var month = date('M', time);
+
+			// Convert mounts names
+			$.each([
+				['Jan', 'január'],
+				['Feb', 'február'],
+				['Mar', 'március'],
+				['Apr', 'április'],
+				['May', 'május'],
+				['Jun', 'június'],
+				['Jul', 'július'],
+				['Aug', 'augusztus'],
+				['Sep', 'szeptember'],
+				['Oct', 'október'],
+				['Nov', 'november'],
+				['Dec', 'december'],
+			
+			], function(index, item) {
+				month = month.replace(item[0], item[1]);
+			});						
+			
+			// Update last sync date
+			$('.settings_page.sync .log .last_sync').html(''+month+' '+date('d. -  H:i', time)+'');
+
 			// HTML for indicator
 			html = '<div class="status">';
 			html += '<div class="loggedin">&#10003;</div>';
