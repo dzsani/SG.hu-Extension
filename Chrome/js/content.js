@@ -442,9 +442,9 @@ var blocklist =  {
 				})
 			});
 		
-			// Post message
-			port.postMessage({ name : "addToBlocklist", message : nick });
-		
+			// Store new settings in localStorage
+			port.postMessage({ name : "addToBlocklist", message : nick });	
+			
 			// Add name to blocklist 
 			$('<li><span>'+nick+'</span> <a href="#">töröl</a></li>').appendTo('#ext_blocklist')
 		
@@ -3564,6 +3564,16 @@ port.onMessage.addListener(function(event) {
 		$(document).ready(function() {
 			extInit();
 		});
+	
+	} else if(event.name == 'updateDataStore') {
+		
+		// Update dataStore with the new data
+		dataStore = event.message;
+
+		// Save changes to sync
+		if(dataStore['sync_status'] == 'true') {
+			sync_cp.save();
+		}		
 	}
 });
 

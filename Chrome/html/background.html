@@ -35,6 +35,12 @@
 			if( typeof localStorage['mc_messages']							== 'undefined') localStorage['mc_messages']							= '';
 			if( typeof localStorage['mc_selected_tab']						== 'undefined') localStorage['mc_selected_tab']						= 0;
 			
+			// Sync
+			if( typeof localStorage['sync_nick']							== 'undefined') localStorage['sync_nick']							= '';
+			if( typeof localStorage['sync_pass']							== 'undefined') localStorage['sync_pass']							= '';
+			if( typeof localStorage['sync_status']							== 'undefined') localStorage['sync_status']							= 'false';
+			if( typeof localStorage['sync_last_sync']						== 'undefined') localStorage['sync_last_sync']						= '0';
+			
 			chrome.extension.onConnect.addListener(function(port) {
 				port.onMessage.addListener(function(event) {
 
@@ -67,6 +73,7 @@
 								if(blockList.indexOf(event.message) == -1) { 
 									blockList.push(event.message); 
 									localStorage['block_list'] = blockList.join(',');
+									port.postMessage({ name : "updateDataStore", message : localStorage });
 								}
 						}
 					// Reset blocks config
@@ -91,6 +98,9 @@
 					
 						// Save changes in localStorage
 						localStorage['block_list'] = list.join(',');
+						
+						// Update dataStore
+						port.postMessage({ name : "updateDataStore", message : localStorage });
 				
 					// Save posted settings
 					} else if(event.name == 'setSetting') {

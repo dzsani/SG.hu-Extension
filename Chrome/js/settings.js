@@ -29,6 +29,7 @@ var cp = {
 				html += '<li>Egyéb</li>';
 				html += '<li>Profilok</li>';
 				html += '<li>Tiltólista</li>';
+				html += '<li>Sync</li>';
 				html += '<li class="clear"></li>';
 			html += '</ul>';
 			
@@ -179,6 +180,7 @@ var cp = {
 			    		html += '<p class="remove">eltávolít</p>';
 			    	html += '</li>';
 			    html += '</ul>';
+			    html += '<button class="profile_save">Változások mentése</button>';
 			    html += '<a href="#" class="new_profile">Új csoport hozzáadása</a>';
 			html += '</div>';
 
@@ -187,7 +189,57 @@ var cp = {
 					html += '<li id="ext_empty_blocklist">Jelenleg üres a tiltólistád</li>';
 				html += '</ul>';
 			html += '</div>';
+			
+			html += '<div class="settings_page sync">';
+				
+				html += '<div class="set">';
+					html += '<form action="http://sgsync.dev.kreatura.hu/api/set/" method="post">';
+						html += '<input type="hidden" name="nick">';
+						html += '<input type="hidden" name="pass">';
+						html += '<input type="hidden" name="data">';
+					html += '</form>';
+				html += '</div>';
+				
+				html += '<div class="signup">';
+					html += '<h3>Regisztráció</h3>';
+					html += '<p class="desc">';
+						html += 'A jelszavad visszafejthető módon, lokálisan is tárolódik! ';
+						html += 'Ha publikus számítógépeken is használod a bővítményt, ';
+						html += 'válassz egyedi jelszót, amit máshol nem használsz!';
+					html += '</p>';
+					html += '<form action="http://sgsync.dev.kreatura.hu/api/signup/?callback=?" method="post">';
+						html += '<input type="text" name="nick" placeholder="Felhasználónév">';
+						html += '<input type="password" name="pass" placeholder="Jelszó">';
+						html += '<button type="submit">Regisztráció</button>';
+					html += '</form>';
+				html += '</div>';
+				
+				html += '<div class="login">';
+					html += '<h3>Belépés</h3>';
+					html += '<form action="http://sgsync.dev.kreatura.hu/api/auth/?callback=?" method="post">';
+						html += '<input type="text" name="nick" placeholder="Felhasználónév" value="'+dataStore['sync_nick']+'">';
+						html += '<input type="password" name="pass" placeholder="Jelszó" value="'+dataStore['sync_pass']+'">';
+						html += '<button type="submit">Belépés</button>';
+						
+						html += '<div class="status">';
+							if(typeof dataStore['sync_nick'] != 'undefined' && dataStore['sync_status'] == 'true') {
+							html += '<div class="loggedin">&#10003;</div>';
+							html += '<strong>Belépve mint: </strong>';
+							html += '<span>'+dataStore['sync_nick']+'</span>';
+							}
+						html += '</div>';
+					html += '</form>';
+				html += '</div>';
+				
+				html += '<div class="log">';
+					html += '<h3>Statisztika és lehetőségek</h3>';
+					html += '<strong>Utolsó szinkronizálás: </strong>';
+					html += '<span>január 23. 18:00</span>';
+					html += '<button class="sync">Szinkronizálás most</button>';
+				html += '</div>';
+			html += '</div>';
 		html += '</div>';
+
 		
 		// Append settings pane html to body
 		$(html).appendTo('body');
@@ -245,6 +297,9 @@ var cp = {
 
 		// Init profiles settings
 		profiles_cp.init();
+
+		// Init sync settings
+		sync_cp.init();
 	},
 	
 	show : function() {
@@ -403,10 +458,10 @@ var settings = {
 		$('.settings_page .button').each(function() {
 
 			if(dataStore[ $(this).attr('id') ] == 'true') {
-				$(this).addClass('on');
+				$(this).attr('class', 'button on');
 			
 			} else {
-				$(this).addClass('off');
+				$(this).attr('class', 'button off');
 			}
 		});
 		
@@ -415,6 +470,8 @@ var settings = {
 			
 			if(dataStore[ $(this).attr('id') ] == 'true') {
 				$(this).attr('checked', true);
+			} else {
+				$(this).attr('checked', false);
 			}
 		});
 
@@ -431,27 +488,37 @@ var settings = {
 			
 			// Save new settings ...
 			port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : 'true' });
+
+			// Set new value to dataStore var
+			dataStore[$(ele).attr('id')] = 'true';
+	
+			// Sync new settings
+			if(dataStore['sync_status'] == 'true') {
+				sync_cp.save();
+			}
 			
 			// Check for interactive action
 			if( typeof window[$(ele).attr('id')].activated != 'undefined') {
 				window[$(ele).attr('id')].activated();
 			}
-			
-			// Set new value to dataStore var
-			dataStore[$(ele).attr('id')] = 'true';
 		
 		} else {
 
 			// Save new settings ...
 			port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : 'false' });
-			
+
+			// Set new value to dataStore var
+			dataStore[$(ele).attr('id')] = 'false';
+
+			// Sync new settings
+			if(dataStore['sync_status'] == 'true') {
+				sync_cp.save();
+			}
+
 			// Check for interactive action
 			if( typeof window[$(ele).attr('id')].disabled != 'undefined') {
 				window[$(ele).attr('id')].disabled();
 			}
-			
-			// Set new value to dataStore var
-			dataStore[$(ele).attr('id')] = 'false';
 		}
 	},
 	
@@ -462,7 +529,12 @@ var settings = {
 		
 		// Update in dataStore
 		dataStore[ $(ele).attr('id') ] = val;
-		
+
+		// Sync new settings
+		if(dataStore['sync_status'] == 'true') {
+			sync_cp.save();
+		}
+
 		// Update in localStorage
 		port.postMessage({ name : "setSetting", key : $(ele).attr('id'), val : val });
 	}
@@ -489,13 +561,13 @@ var profiles_cp = {
 			profiles_cp.removeGroup(this);
 		});
 		
-		// Keyup event for the form elements
-		$('.settings_page .profiles input, .settings_page .profiles textarea').live('keyup', function() {
-			profiles_cp.save();
-		});
-		
-		// Checkboxes
-		$('.settings_page .profiles input:checkbox').live('click', function() {
+		// Save the settings
+		$('.settings_page .profile_save').click(function(e) {
+			
+			// Prevent browsers default submission
+			e.preventDefault();
+			
+			// Save the settings
 			profiles_cp.save();
 		});
 		
@@ -508,6 +580,9 @@ var profiles_cp = {
 		if(dataStore['profiles'] == '') {
 			return false;
 		}
+		
+		// Empty the list
+		$('.settings_page .profiles li:not(.sample)').remove();
 		
 		var profiles = JSON.parse(dataStore['profiles']);
 
@@ -545,9 +620,6 @@ var profiles_cp = {
 		
 		// Append the new group
 		$(clone).appendTo(target).removeClass('sample');
-
-		// Save the new group
-		profiles_cp.save();
 	},
 	
 	removeGroup : function(ele) {
@@ -556,9 +628,6 @@ var profiles_cp = {
 		
 			// Remove the group from DOM
 			$(ele).closest('li').remove();
-		
-			// Save changes
-			profiles_cp.save();
 		}
 	},
 	
@@ -572,9 +641,6 @@ var profiles_cp = {
 		
 		// Set the color input
 		$(ele).parent().parent().find('input.color').val(color.join(','));
-		
-		// Save new settings
-		profiles_cp.save();
 	},
 	
 	save : function() {
@@ -603,7 +669,233 @@ var profiles_cp = {
 
 		});
 		
-		// Seriaize the form
+		// Save settings in localStorage
 		port.postMessage({ name : "setSetting", key : 'profiles', val : JSON.stringify(data) });
+		
+		// Save new settings in dataStore
+		dataStore['profiles'] = JSON.stringify(data);
+		
+		// Save new settings in sync
+		sync_cp.save();
+
+		// Saved indicator
+		$('<p class="profile_status">&#10003;</p>').insertAfter( $('.settings_page .profile_save') );
+			
+		// Remove the idicator in 2 sec
+		setTimeout(function() {
+			$('.settings_page .profile_status').remove();
+		}, 3000);
+	}
+};
+
+var sync_cp = {
+	
+	init : function() {
+		
+		// Signup
+		$('.settings_page.sync .signup form').submit(function(e) {
+			
+			// Prevent borwsers default submisson
+			e.preventDefault();
+			
+			// POST the data
+			$.post($(this).attr('action'), $(this).serialize(), function(data) {
+				sync_cp.signup(data);
+			});
+		
+		});
+		
+		// Login
+		$('.settings_page.sync .login form').submit(function(e) {
+		
+			// Prevent browsers default submission
+			e.preventDefault();
+
+			// POST the data
+			$.post($(this).attr('action'), $(this).serialize(), function(data) {
+				sync_cp.login(data);
+			});
+		});
+		
+		// Sync now button
+		$('.settings_page.sync .log button.sync').click(function(e) {
+
+			// Prevent browsers default submission
+			e.preventDefault();
+			
+			// Get settings 
+			sync_cp.get();
+		});
+		
+		// Ping for settings chances
+		sync_cp.ping();
+	},
+	
+	signup : function(data) {
+		
+		// Show the message
+		alert(data.messages[0]);
+		
+		// On success
+		if(data.errorCount == 0) {
+			
+			// Target elements
+			var login_nick = $('.settings_page.sync .login input[name="nick"]');
+			var login_pass = $('.settings_page.sync .login input[name="pass"]');
+			
+			// Get the values
+			var signup_nick = $('.settings_page.sync .signup input[name="nick"]');
+			var signup_pass = $('.settings_page.sync .signup input[name="pass"]');
+			
+			// Set the login values
+			login_nick.val(signup_nick.val());
+			login_pass.val(signup_pass.val());
+			
+			// Store login credentials in localStorage
+			port.postMessage({ name : "setSetting", key : 'sync_nick', val : signup_nick.val() });
+			port.postMessage({ name : "setSetting", key : 'sync_pass', val : signup_pass.val() });
+			port.postMessage({ name : "setSetting", key : 'sync_status', val : 'true' });
+			
+			// Empty status div
+			$('.settings_page.sync .login .status').html('');
+			
+			// HTML to insert
+			html  = '<div class="loggedin">&#10003;</div>';
+			html += '<strong>Belépve mint: </strong>';
+			html += '<span>'+signup_nick.val()+'</span>';
+			
+			// Insert new status
+			$('.settings_page.sync .login .status').html(html);
+
+			// Empty signup fields
+			signup_nick.val('');
+			signup_pass.val('');
+			
+			// Upload the config data after the signup process
+			sync_cp.save();
+		}
+	},
+	
+	login : function(data) {
+				
+		// Show error message if any
+		if(data.errorCount > 0) {
+					
+			// Clear HTML from previous tries
+			$('.settings_page.sync .login .status').html('');
+					
+			// HTML to append
+			html = '<div class="loggedin error">X</div>';
+			html += '<strong>Hiba: </strong>';
+			html += '<span>'+data.messages[0]+'</span>';
+					
+			$(html).appendTo($('.settings_page.sync .login .status'));
+				
+		// Success
+		} else {
+			
+			// Target elements
+			var login_nick = $('.settings_page.sync .login input[name="nick"]');
+			var login_pass = $('.settings_page.sync .login input[name="pass"]');
+			
+			// Clear HTML from previous tries
+			$('.settings_page.sync .login .status').html('');
+	
+			html = '<div class="loggedin">&#10003;</div>';
+			html += '<strong>Belépve mint: </strong>';
+			html += '<span>'+login_nick.val()+'</span>';
+			
+			$(html).appendTo($('.settings_page.sync .login .status'));
+
+			// Store login credentials in localStorage
+			port.postMessage({ name : "setSetting", key : 'sync_nick', val : login_nick.val() });
+			port.postMessage({ name : "setSetting", key : 'sync_pass', val : login_pass.val() });
+			port.postMessage({ name : "setSetting", key : 'sync_status', val : 'true' });
+			
+			// Store login credentials in dataStore
+			dataStore['sync_nick'] = login_nick.val();
+			dataStore['sync_pass'] = login_pass.val();
+			dataStore['sync_status'] = 'true';
+			
+			// Download the config
+			sync_cp.get();
+		}
+	},
+	
+	
+	ping : function() {
+		
+		// Get current timestamp
+		var time = Math.round(new Date().getTime() / 1000)
+
+		if(dataStore['sync_last_sync'] < time - 60*10) {
+			$.getJSON('http://sgsync.dev.kreatura.hu/api/ping/', { nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }, function(data) {
+				if(data.date_m > dataStore['sync_last_sync']) {
+					sync_cp.get();
+				}
+			});
+		}
+	},
+	
+	
+	save : function() {
+		
+		// Target form
+		var form = $('.settings_page.sync .set form');
+		
+		// Set fields
+		$(form).find('input[name="nick"]').val(dataStore['sync_nick']);
+		$(form).find('input[name="pass"]').val(dataStore['sync_pass']);
+		$(form).find('input[name="data"]').val( JSON.stringify(dataStore) );
+
+		// Make the request
+		$.post( $(form).attr('action'), $(form).serialize() );
+	},
+	
+	
+	get : function() {
+		
+		$.getJSON('http://sgsync.dev.kreatura.hu/api/get/', { nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }, function(data) {
+		
+			if(data.errorCount > 0) {
+				alert('A szinkronizáció meghiúsult, ellenőrizd a felhasználóneved, jelszavad!');
+				return;
+			}
+		
+			// Get current timestamp
+			var time = Math.round(new Date().getTime() / 1000)
+
+			// Update the last sync time
+			port.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
+			
+			// Update data in dataStore object
+			dataStore = JSON.parse(data['settings']);
+			
+			// Update settings in localStorage
+			for (var key in dataStore) {
+				
+				if(!key.match('sync')) {
+					port.postMessage({ name : "setSetting", key : key, val : dataStore[key] });
+				}
+			}
+			
+			// Update settings GUI
+			settings.restore();
+			blocklist_cp.list();
+			profiles_cp.rebuildProfiles();
+			
+			// HTML for indicator
+			html = '<div class="status">';
+			html += '<div class="loggedin">&#10003;</div>';
+			html += '</div>';
+			
+			// Insert HTML
+			$(html).insertAfter( $('.settings_page.sync .log button') );
+			
+			// Remove the idicator in 2 sec
+			setTimeout(function() {
+				$('.settings_page.sync .log .status').remove();
+			}, 3000);
+		});
 	}
 };

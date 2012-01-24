@@ -19,5 +19,5 @@
 		
 	"icons" : { "16" : "img/icons/icon.png", "48": "img/icons/icon.png", "128": "img/icons/icon.png" },
 
-	"permissions": [ "http://www.sg.hu/", "http://sg.hu/" ]
+	"permissions": [ "http://www.sg.hu/", "http://sg.hu/", "http://sgsync.dev.kreatura.hu/" ]
 }

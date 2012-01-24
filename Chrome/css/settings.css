@@ -109,6 +109,9 @@
 	background-position: -375px 0px;
 }
 
+#ext_settings_header li:nth-child(7) {
+	background-position: -450px 0px;
+}
 
 
 #ext_settings_header li:nth-child(1).on {
@@ -133,6 +136,10 @@
 
 #ext_settings_header li:nth-child(6).on {
 	background-position: -375px -75px;
+}
+
+#ext_settings_header li:nth-child(7).on {
+	background-position: -450px -75px;
 }
 
 /* ABOUT */
@@ -286,6 +293,33 @@
 	text-align: center;
 }
 
+.settings_page .profile_save {
+	width: 200px;
+	height: 20px;
+	padding: 0px;
+	margin: 0px;
+	margin-right: 10px;
+	border-radius: 3px;
+	border: 1px solid #AAA;
+	box-shadow: 1px 1px 3px #aaa;
+	background-image: -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+	font: normal normal normal 12px/20px Arial, serif;
+	cursor: pointer;
+}
+
+.settings_page .profile_status {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin: 0px;
+	margin-right: 10px;
+	border-radius: 10px;
+	background-color: #22e618;
+	color: #fff;
+	text-align: center;
+	font: normal normal bold 14px/20px Arial, serif;
+}
+
 #blocklist {
 	font: normal normal normal 14px/18px Arial, serif;
 	color: #333;
@@ -296,4 +330,89 @@
 	font: normal normal normal 14px/18px Arial, serif;
 	color: #999;
 	text-decoration: none;
+}
+
+/* SYNC */
+
+.settings_page .set {
+	display: none;
+}
+
+.settings_page.sync .signup, .settings_page.sync .login {
+	width: 100%;
+	padding-right: 0px;
+}
+
+
+.settings_page.sync h3 {
+	font: normal normal normal 16px/20px Arial, serif;
+	margin-bottom: 10px;
+	color: #555;
+}
+
+.settings_page.sync p {
+	width: 500px;
+	text-align: justify;
+	margin:0px;
+	margin-bottom: 10px;
+}
+
+.settings_page.sync .status {
+	display: inline-block;
+}
+
+.settings_page.sync input {
+	width: 196px;
+	height: 16px;
+	padding: 2px;
+	margin-right: 10px;
+	border: 1px solid #AAA;
+	border-radius: 5px;
+	font: normal normal normal 12px/16px Arial, serif;
+}
+
+.settings_page.sync button {
+	width: 100px;
+	height: 20px;
+	padding: 0px;
+	margin: 0px;
+	border-radius: 3px;
+	border: 1px solid #AAA;
+	box-shadow: 1px 1px 3px #aaa;
+	background-image: -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+	font: normal normal normal 12px/20px Arial, serif;
+	cursor: pointer;
+}
+
+.settings_page.sync .loggedin {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin: 0px 10px;
+	border-radius: 10px;
+	background-color: #22e618;
+	color: #fff;
+	text-align: center;
+	font: normal normal bold 14px/20px Arial, serif;
+}
+
+.settings_page.sync .loggedin.error {
+	background-color: #de1919;
+}
+
+.settings_page.sync strong {
+	display: inline-block;
+	height: 20px;
+	font: normal normal bold 13px/20px Arial, serif;
+}
+
+.settings_page.sync span {
+	display: inline-block;
+	height: 20px;
+	margin: 0px 10px;
+	font: normal normal normal 14px/20px Arial, serif;
+}
+
+.settings_page.sync button {
+	width: 150px;
 }
