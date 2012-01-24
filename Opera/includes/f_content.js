@@ -3476,6 +3476,16 @@ if (window.top === window) {
 					style.setAttribute('type', 'text/css');            
 					style.appendChild(document.createTextNode(css));
 					document.getElementsByTagName('head')[0].appendChild(style);
+			
+			} else if(msg.name == 'updateDataStore') {
+		
+				// Update dataStore with the new data
+				dataStore = msg.message;
+
+				// Save changes to sync
+				if(dataStore['sync_status'] == 'true') {
+					sync_cp.save();
+				}		
 			}
 		}
 	
