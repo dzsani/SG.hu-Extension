@@ -850,7 +850,12 @@ var sync_cp = {
 	
 	
 	ping : function() {
-		
+
+		// Exit when the user is not authenticated
+		if(dataStore['sync_status'] != 'true') {
+			return;
+		}
+
 		// Get current timestamp
 		var time = Math.round(new Date().getTime() / 1000)
 

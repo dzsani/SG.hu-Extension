@@ -3548,6 +3548,33 @@ function handleMessage(event) {
 		$(document).ready(function() {
 				extInit();
 		});
+		
+	} else if(event.name == 'ajaxComplete') {
+		
+		// Get data
+		var data = event.message.data;
+		
+		// Get callback
+		var callback = event.message.callback;
+		
+		// Call the function
+		if(typeof callback != 'undefined') {
+			
+			// Filter out iframes
+			if (window.top === window) {
+				window[callback[0]][callback[1]](data);
+			}
+		}
+	
+	} else if(event.name == 'updateDataStore') {
+		
+		// Update dataStore with the new data
+		dataStore = event.message;
+
+		// Save changes to sync
+		if(dataStore['sync_status'] == 'true') {
+			sync_cp.save();
+		}		
 	}
 }
 

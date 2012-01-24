@@ -2,7 +2,7 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<script>
-						
+			
 			// Set properties default values
 			if( typeof safari.extension.settings.chat_hide 							== 'undefined') safari.extension.settings.chat_hide 						= 'false';
 			if( typeof safari.extension.settings.custom_blocks						== 'undefined') safari.extension.settings.custom_blocks 					= 'false';
@@ -34,6 +34,12 @@
 			if( typeof safari.extension.settings.message_center						== 'undefined') safari.extension.settings.message_center					= 'false';
 			if( typeof safari.extension.settings.mc_messages						== 'undefined') safari.extension.settings.mc_messages						= '';
 			if( typeof safari.extension.settings.mc_selected_tab					== 'undefined') safari.extension.settings.mc_selected_tab					= 0;
+			
+			// SYNC
+			if( typeof safari.extension.settings.sync_nick							== 'undefined') safari.extension.settings.sync_nick							= '';
+			if( typeof safari.extension.settings.sync_pass							== 'undefined') safari.extension.settings.sync_pass							= '';
+			if( typeof safari.extension.settings.sync_status						== 'undefined') safari.extension.settings.sync_status						= 'false';
+			if( typeof safari.extension.settings.sync_last_sync						== 'undefined') safari.extension.settings.sync_last_sync					= '0';
 						
 		
 			function respondToMessage(event) {
@@ -58,6 +64,7 @@
 					// If the blocklist is empty
 					if(safari.extension.settings.block_list == '') { 
 						safari.extension.settings.block_list = event.message;
+						event.target.page.dispatchMessage("updateDataStore", safari.extension.settings);
 		
 					// If the blocklist is not empty
 					} else {
@@ -66,6 +73,7 @@
 							if(blockList.indexOf(event.message) == -1) { 
 								blockList.push(event.message); 
 								safari.extension.settings.block_list = blockList.join(',');
+								event.target.page.dispatchMessage("updateDataStore", safari.extension.settings);
 							}
 					}
 				// Reset blocks config
@@ -151,6 +159,35 @@
 				} else if(event.name == 'updateFavesFilterLastState') {
 
 					safari.extension.settings.fav_show_only_unreaded_opened = event.message;
+				} else if(event.name == 'makeRequest') {
+					
+					// URL to call
+					var url = event.message.url;
+					
+					// POST data
+					var params = event.message.params;
+					
+					// Callback function
+					var callback = event.message.callback;
+				
+					var xhr = new XMLHttpRequest();
+						xhr.open("POST", url, true);
+
+						xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						xhr.setRequestHeader("Content-length", params.length);
+						xhr.setRequestHeader("Connection", "close");
+						
+						xhr.onreadystatechange = function() {
+							if (xhr.readyState == 4) {
+								if(xhr.status == 200) {
+									event.target.page.dispatchMessage("ajaxComplete", { data : xhr.responseText, callback : callback } );
+								} else {
+									alert('Hiba lépett fel a kérelem közben!');
+								}
+							}
+						}
+						xhr.send(params);
+
 				}
 			}
 			
