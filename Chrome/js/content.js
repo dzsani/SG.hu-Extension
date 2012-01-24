@@ -593,7 +593,7 @@ var autoload_next_page = {
 		$.get(url, function(data) {
 			
 			// Create the 'next page' indicator
-			if(dataStore['threaded_comments'] != true) {
+			if(dataStore['threaded_comments'] != 'true') {
 				if(document.location.href.match('cikkek')) {
 					$('<div class="ext_autopager_idicator">'+(autoload_next_page.currPage+1)+'. oldal</div>').insertBefore('.std2:last');
 				} else {
