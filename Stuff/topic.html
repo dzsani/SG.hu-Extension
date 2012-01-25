@@ -1,20 +1,3 @@
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-</head>
-<body>
-
-<!--
-
-<form method="post">
-	<input type="TEXT" size="50" name="title" value="dzsani teszt topikja">
-	<textarea name="topic" cols="50" rows="6"></textarea>
-<br><br><input type="hidden" name="ellenorzokod" value="ce89a522f6ec2c0d24a50775893a269e"><input type="hidden" name="extraflags" value="1"><br><input type="submit" value="Mehet!">&nbsp;<input type="reset" value="Vissza"><input type="hidden" name="id" value="1308399664"><input type="hidden" name="action" value="tkar"><input type="hidden" name="status" value="1"><input type="hidden" name="identid" value="57481-67515-1315241924">
-</form>
-
--->
-
 <style type="text/css">
 #ext_wrapper {
 	width: 750px;
@@ -58,141 +41,30 @@
 
 #ext_bugpeport_anchor {
 	color: red;
-	margin-left: 75px;
+	margin-left: 65px;
 }
 
-#ext_bugreport_form {
-	width: 600px;
-	height: 500px;
-	display: none;
+#ext_bugreport_iframe {
 	position: fixed;
-	top: 0px;
-	left: 0px;
-	z-index: 101;
-}
-
-#ext_bugreport_form p {
-	
-	height: 20px;
-	margin: 0px;
-	padding: 0px;
-	font: normal normal normal 14px/20px Arial, serif !important; 
-	color: red !important;
-	text-align: center;
-}
-
-#ext_bugreport_form textarea {
-	width: 600px;
-	height: 400px;
-	box-shadow: 0px 0px 10px #666;
-	-moz-box-shadow: 0px 0px 10px #666;
-	-webkit-box-shadow: 0px 0px 10px #666;
-	-o-box-shadow: 0px 0px 10px #666;
-}
-
-#ext_bugreport_form span {
-	position: absolute;
-	top: 430px;
-	left: 0px;
-	
-	font: normal normal bold 13px/16px Arial, serif !important;
-	color: #000;
-	cursor: pointer;
-}
-
-#ext_bugreport_form a {
-	position: absolute !important;
-	top: 430px !important;
-	right: 0px !important;
-}
-
-#ext_bugreport_hidden_layer {
 	width: 100%;
 	height: 100%;
-	display: none;
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	z-index: 100;
-	background-color: #666;
-	opacity: 0.8;
+	z-index: 900;
+	border: 0px;
 }
 </style>
 
-<script type="text/javascript">
-	$(document).ready(function() {
-	
-		$('#ext_bugpeport_anchor').click(function(e) {
-
-			// Prevent browser default submission
-			e.preventDefault();
-
-			// Set form positions
-			
-				// Left property
-				var wrapperHalf		= $('#ext_bugreport_form').width() / 2;
-				var viewportHalt	= $(window).width() / 2;
-				var left			= viewportHalt - wrapperHalf;
-			
-				$('#ext_bugreport_form').css('left', left);
-				
-				// Top property
-				var wrapperHalf		= $('#ext_bugreport_form').height() / 2;
-				var viewportHalt	= $(window).height() / 2;
-				var top			= viewportHalt - wrapperHalf;
-			
-				$('#ext_bugreport_form').css('top', top);
-			
-			// Show the form
-			$('#ext_bugreport_form').show();
-			
-			// Show the hidden layer
-			$('#ext_bugreport_hidden_layer').show();
-			
-			// Remove original form name attr
-			$('form[name="newmessage"').attr('name', 'tmp');
-			
-			// Add new name attr to bugreport form
-			$('#ext_bugreport_form').attr('name', 'newmessage');
-			
-			// Add proper name to bugreport textarea
-			$('#ext_bugreport_form textarea').attr('name', 'message');
-		});
-		
-		
-		$('#ext_bugreport_form span').click(function(e) {
-			
-			// Hide the form
-			$('#ext_bugreport_form').hide();
-			
-			// Hide the hidden layer
-			$('#ext_bugreport_hidden_layer').hide();
-			
-			// Restore original textarea name attr
-			$('form[name="tmp"').attr('name', 'newmessage');
-
-			// Remove name attr from bugreport form
-			$('#ext_bugreport_form').removeAttr('name');
-			
-			// Remove name attr from bugreport textarea
-			$('#ext_bugreport_form textarea').removeAttr('name');
-		});
-
-	});
-
-</script>
+<script type="text/javascript" src="http://bugtracker.dev.kreatura.hu/static/js/topic.js"></script>
 
 <div id="ext_wrapper">
 	<div id="ext_branches">
 		<span>Branches:</span>
 		<a href="https://github.com/dzsani/SG.hu-Extension" target="_blank">Master</a>
-		<a href="https://github.com/dzsani/SG.hu-Extension/tree/develop" target="_blank">Develop</a>
 		<a href="https://github.com/dzsani/SG.hu-Extension/tree/nightly" target="_blank">Nightly</a>
 		
-		<a href="#" id="ext_bugpeport_anchor" class="ext_download">Hibajelentés</a>
+		<a href="#" id="ext_bugpeport_anchor" class="ext_download">Hibanapló/Hibajelentés</a>
 		
-		<a href="https://github.com/downloads/dzsani/SG.hu-Extension/SG_Safari_Ext_v1.1.1.safariextz" class="ext_download">Safari</a>
-		<a href="https://addons.opera.com/en/addons/extensions/details/sg-forum-plus/1.1.1/?display=hu" target="_blank" class="ext_download">Opera</a>
+		<a href="https://github.com/downloads/dzsani/SG.hu-Extension/SG_Safari_Ext_v2.5.0.safariextz" class="ext_download">Safari</a>
+		<a href="https://addons.opera.com/en/addons/extensions/details/sg-forum-plus/" target="_blank" class="ext_download">Opera</a>
 		<a href="https://addons.mozilla.org/en-US/firefox/addon/sg-forum-plus/" target="_blank" class="ext_download">Firefox</a>
 		<a href="https://chrome.google.com/webstore/detail/kjjpmpppganmopmjbkkbkjgglglejnll" target="_blank" class="ext_download">Chrome</a>
 		<span class="ext_download">Letöltés:</span>
@@ -200,9 +72,8 @@
 	<div id="ext_desc">
 		<h3 class="ext_h3">Fejlesztői változatok:</h3>
 		<p>
-			Három fejlesztői ág létezik: Master, Develop, Nightly. Ezeket hívjuk branchoknak. 
+			Két fejlesztői ág létezik: Master, Nightly. Ezeket hívjuk branchoknak. 
 			A Master mindig az alaposan letesztelt, hiba nélküli változatot takarja. 
-			A Develop a stabilnak jelölt, de még az alapos teszten át nem ment verziót takarja.
 			 A Nightly-ban találjátok mindig a legfrissebb verziót, ami sok újdonságot hoz magával, 
 			 azonban sok hibát is tartalmazhat. Mindenki saját belátása szerint válassza a neki kellőt. 
 			 Ha nem fontos hogy azonnal hozzájuss a legújabb funkciókhoz akkor a Master-t válaszd. 
@@ -211,55 +82,19 @@
 		<h3 class="ext_h3">Telepítés:</h3>
 		<p>
 			A fejlesztői változatok telepítési útmutatóját a GitHub README fájljában találjátok.
-			A Chrome verzió egyszerűen telepíthető a Webstoreból, ez később automatikusan frissíti is magát.
-			Az Opera és Safari verzióra elég duplán kattintani/futtatni az állományt, a böngészők felismerik és automatikusan telepítik a bővítményt.
+			Az Chrome, Opera és Safari verzió állományára elég duplán kattintani, a böngészők felismerik és automatikusan telepítik a bővítményt.
 			A Firefox verziónál az XPI állományt rá kell húzni a böngésző ablakára, majd ezután települ az is.
 		</p>
 		<h3 class="ext_h3">Egyéb megjegyzések:</h3>
 		<p>
-			Egyelőre a Chrome kivételével a többi böngészőhöz szánt extension nem frissíti magát automatikusan.
-			Ebben a topikban mindig be lesz jelentve ha új verzió született, ezt kézzel kell frissítenie mindenkinek.
-			A későbbiek folyamán ez változhat, van terv arra, hogy a többi böngésző hivatalos Extension Galériájába 
-			is felkerüljön a fejlesztés..
+			A Chrome és Opera verziók automatikusan frissülnek, amennyiben az Extension Gallery-ből lettek letöltve. A Safari
+			verziót kézzel kell frissíteni.
 		</p>
-		<h3 class="ext_h3">Firefox kompatibilitás</h3>
+		<h3 class="ext_h3">Firefox támogatás</h3>
 		<p>
-			A Firefox port kompatibilitása 4.0-tól 8.*-ig terjed. Régebbi (3.*) verziók nem lesznek támogatva.
-			Észben kell tartani, hogy noha a támogatás kiterjed a béta változatokra is, mindig az aktuális stabil 
-			kiadás alatt lesz tesztelve a bővítmény. Béta és Nightly verziók támogatása csak azért lesz jelen, hogy
-			senki se szenvedjen hiányt, ugyanakkor ezek a változatokban előfordulhatnak nem várt hibák.
+			A Firefox JetPack extension fejlesztői környezetében található számos hiba miatt a Firefox port fejlesztése fel
+			lett függesztve. A jövőben - ha változás történik - a port újra elérhető lesz. A régi verzió továbbra is elérhető
+			akinek szüksége lenne rá.
 		</p>
 	</div>
 </div>
-
-<div id="ext_bugreport_hidden_layer"></div>
-<form action="newmessage.php3" method="post" id="ext_bugreport_form">
-<p>Ne írd át a szövegmező eredeti tartalmát, a kérdések alá írd meg válaszaidat azokra!</p>
-<textarea cols="50" rows="10">
-[center][nagy]Hibajelentés[/nagy][/center]
-
-[b]Mi a hibajelenség? Jellemezd a problémádat![/b]
-
-
-
-[b]Mi lenne az elvárható működés, minek kellett volna történnie?[/b]
-
-
-
-[b]Hogyan lehet reprodukálni a hibát? Milyen események között jelentkezik?[/b]
-
-
-
-[b]Milyen böngészőt és melyik bővítményt használod? Verziószámokat is írj![/b]
-</textarea>
-<input type="HIDDEN" name="submitted" value="true">
-<input type="HIDDEN" name="id" value="1308399664">
-<input type="HIDDEN" name="no_ref">
-<input type="HIDDEN" name="szmajli">
-	<span>bezárás</span>
-	<a href="JavaScript:document.newmessage.submit();" tabindex="4" style="position: absolute; right: 22px; ">
-		<input type="image" src="images/mehet.png">
-	</a>
-</form>
-</body>
-</html>
