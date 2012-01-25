@@ -2850,7 +2850,9 @@ var message_center = {
 						
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
-						
+					
+						// Sync new messages
+						window['sync_cp']['save']();	
 					}
 				});
 			}
