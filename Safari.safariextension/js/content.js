@@ -3558,7 +3558,7 @@ function handleMessage(event) {
 		var callback = event.message.callback;
 		
 		// Call the function
-		if(typeof callback != 'undefined') {
+		if(callback != '') {
 			
 			// Filter out iframes
 			if (window.top === window) {

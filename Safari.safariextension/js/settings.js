@@ -870,8 +870,19 @@ var sync_cp = {
 		// Parse JSON data
 		data = $.parseJSON(data);
 		
+		// Update the latest data from sync
 		if(data.date_m > dataStore['sync_last_sync']) {
 			sync_cp.get();
+		
+		// There is no updates, 
+		// Update the last checked date
+		} else {
+
+			// Get current timestamp
+			var time = Math.round(new Date().getTime() / 1000)
+
+			// Update the last sync time
+			safari.self.tab.dispatchMessage("setSetting", { key : 'sync_last_sync', val : time });
 		}
 	},
 	
@@ -887,7 +898,7 @@ var sync_cp = {
 		$(form).find('input[name="data"]').val( JSON.stringify(dataStore) );
 
 		// Make the request
-		safari.self.tab.dispatchMessage('makeRequest', { url : $(form).attr('action'), params : $(form).serialize() });
+		safari.self.tab.dispatchMessage('makeRequest', { url : $(form).attr('action'), params : $(form).serialize(), callback : '' });
 	},
 	
 	

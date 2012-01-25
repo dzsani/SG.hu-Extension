@@ -880,8 +880,19 @@ window.sync_cp = {
 		// Parse JSON data
 		data = $.parseJSON(data);
 		
+		// Update the latest data from sync
 		if(data.date_m > dataStore['sync_last_sync']) {
 			window['sync_cp']['get']();
+		
+		// There is no updates, 
+		// Update the last checked date
+		} else {
+	
+			// Get current timestamp
+			var time = Math.round(new Date().getTime() / 1000)
+
+			// Update the last sync time
+			opera.extension.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
 		}
 	},
 	

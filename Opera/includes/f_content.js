@@ -3486,7 +3486,9 @@ if (window.top === window) {
 				var callback = msg.message.callback;
 
 				// Trigger the callback
-				window[callback[0]][callback[1]](data);
+				if(callback != '') {
+					window[callback[0]][callback[1]](data);
+				}
 	
 
 			} else if(msg.name == 'updateDataStore') {
