@@ -3509,8 +3509,6 @@ if (window.top === window) {
     	// Send the stylesheet path to the background script to get the CSS.
     	opera.extension.postMessage({ name : 'LoadInjectedCSS', message : 'css/content.css' });
     	opera.extension.postMessage({ name : 'LoadInjectedCSS', message : 'css/settings.css' });
-    	opera.extension.postMessage({ name : 'LoadInjectedCSS', message : 'css/cleditor.css' });
-    	opera.extension.postMessage({ name : 'LoadInjectedCSS', message : 'css/restore.css' });
 
 		extInit();
 	});
