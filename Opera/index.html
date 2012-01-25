@@ -68,7 +68,7 @@
 						// If the blocklist is empty
 						if(widget.preferences.block_list == '') { 
 							widget.preferences.block_list = msg.message;
-							event.source.postMessage({ name: 'updateDataStore', message: widget.preferences });
+							event.source.postMessage({ name: 'updateDataStore', message: '' });
 		
 						// If the blocklist is not empty
 						} else {
@@ -77,7 +77,8 @@
 								if(blockList.indexOf(msg.message) == -1) { 
 									blockList.push(msg.message); 
 									widget.preferences.block_list = blockList.join(',');
-									event.source.postMessage({ name: 'updateDataStore', message: widget.preferences });
+									opera.postError('MULTIPLE BLOCK');
+									event.source.postMessage({ name: 'updateDataStore', message: '' });
 								}
 						}
 					// Reset blocks config
@@ -102,6 +103,9 @@
 					
 						// Save changes in localStorage
 						widget.preferences.block_list = list.join(',');
+						
+						// PostMessage to update dataStore
+						event.source.postMessage({ name: 'updateDataStore', message: '' });
 				
 					// Save posted settings
 					} else if(msg.name == 'setSetting') {

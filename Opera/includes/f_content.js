@@ -3492,13 +3492,13 @@ if (window.top === window) {
 	
 
 			} else if(msg.name == 'updateDataStore') {
-		
+
 				// Update dataStore with the new data
-				dataStore = msg.message;
+				dataStore = widget.preferences;
 
 				// Save changes to sync
 				if(dataStore['sync_status'] == 'true') {
-					sync_cp.save();
+					window['sync_cp']['save']();
 				}		
 			}
 		}

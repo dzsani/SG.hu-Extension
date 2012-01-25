@@ -98,7 +98,10 @@
 					
 					// Save changes in localStorage
 					safari.extension.settings.block_list = list.join(',');
-				
+					
+					// Update dataStore
+					event.target.page.dispatchMessage("updateDataStore", safari.extension.settings);
+					
 				// Save posted settings
 				} else if(event.name == 'setSetting') {
 

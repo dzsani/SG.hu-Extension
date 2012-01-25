@@ -876,7 +876,7 @@ window.sync_cp = {
 	},
 	
 	doPing : function(data) {
-		
+
 		// Parse JSON data
 		data = $.parseJSON(data);
 		
