@@ -859,23 +859,24 @@ var sync_cp = {
 		// Get current timestamp
 		var time = Math.round(new Date().getTime() / 1000)
 		
-		// Update the latest data from sync
 		if(dataStore['sync_last_sync'] < time - 60*10) {
 			$.getJSON('http://sgsync.dev.kreatura.hu/api/ping/', { nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }, function(data) {
+				
+				// Update the latest data from sync
 				if(data.date_m > dataStore['sync_last_sync']) {
 					sync_cp.get();
+				
+				// There is no updates, 
+				// Update the last checked date
+				} else {
+
+					// Get current timestamp
+					var time = Math.round(new Date().getTime() / 1000)
+
+					// Update the last sync time
+					port.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
 				}
 			});
-
-		// There is no updates, 
-		// Update the last checked date
-		} else {
-
-			// Get current timestamp
-			var time = Math.round(new Date().getTime() / 1000)
-
-			// Update the last sync time
-			port.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
 		}
 	},
 	
