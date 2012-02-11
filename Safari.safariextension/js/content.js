@@ -636,6 +636,10 @@ var autoload_next_page = {
 				if(dataStore['profiles'] != '') {
 					profiles.init();
 				}
+
+				if(dataStore['columnify_comments'] == 'true') {
+					columnify_comments.activated();
+				}
 		});
 	}
 
@@ -1215,6 +1219,11 @@ function ext_valaszmsg(target, id, no, callerid) {
 			if(dataStore['profiles'] != '') {
 				profiles.init();
 			}
+			
+			if(dataStore['columnify_comments'] == 'true') {
+
+				columnify_comments.activated();
+			}			
 
 		});
 	}
@@ -3406,6 +3415,34 @@ var add_to_list = {
 };
 
 
+var columnify_comments = {
+	
+	activated : function() {
+
+		$('.topichead:not(.columnify)').each(function() {
+			
+			// Get the message element
+			var target = $(this).closest('center').find('.msg-text:first');
+			
+			// Add multi column when the text is larder than 200px
+			if( target.html().length > 800) {
+				target.css({ '-webkit-column-width' : 200, '-webkit-column-gap' : 20, 'text-align' : 'justify' });
+			}
+			
+			// Add 'columnify' class
+			$(this).addClass('columnify');
+		});
+	},
+	
+	disabled : function() {
+		
+		$('.topichead').each(function() {
+			$(this).next().find('.msg-text').css({ '-webkit-column-width' : 'auto', '-webkit-column-gap' : 0 });
+		});
+	}
+	
+};
+
 function extInit() {
 	
 	// SG index.php
@@ -3490,6 +3527,10 @@ function extInit() {
 
 		if(dataStore['profiles'] != '') {
 			profiles.init();
+		}
+		
+		if(dataStore['columnify_comments'] == 'true') {
+			columnify_comments.activated();
 		}
 
 	// FORUM.PHP
@@ -3636,6 +3677,10 @@ function extInit() {
 			
 			if(dataStore['profiles'] != '') {
 				profiles.init();
+			}
+
+			if(dataStore['columnify_comments'] == 'true') {
+				columnify_comments.activated();
 			}
 
 		// Topic if whitelisted, show the navigation

@@ -147,6 +147,11 @@ var cp = {
 					html += '<p>Ez az opció eltávolítja a pontozó gombokat és minden rejtett hozzászólást láthatóvá tesz.</p>';
 					html += '<div class="button" id="disable_point_system"></div>';
 				html += '</div>';
+				html += '<div>';
+					html += '<h3>Hosszú kommentek oszloposítása</h3>';
+					html += '<p>Meghatározott karakterszám felett a bővítmény oszlopokra bontja az üzeneteket a könnyebb olvashatóság miatt. </p>';
+					html += '<div class="button" id="columnify_comments"></div>';
+				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';
