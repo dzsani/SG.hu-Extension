@@ -897,7 +897,7 @@ window.sync_cp = {
 		var time = Math.round(new Date().getTime() / 1000)
 
 		if(dataStore['sync_last_sync'] < time - 60*10) {
-			opera.extension.postMessage({ name : 'makeRequest', message : { url : 'http://sgsync.dev.kreatura.hu/api_v2/ping/', params : $.param({ nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }), callback : ['sync_cp', 'doPing'] } });
+			opera.extension.postMessage({ name : 'makeRequest', message : { url : 'http://sgsync.dev.kreatura.hu/api_v2/ping/', params : $.param({ auth_key : dataStore['sync_auth_key'] }), callback : ['sync_cp', 'doPing'] } });
 		}
 	},
 	
@@ -953,7 +953,7 @@ window.sync_cp = {
 		// Log the request
 		log.add('Initiating sync (DOWN) to get changes');
 
-		opera.extension.postMessage({ name : 'makeRequest', message : { url : 'http://sgsync.dev.kreatura.hu/api_v2/get/', params : $.param({ nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }), callback : ['sync_cp', 'doGet'] } });
+		opera.extension.postMessage({ name : 'makeRequest', message : { url : 'http://sgsync.dev.kreatura.hu/api_v2/get/', params : $.param({ auth_key : dataStore['sync_auth_key'] }), callback : ['sync_cp', 'doGet'] } });
 	},
 	
 	doGet : function(data) {
@@ -1105,7 +1105,7 @@ var log = {
 		dataStore['debugger_messages'] = JSON.stringify(messages);
 	
 		// Store new settings
-		safari.self.tab.dispatchMessage("setSetting", { key : 'debugger_messages', val : JSON.stringify(messages) });	
+		opera.extension.postMessage({ name : "setSetting", key : 'debugger_messages', val : JSON.stringify(messages) });
 
 		// Update the GUI
 		var html = $('.settings_page.debugger textarea').html();
@@ -1116,7 +1116,7 @@ var log = {
 	clear : function() {
 	
 		// Clear in localStorage
-		safari.self.tab.dispatchMessage("setSetting", { key : 'debugger_messages', val : '' });
+		opera.extension.postMessage({ name : "setSetting", key : 'debugger_messages', val : '' });
 		
 		// Clear in dataStore
 		dataStore['debugger_messages'] = '';

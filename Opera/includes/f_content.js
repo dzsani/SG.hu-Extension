@@ -3222,7 +3222,7 @@ var add_to_list = {
 			var separator = $('<span> | </span>').insertAfter(this);
 			
 			// Insert dropdow placeholder
-			var dropdown = $('<div class="ext_dropdown"><span>&#9660;</span></div>').insertAfter(separator);
+			var dropdown = $('<div class="ext_dropdown"><span>&#9660;</span></div>').insertAfter(separator).css('display', 'none');
 			
 			// Insert dropdown list
 			var list = $('<ul></ul>').appendTo(dropdown).addClass('ext_addtolist_list');
@@ -3318,7 +3318,7 @@ var add_to_list = {
 		dataStore['profiles'] = data;
 		
 		// Save in localStorage
-		safari.self.tab.dispatchMessage("setSetting", { key : 'profiles', val : data });
+		opera.extension.postMessage({ name : "setSetting", key : 'profiles', val : data });
 		
 		// Update settings GUI
 		profiles_cp.init();

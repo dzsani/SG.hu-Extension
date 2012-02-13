@@ -630,7 +630,7 @@ textarea[name="message"] {
 
 /* DROPDOWNS */
 .ext_dropdown {
-	display: inline-block;
+	display: inline-block !important;
 	width: 20px;
 	text-align: center;
 	cursor: pointer;
