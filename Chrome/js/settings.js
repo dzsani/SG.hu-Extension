@@ -795,11 +795,6 @@ var sync_cp = {
 			// Get the values
 			var signup_nick = $('.settings_page.sync .signup input[name="nick"]');
 			var signup_pass = $('.settings_page.sync .signup input[name="pass"]');
-
-			
-			// Set the login values
-			login_nick.val(signup_nick.val());
-			login_pass.val(signup_pass.val());
 			
 			// Store login credentials in localStorage
 			port.postMessage({ name : "setSetting", key : 'sync_auth_key', val : data['auth_key'] });

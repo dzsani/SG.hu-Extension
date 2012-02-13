@@ -3411,7 +3411,7 @@ var add_to_list = {
 		dataStore['profiles'] = data;
 		
 		// Save in localStorage
-		safari.self.tab.dispatchMessage("setSetting", { key : 'profiles', val : data });
+		port.postMessage({ name : "setSetting", key : 'profiles', val : data });
 		
 		// Update settings GUI
 		profiles_cp.init();
