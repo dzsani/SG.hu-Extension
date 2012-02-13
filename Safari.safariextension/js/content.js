@@ -1223,7 +1223,7 @@ function ext_valaszmsg(target, id, no, callerid) {
 			if(dataStore['columnify_comments'] == 'true') {
 
 				columnify_comments.activated();
-			}			
+			}
 
 		});
 	}

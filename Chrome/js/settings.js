@@ -30,6 +30,7 @@ var cp = {
 				html += '<li>Profilok</li>';
 				html += '<li>Tiltólista</li>';
 				html += '<li>Sync</li>';
+				html += '<li>Debugger</li>';
 				html += '<li class="clear"></li>';
 			html += '</ul>';
 			
@@ -146,6 +147,11 @@ var cp = {
 					html += '<p>Ez az opció eltávolítja a pontozó gombokat és minden rejtett hozzászólást láthatóvá tesz.</p>';
 					html += '<div class="button" id="disable_point_system"></div>';
 				html += '</div>';
+				html += '<div>';
+					html += '<h3>Hosszú kommentek oszloposítása</h3>';
+					html += '<p>Meghatározott karakterszám felett a bővítmény oszlopokra bontja az üzeneteket a könnyebb olvashatóság miatt. </p>';
+					html += '<div class="button" id="columnify_comments"></div>';
+				html += '</div>';
 			html += '</div>';
 
 			html += '<div class="settings_page">';
@@ -193,9 +199,8 @@ var cp = {
 			html += '<div class="settings_page sync">';
 				
 				html += '<div class="set">';
-					html += '<form action="http://sgsync.dev.kreatura.hu/api/set/" method="post">';
-						html += '<input type="hidden" name="nick">';
-						html += '<input type="hidden" name="pass">';
+					html += '<form action="http://sgsync.dev.kreatura.hu/api_v2/set/" method="post">';
+						html += '<input type="hidden" name="auth_key">';
 						html += '<input type="hidden" name="data">';
 					html += '</form>';
 				html += '</div>';
@@ -207,7 +212,7 @@ var cp = {
 						html += 'Ha publikus számítógépeken is használod a bővítményt, ';
 						html += 'válassz egyedi jelszót, amit máshol nem használsz!';
 					html += '</p>';
-					html += '<form action="http://sgsync.dev.kreatura.hu/api/signup/?callback=?" method="post">';
+					html += '<form action="http://sgsync.dev.kreatura.hu/api_v2/signup/" method="post">';
 						html += '<input type="text" name="nick" placeholder="Felhasználónév">';
 						html += '<input type="password" name="pass" placeholder="Jelszó">';
 						html += '<button type="submit">Regisztráció</button>';
@@ -216,13 +221,13 @@ var cp = {
 				
 				html += '<div class="login">';
 					html += '<h3>Belépés</h3>';
-					html += '<form action="http://sgsync.dev.kreatura.hu/api/auth/?callback=?" method="post">';
-						html += '<input type="text" name="nick" placeholder="Felhasználónév" value="'+dataStore['sync_nick']+'">';
-						html += '<input type="password" name="pass" placeholder="Jelszó" value="'+dataStore['sync_pass']+'">';
+					html += '<form action="http://sgsync.dev.kreatura.hu/api_v2/auth/" method="post">';
+						html += '<input type="text" name="nick" placeholder="Felhasználónév">';
+						html += '<input type="password" name="pass" placeholder="Jelszó">';
 						html += '<button type="submit">Belépés</button>';
 						
 						html += '<div class="status">';
-							if(dataStore['sync_nick'] != '' && dataStore['sync_status'] == 'true') {
+							if(dataStore['sync_auth_key'] != '') {
 							html += '<div class="loggedin">&#10003;</div>';
 							html += '<strong>Belépve mint: </strong>';
 							html += '<span>'+dataStore['sync_nick']+'</span>';
@@ -264,6 +269,25 @@ var cp = {
 					html += '<button class="sync">Szinkronizálás most</button>';
 				html += '</div>';
 			html += '</div>';
+
+			html += '<div class="settings_page debugger">';
+				html += '<h3>Debugger</h3>';
+				html += '<textarea readonly="readonly">';
+				
+				if(dataStore['debugger_messages'] != '') {
+
+					// Parse debugger messages
+					var messages = JSON.parse(dataStore['debugger_messages']);	
+		
+					for(c = 0; c < messages.length; c++) {
+						html += ""+messages[c]+"\r\n";
+					}
+				}
+				
+				html += '</textarea>';
+				html += '<button>Clear</button>';
+			html += '</div>';
+
 		html += '</div>';
 
 		
@@ -326,6 +350,9 @@ var cp = {
 
 		// Init sync settings
 		sync_cp.init();
+
+		// Init log
+		log.init();
 	},
 	
 	show : function() {
@@ -519,7 +546,7 @@ var settings = {
 			dataStore[$(ele).attr('id')] = 'true';
 	
 			// Sync new settings
-			if(dataStore['sync_status'] == 'true') {
+			if(dataStore['sync_auth_key'] != '') {
 				sync_cp.save();
 			}
 			
@@ -537,7 +564,7 @@ var settings = {
 			dataStore[$(ele).attr('id')] = 'false';
 
 			// Sync new settings
-			if(dataStore['sync_status'] == 'true') {
+			if(dataStore['sync_auth_key'] != '') {
 				sync_cp.save();
 			}
 
@@ -557,7 +584,7 @@ var settings = {
 		dataStore[ $(ele).attr('id') ] = val;
 
 		// Sync new settings
-		if(dataStore['sync_status'] == 'true') {
+		if(dataStore['sync_auth_key'] != '') {
 			sync_cp.save();
 		}
 
@@ -765,23 +792,23 @@ var sync_cp = {
 		// On success
 		if(data.errorCount == 0) {
 			
-			// Target elements
-			var login_nick = $('.settings_page.sync .login input[name="nick"]');
-			var login_pass = $('.settings_page.sync .login input[name="pass"]');
-			
 			// Get the values
 			var signup_nick = $('.settings_page.sync .signup input[name="nick"]');
 			var signup_pass = $('.settings_page.sync .signup input[name="pass"]');
+
 			
 			// Set the login values
 			login_nick.val(signup_nick.val());
 			login_pass.val(signup_pass.val());
 			
 			// Store login credentials in localStorage
+			port.postMessage({ name : "setSetting", key : 'sync_auth_key', val : data['auth_key'] });
 			port.postMessage({ name : "setSetting", key : 'sync_nick', val : signup_nick.val() });
-			port.postMessage({ name : "setSetting", key : 'sync_pass', val : signup_pass.val() });
-			port.postMessage({ name : "setSetting", key : 'sync_status', val : 'true' });
-			
+
+			// Store login credentials in dataStore
+			dataStore['sync_auth_key'] = data['auth_key'];
+			dataStore['sync_nick'] = signup_nick.val();
+
 			// Empty status div
 			$('.settings_page.sync .login .status').html('');
 			
@@ -820,9 +847,8 @@ var sync_cp = {
 		// Success
 		} else {
 			
-			// Target elements
+			// Get the nick
 			var login_nick = $('.settings_page.sync .login input[name="nick"]');
-			var login_pass = $('.settings_page.sync .login input[name="pass"]');
 			
 			// Clear HTML from previous tries
 			$('.settings_page.sync .login .status').html('');
@@ -834,14 +860,12 @@ var sync_cp = {
 			$(html).appendTo($('.settings_page.sync .login .status'));
 
 			// Store login credentials in localStorage
+			port.postMessage({ name : "setSetting", key : 'sync_auth_key', val : data['auth_key'] });
 			port.postMessage({ name : "setSetting", key : 'sync_nick', val : login_nick.val() });
-			port.postMessage({ name : "setSetting", key : 'sync_pass', val : login_pass.val() });
-			port.postMessage({ name : "setSetting", key : 'sync_status', val : 'true' });
 			
 			// Store login credentials in dataStore
 			dataStore['sync_nick'] = login_nick.val();
-			dataStore['sync_pass'] = login_pass.val();
-			dataStore['sync_status'] = 'true';
+			dataStore['sync_auth_key'] = data['auth_key'];
 			
 			// Download the config
 			sync_cp.get();
@@ -852,7 +876,7 @@ var sync_cp = {
 	ping : function() {
 
 		// Exit when the user is not authenticated
-		if(dataStore['sync_status'] != 'true') {
+		if(dataStore['sync_auth_key'] == '') {
 			return;
 		}
 
@@ -860,7 +884,11 @@ var sync_cp = {
 		var time = Math.round(new Date().getTime() / 1000)
 		
 		if(dataStore['sync_last_sync'] < time - 60*10) {
-			$.getJSON('http://sgsync.dev.kreatura.hu/api/ping/', { nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }, function(data) {
+		
+			// Log the request
+			log.add('Pinging sgsync.dev.kreatura.hu\r\n');
+	
+			$.getJSON('http://sgsync.dev.kreatura.hu/api_v2/ping/', { auth_key : dataStore['sync_auth_key'] }, function(data) {
 				
 				// Update the latest data from sync
 				if(data.date_m > dataStore['sync_last_sync']) {
@@ -887,24 +915,41 @@ var sync_cp = {
 		var form = $('.settings_page.sync .set form');
 		
 		// Set fields
-		$(form).find('input[name="nick"]').val(dataStore['sync_nick']);
-		$(form).find('input[name="pass"]').val(dataStore['sync_pass']);
+		$(form).find('input[name="auth_key"]').val(dataStore['sync_auth_key']);
 		$(form).find('input[name="data"]').val( JSON.stringify(dataStore) );
 
+		// Log the request
+		log.add('Initiating sync (UP) to save changes');
+
 		// Make the request
-		$.post( $(form).attr('action'), $(form).serialize() );
+		$.post( $(form).attr('action'), $(form).serialize(), function() {
+		
+			// Log the request
+			log.add('Client data was sent successfully\r\n');		
+		});
 	},
 	
 	
 	get : function() {
-		
-		$.getJSON('http://sgsync.dev.kreatura.hu/api/get/', { nick : dataStore['sync_nick'], pass : dataStore['sync_pass'] }, function(data) {
+
+		// Log the request
+		log.add('Initiating sync (DOWN) to get changes');
+
+		$.getJSON('http://sgsync.dev.kreatura.hu/api_v2/get/', { auth_key : dataStore['sync_auth_key'] }, function(data) {
 		
 			if(data.errorCount > 0) {
-				alert('A szinkronizáció meghiúsult, ellenőrizd a felhasználóneved, jelszavad!');
-				return;
+			
+				// Log the request
+				log.add('Sync failed, authentication error\r\n');
+				
+				// Show the error message
+			    alert('A szinkronizáció meghiúsult, ellenőrizd a felhasználóneved, jelszavad!');
+			    return;
 			}
-		
+
+			// Log the request
+			log.add('Data received, processing...');
+
 			// Get current timestamp
 			var time = Math.round(new Date().getTime() / 1000)
 
@@ -912,16 +957,27 @@ var sync_cp = {
 			port.postMessage({ name : "setSetting", key : 'sync_last_sync', val : time });
 			
 			// Update data in dataStore object
-			dataStore = JSON.parse(data['settings']);
+			config = JSON.parse(data['settings']);
 			
 			// Update settings in localStorage
-			for (var key in dataStore) {
-				
-				if(!key.match('sync')) {
-					port.postMessage({ name : "setSetting", key : key, val : dataStore[key] });
+			for (var key in config) {
+
+				// Exclude some settings
+				if(key.match('sync') || key.match('debugger')) {
+					continue;
 				}
+				
+				// Store in localStorage
+				port.postMessage({ name : "setSetting", key : key, val : config[key] });
+
+				// Store in dataStore
+				dataStore[key] = config[key];
 			}
-			
+
+			// Log the request
+			log.add('New profile settings has been saved');
+			log.add('Updating the GUI...\r\n');
+
 			// Update settings GUI
 			settings.restore();
 			blocklist_cp.list();
@@ -965,5 +1021,84 @@ var sync_cp = {
 				$('.settings_page.sync .log .status').remove();
 			}, 3000);
 		});
+	}
+};
+
+var log = {
+	
+	init : function() {
+		
+		// Clear event
+		$('.settings_page.debugger button').click(function() {
+			log.clear();
+		});
+	},
+	
+	add : function(message) {
+
+		// Get current timestamp
+		var time = Math.round(new Date().getTime() / 1000)
+
+		// Parse messages
+		if(dataStore['debugger_messages'] != '') {
+			var messages = JSON.parse(dataStore['debugger_messages']);
+		
+		} else {
+			var messages = [];
+		}
+		
+		var month = date('M', time);
+
+		// Convert mounts names
+		$.each([
+		    ['Jan', 'január'],
+		    ['Feb', 'február'],
+		    ['Mar', 'március'],
+		    ['Apr', 'április'],
+		    ['May', 'május'],
+		    ['Jun', 'június'],
+		    ['Jul', 'július'],
+		    ['Aug', 'augusztus'],
+		    ['Sep', 'szeptember'],
+		    ['Oct', 'október'],
+		    ['Nov', 'november'],
+		    ['Dec', 'december'],
+		
+		], function(index, item) {
+		    month = month.replace(item[0], item[1]);
+		});
+		
+		// Append timestamp
+		message	= month + date('d. H:i - ', time) + message;
+
+		// Add new messages
+		messages.push(message);
+		
+		if(messages.length > 100) {
+			messages.splice(0, 1);
+		}
+		
+		// Add to dataStore
+		dataStore['debugger_messages'] = JSON.stringify(messages);
+	
+		// Store new settings
+		port.postMessage({ name : "setSetting", key : 'debugger_messages', val : JSON.stringify(messages) });
+
+		// Update the GUI
+		var html = $('.settings_page.debugger textarea').html();
+			
+		$('.settings_page.debugger textarea').html( html + message + "\r\n" );
+	},
+	
+	clear : function() {
+	
+		// Clear in localStorage
+		port.postMessage({ name : "setSetting", key : 'debugger_messages', val : '' });
+		
+		// Clear in dataStore
+		dataStore['debugger_messages'] = '';
+		
+		// Clear the debugger window
+		$('.settings_page.debugger textarea').html('');
 	}
 };
