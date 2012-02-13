@@ -109,6 +109,10 @@
 	background-position: -450px 0px;
 }
 
+#ext_settings_header li:nth-child(8) {
+	background-position: -525px 0px;
+}
+
 #ext_settings_header li:nth-child(1).on {
 	background-position: 0px -75px;
 }
@@ -135,6 +139,10 @@
 
 #ext_settings_header li:nth-child(7).on {
 	background-position: -450px -75px;
+}
+
+#ext_settings_header li:nth-child(8).on {
+	background-position: -525px -75px;
 }
 
 /* ABOUT */
@@ -410,4 +418,29 @@
 
 .settings_page.sync button {
 	width: 150px;
+}
+
+/* DEBUGGER */
+.settings_page.debugger textarea {
+
+	width: 840px;
+	height: 380px;
+	margin: 0px;
+	padding: 10px;
+	border: 0px;
+	border-radius: 5px;
+}
+
+.settings_page.debugger button {
+	width: 100px;
+	height: 20px;
+	padding: 0px;
+	margin: 0px;
+	margin-top: 10px;
+	border-radius: 3px;
+	border: 1px solid #AAA;
+	box-shadow: 1px 1px 3px #aaa;
+	background-image: -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+	font: normal normal normal 12px/20px Arial, serif;
+	cursor: pointer;
 }
