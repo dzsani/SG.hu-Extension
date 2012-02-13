@@ -3135,7 +3135,17 @@ var profiles = {
 		
 		// Iterate over the comments
 		$('.topichead:not(.checked)').each(function() {
-			
+
+			// Create the wrapper if not any
+			if( !$(this).next().is('.wrapper') ) {
+			    
+			    // Create the wrapper
+			    var wrapper = $('<div class="wrapper"></div>').insertAfter( this ).css('position', 'relative');
+			    
+			    // Place in other elements
+			    $(this).parent().find('.msg-text').appendTo( wrapper );
+			}
+
 			// Get nickname
 			if(document.location.href.match('cikkek')) {
 
@@ -3148,7 +3158,7 @@ var profiles = {
 			}
 			
 			// Remove old outlines and titles
-			$(this).parent().find('.outline').remove();
+			$(this).next().find('.outline').remove();
 			$(this).find('.titles').remove();
 			
 			// Set the background to default and remove paddings
@@ -3162,16 +3172,6 @@ var profiles = {
 					if( jQuery.trim(profiles[c]['users'][u]) == nick) {
 						
 						// WE GOT A MATCH
-						
-						// Create the wrapper if not any
-						if( $(this).parent().find('.wrapper').length == 0) {
-							
-							// Create the wrapper
-							$('<div class="wrapper"></div>').insertAfter( $(this).parent().find('.topichead:first') ).css('position', 'relative');
-							
-							// Place in other elements
-							$(this).parent().find('.msg-text').appendTo( $(this).parent().find('.wrapper:first') );
-						}		
 
 						// Title
 						var placeholder = $('<span class="titles">'+profiles[c]['title']+'</span>').appendTo( $(this).find('td.left:eq(1)') );
@@ -3324,7 +3324,22 @@ var add_to_list = {
 		profiles_cp.init();
 		
 		// Remove checked class for update
-		$(ele).closest('.topichead').removeClass('checked');
+		$(".topichead").each( function() {
+			
+			if(document.location.href.match('cikkek')) {
+			
+				var nick_2 = $(this).find('a:first').html();
+
+			} else {
+			
+				var nick_2 = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+					nick_2 = nick_2.replace(/ - VIP/, "");
+			}
+			
+			if(nick == nick_2) {
+				$(this).removeClass('checked');
+			}
+		});
 		
 		// Update content GUI
 		profiles.init();
