@@ -3373,7 +3373,7 @@ var columnify_comments = {
 			
 			// Add multi column when the text is larder than 200px
 			if( target.html().length > 800) {
-				target.css({ '-webkit-column-width' : 200, '-webkit-column-gap' : 20, 'text-align' : 'justify' });
+				target.css({ 'column-width' : 200, 'column-gap' : 20, 'text-align' : 'justify' });
 			}
 			
 			// Add 'columnify' class
@@ -3384,7 +3384,7 @@ var columnify_comments = {
 	disabled : function() {
 		
 		$('.topichead').each(function() {
-			$(this).next().find('.msg-text').css({ '-webkit-column-width' : 'auto', '-webkit-column-gap' : 0 });
+			$(this).next().find('.msg-text').css({ 'column-width' : 'auto', 'column-gap' : 0 });
 		});
 	}
 	
