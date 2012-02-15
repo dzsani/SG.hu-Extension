@@ -2775,6 +2775,7 @@ var message_center = {
 				
 					url : 'utolso80.php?id=' + messages[key]['topic_id'],
 					mimeType : 'text/html;charset=iso-8859-2',
+					async: false,
 					
 					success : function(data) {
 
@@ -2839,23 +2840,24 @@ var message_center = {
 						
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
-					
+
 						// Count new messages
-						counter = TmpAnswers.length;
+						counter = TmpAnswers.length;	
 					}
-					
-					return counter;
 				});
 				
-				// Make the requests
-				newmessages += doAjax(messages, key);
+				return counter;
 			}
 			
-			// Sync new messages if any
-			if(newmessages > 0) {
-				window['sync_cp']['save']();
-			}
+			// Make the requests
+			newmessages += doAjax(messages, key);
 		}
+
+		// Sync new messages if any
+		if(newmessages > 0) {
+			window['sync_cp']['save']();
+		}
+
 	},
 	
 	buildOwnCommentsTab : function() {

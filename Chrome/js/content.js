@@ -2865,6 +2865,7 @@ var message_center = {
 				
 					url : 'utolso80.php?id=' + messages[key]['topic_id'],
 					mimeType : 'text/html;charset=iso-8859-2',
+					async: false,
 					
 					success : function(data) {
 
