@@ -2841,7 +2841,10 @@ var message_center = {
 		
 		// Get the latest post
 		var messages = JSON.parse(dataStore['mc_messages']);
-		
+
+		// Var to count new messages
+		var newmessages = 0;
+
 		// Iterate over the posts
 		for(key = 0; key < messages.length; key++) {
 			
@@ -2854,6 +2857,9 @@ var message_center = {
 			}
 
 			function doAjax(messages, key) {
+
+				// Var to count new messages
+				var counter = 0;
 
 				$.ajax({
 				
@@ -2924,14 +2930,21 @@ var message_center = {
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
 
-						// Sync new messages
-						sync_cp.save();
+						// Count new messages
+						counter = TmpAnswers.length;
 					}
 				});
+				
+				return counter;
 			}
 			
 			// Make the requests
-			doAjax(messages, key);
+			newmessages += doAjax(messages, key);
+		}
+
+		// Sync new messages if any
+		if(newmessages > 0) {
+			sync_cp.save();
 		}
 	},
 	
