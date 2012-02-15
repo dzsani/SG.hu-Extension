@@ -2834,6 +2834,9 @@ var message_center = {
 		// Get the latest post
 		var messages = JSON.parse(dataStore['mc_messages']);
 		
+		// Var to indicate when new messages found
+		var newmsg = 0;
+		
 		// Iterate over the posts
 		for(key = 0; key < messages.length; key++) {
 			
@@ -2845,8 +2848,10 @@ var message_center = {
 				continue;
 			}
 
-			function doAjax(messages, key) {
-
+			function doAjax(messages, key) { 
+				
+				var tmp = 0;
+				
 				$.ajax({
 				
 					url : 'utolso80.php?id=' + messages[key]['topic_id'],
@@ -2916,15 +2921,23 @@ var message_center = {
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
 						
-						// Sync new messages
-						sync_cp.save();
-						
+						// Count new messages
+						tmp = TmpAnswers.length;
 					}
 				});
+				
+				return tmp;
+				
 			}
 			
 			// Make the requests
-			doAjax(messages, key);
+			alert(doAjax(messages, key));
+		}
+		
+		// Sync new messages if any
+		if(newmsg > 0) {
+			alert('sync');
+			sync_cp.save();
 		}
 	},
 	
