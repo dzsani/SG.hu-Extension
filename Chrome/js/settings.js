@@ -781,7 +781,9 @@ var sync_cp = {
 		});
 		
 		// Ping for settings chances
-		sync_cp.ping();
+		setTimeout(function() {
+			sync_cp.ping();
+		}, 10000);
 	},
 	
 	signup : function(data) {

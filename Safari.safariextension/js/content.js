@@ -2937,7 +2937,7 @@ var message_center = {
 		}
 		
 		// Sync new messages if any
-		if(newmessages > 0) {
+		if(newmessages > 0 && dataStore['sync_auth_key'] != '') {
 			sync_cp.save();
 		}
 	},
