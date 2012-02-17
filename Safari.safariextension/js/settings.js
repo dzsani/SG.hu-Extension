@@ -30,7 +30,7 @@ var cp = {
 				html += '<li>Profilok</li>';
 				html += '<li>Tiltólista</li>';
 				html += '<li>Sync</li>';
-				html += '<li>Debugger</li>';
+				html += '<li>Logger</li>';
 				html += '<li class="clear"></li>';
 			html += '</ul>';
 			
@@ -546,7 +546,7 @@ var settings = {
 	
 			// Sync new settings
 			if(dataStore['sync_auth_key'] != '') {
-				sync_cp.save();
+				sync_cp.save('Settings Panel');
 			}
 			
 			// Check for interactive action
@@ -564,7 +564,7 @@ var settings = {
 
 			// Sync new settings
 			if(dataStore['sync_auth_key'] != '') {
-				sync_cp.save();
+				sync_cp.save('Settings Panel');
 			}
 
 			// Check for interactive action
@@ -584,7 +584,7 @@ var settings = {
 
 		// Sync new settings
 		if(dataStore['sync_auth_key'] != '') {
-			sync_cp.save();
+			sync_cp.save('Settings Panel');
 		}
 
 		// Update in localStorage
@@ -727,7 +727,7 @@ var profiles_cp = {
 		dataStore['profiles'] = JSON.stringify(data);
 		
 		// Save new settings in sync
-		sync_cp.save();
+		sync_cp.save('Settings Panel');
 
 		// Saved indicator
 		$('<p class="profile_status">&#10003;</p>').insertAfter( $('.settings_page .profile_save') );
@@ -820,7 +820,7 @@ var sync_cp = {
 			signup_pass.val('');
 			
 			// Upload the config data after the signup process
-			sync_cp.save();
+			sync_cp.save('Sync Signup');
 		}
 	},
 	
@@ -911,7 +911,7 @@ var sync_cp = {
 	},
 	
 	
-	save : function() {
+	save : function(origin) {
 		
 		// Target form
 		var form = $('.settings_page.sync .set form');
@@ -921,7 +921,7 @@ var sync_cp = {
 		$(form).find('input[name="data"]').val( JSON.stringify(dataStore) );
 		
 		// Log the request
-		log.add('Initiating sync (UP) to save changes');
+		log.add('Initiating sync (UP) to save changes', origin);
 		
 		// Make the request
 		safari.self.tab.dispatchMessage('makeRequest', { url : $(form).attr('action'), params : $(form).serialize(), callback : ['sync_cp', 'doSave'] });
@@ -1045,7 +1045,7 @@ var log = {
 		});
 	},
 	
-	add : function(message) {
+	add : function(message, origin) {
 
 		// Get current timestamp
 		var time = Math.round(new Date().getTime() / 1000)
@@ -1081,7 +1081,12 @@ var log = {
 		
 		// Append timestamp
 		message	= month + date('d. H:i - ', time) + message;
-
+		
+		// Append origin
+		if(typeof origin != "undefined") {
+			message = message + ' | Origin: ' + origin;
+		}
+		
 		// Add new messages
 		messages.push(message);
 		
