@@ -2908,9 +2908,14 @@ var message_center = {
 							answers.push( AD );
 						}
 
+						// Count new messages
+						if( JSON.stringify(messages[key]['answers']) != JSON.stringify(messages) ) {
+							counter = 1;
+						}
+
 						// Get current time
 						var time = Math.round(new Date().getTime() / 1000);
-					
+
 						// Set new checked date
 						messages[key]['checked'] = time;
 						
@@ -2922,9 +2927,6 @@ var message_center = {
 						
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
-						
-						// Count new messages
-						counter = TmpAnswers.length;
 					}
 				});
 				
@@ -3133,7 +3135,12 @@ var topic_whitelist = {
 
 			// Add to config
 			safari.self.tab.dispatchMessage("addTopicToWhitelist", id);
-			
+
+			// Sync new settings
+			if(dataStore['sync_auth_key'] != '') {
+				sync_cp.save();
+			}
+
 		// Remove topic from whitelist
 		} else {
 
@@ -3145,6 +3152,11 @@ var topic_whitelist = {
 
 			// Remove from config
 			safari.self.tab.dispatchMessage("removeTopicFromWhitelist", id);
+
+			// Sync new settings
+			if(dataStore['sync_auth_key'] != '') {
+				sync_cp.save();
+			}
 		}
 	},
 };
