@@ -363,31 +363,6 @@ var short_comment_marker = {
 
 var blocklist =  {
 	
-	
-	init : function() {
-		
-		// Create the block buttons
-		$('.topichead:not(.blockbutton) a[href*="forummsg.php"]').each(function() {
-			
-			// Insert the block button
-			$('<a href="#" class="block_user">letiltás</a> <span>| </span> ').insertBefore(this);
-			
-			// Restore anchor color settings
-			if(document.location.href.match('cikkek')) {
-				$('a.block_user').css('color', '#444');
-			}
-			
-			// Add "blockbutton" class to avoid duplicates on re-init
-			$(this).closest('.topichead').addClass('blockbutton');
-		});
-	
-		// Create the block evenst
-		$('.block_user').die('click').live('click', function(e) {
-			e.preventDefault();
-			blocklist.block(this);
-		});
-	},
-	
 	hidemessages : function() {
 	
 		// Return false if theres no blocklist entry
@@ -636,7 +611,7 @@ var autoload_next_page = {
 			// Reinit settings
 			
 				// Set-up block buttons
-				blocklist.init();
+				add_to_list.init();
 		
 				// threaded comments
 				if(dataStore['threaded_comments'] == 'true') {
@@ -660,6 +635,10 @@ var autoload_next_page = {
 				// Profiles
 				if(dataStore['profiles'] != '') {
 					profiles.init();
+				}
+
+				if(dataStore['columnify_comments'] == 'true') {
+					columnify_comments.activated();
 				}
 		});
 	}
@@ -1235,10 +1214,15 @@ function ext_valaszmsg(target, id, no, callerid) {
 			}
 
 			// Set-up block buttons
-			blocklist.init();			
+			add_to_list.init();			
 
 			if(dataStore['profiles'] != '') {
 				profiles.init();
+			}
+			
+			if(dataStore['columnify_comments'] == 'true') {
+
+				columnify_comments.activated();
 			}
 
 		});
@@ -1795,7 +1779,7 @@ var fetch_new_comments_in_topic = {
 				// Reinit settings
 
 					// Set-up block buttons
-					blocklist.init();
+					add_to_list.init();
 
 					// highlight_comments_for_me
 					if(dataStore['highlight_comments_for_me'] == 'true' && isLoggedIn()) {
@@ -2850,6 +2834,9 @@ var message_center = {
 		// Get the latest post
 		var messages = JSON.parse(dataStore['mc_messages']);
 		
+		// Var to count new messages
+		var newmessages = 0;
+		
 		// Iterate over the posts
 		for(key = 0; key < messages.length; key++) {
 			
@@ -2861,12 +2848,16 @@ var message_center = {
 				continue;
 			}
 
-			function doAjax(messages, key) {
-
+			function doAjax(messages, key) { 
+				
+				// Var to count new messages
+				var counter = 0;
+				
 				$.ajax({
 				
 					url : 'utolso80.php?id=' + messages[key]['topic_id'],
 					mimeType : 'text/html;charset=iso-8859-2',
+					async: false,
 					
 					success : function(data) {
 
@@ -2917,9 +2908,14 @@ var message_center = {
 							answers.push( AD );
 						}
 
+						// Count new messages
+						if( messages[key]['answers'].length != TmpAnswers.length ) {
+							counter = 1;
+						}
+
 						// Get current time
 						var time = Math.round(new Date().getTime() / 1000);
-					
+
 						// Set new checked date
 						messages[key]['checked'] = time;
 						
@@ -2931,13 +2927,20 @@ var message_center = {
 						
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
-						
 					}
 				});
+				
+				return counter;
+				
 			}
 			
 			// Make the requests
-			doAjax(messages, key);
+			newmessages += doAjax(messages, key);
+		}
+		
+		// Sync new messages if any
+		if(newmessages > 0 && dataStore['sync_auth_key'] != '') {
+			sync_cp.save('Message Center');
 		}
 	},
 	
@@ -3132,7 +3135,12 @@ var topic_whitelist = {
 
 			// Add to config
 			safari.self.tab.dispatchMessage("addTopicToWhitelist", id);
-			
+
+			// Sync new settings
+			if(dataStore['sync_auth_key'] != '') {
+				sync_cp.save();
+			}
+
 		// Remove topic from whitelist
 		} else {
 
@@ -3144,6 +3152,11 @@ var topic_whitelist = {
 
 			// Remove from config
 			safari.self.tab.dispatchMessage("removeTopicFromWhitelist", id);
+
+			// Sync new settings
+			if(dataStore['sync_auth_key'] != '') {
+				sync_cp.save();
+			}
 		}
 	},
 };
@@ -3229,7 +3242,17 @@ var profiles = {
 		
 		// Iterate over the comments
 		$('.topichead:not(.checked)').each(function() {
-			
+
+			// Create the wrapper if not any
+			if( !$(this).next().is('.wrapper') ) {
+			    
+			    // Create the wrapper
+			    var wrapper = $('<div class="wrapper"></div>').insertAfter( this ).css('position', 'relative');
+			    
+			    // Place in other elements
+			    $(this).parent().find('.msg-text').appendTo( wrapper );
+			}
+
 			// Get nickname
 			if(document.location.href.match('cikkek')) {
 
@@ -3240,7 +3263,15 @@ var profiles = {
 				var nick = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
 					nick = nick.replace(/ - VIP/, "");
 			}
-	
+			
+			// Remove old outlines and titles
+			$(this).next().find('.outline').remove();
+			$(this).find('.titles').remove();
+			
+			// Set the background to default and remove paddings
+			$(this).next().find('.msg-text:first').css('background-color', '#F0F0F0');
+			$(this).next().find('.msg-text:first').css('padding', 3);
+			
 			// Iterate over the profile settings
 			// Search for nickname match
 			for(c = 0; c < profiles.length; c++) {
@@ -3249,34 +3280,24 @@ var profiles = {
 						
 						// WE GOT A MATCH
 
-						// Create the wrapper if not any
-						if( $(this).parent().find('.wrapper').length == 0) {
-							
-							// Create the wrapper
-							$('<div class="wrapper"></div>').insertAfter( $(this).parent().find('.topichead') ).css('position', 'relative');
-							
-							// Place in other elements
-							$(this).parent().find('.msg-text').appendTo( $(this).parent().find('.wrapper') );
-						}		
-
 						// Title
-						var placeholder = $('<span>'+profiles[c]['title']+'</span>').appendTo( $(this).find('td.left:eq(1)') );
+						var placeholder = $('<span class="titles">'+profiles[c]['title']+'</span>').appendTo( $(this).find('td.left:eq(1)') );
 							placeholder.css('padding-left', 10);
 						
 						// Calc outline width 
-						var width = (1 + $(this).parent().find('.outline').length) * 8 - 8;
+						var width = (1 + $(this).parent().find('.wrapper:first .outline').length) * 8 - 8;
 						
 						// Border
-						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('.msg-text') );
+						var outline = $('<div class="outline"></div>').insertBefore( $(this).parent().find('.msg-text:first') );
 							outline.css({ width : 6, height : '100%', position : 'absolute', left : width, top : 0, backgroundColor : '#'+profiles[c]['color'][0] });
 						
 						// Background
 						if(profiles[c]['background']) {
-							$(this).parent().find('.msg-text').css('background-color', '#'+profiles[c]['color'][1]);
+							$(this).parent().find('.msg-text:first').css('background-color', '#'+profiles[c]['color'][1]);
 						}
 						
 						// Fix msg-text
-						$(this).parent().find('.msg-text').css('padding-left', (width+3+8));	
+						$(this).parent().find('.msg-text:first').css('padding-left', (width+3+8));	
 					}
 				}
 			}
@@ -3287,6 +3308,186 @@ var profiles = {
 	}
 };
 
+
+
+var add_to_list = {
+	
+	colors : {
+	
+		'1' : '7fadd4', '2' : '90abc3', '3' : '597995', '4' : '657889', '5' : '658969',
+		'6' : '898665', '7' : '897665', '8' : '896586', '9' : '986856', '10' : '985690',
+		'11' : '565698', '12' : '56988f', '13' : '689856', '14' : '979155', '15' : '977455', 
+		'18' : '9dc6e2', '19' : '9ca7e2', '20' : 'c99ce2', '21' : 'e29cdb', '22' : 'e29da5',
+		'24' :  'c0c0c0', '25' : 'a0a0a0', '26' : '808080', '27' : '555555'
+	},
+	
+	init : function() {
+		
+		
+		// Create dropdowns
+		$('.topichead:not(.ext_add_to_list_topichead) a:contains("#")').each(function() {
+
+			// Insert separator
+			var separator = $('<span> | </span>').insertAfter(this);
+			
+			// Insert dropdow placeholder
+			var dropdown = $('<div class="ext_dropdown"><span>&#9660;</span></div>').insertAfter(separator);
+			
+			// Insert dropdown list
+			var list = $('<ul></ul>').appendTo(dropdown).addClass('ext_addtolist_list');
+			
+			// Set dropdown background color
+			var color_id = $(this).closest('.topichead').css('background-image').match(/\d+/g);
+
+				if(color_id) {
+					list.css('background-color', '#' + add_to_list.colors[color_id]);
+				} else {
+					list.css('background-color', '#ccc');
+				}
+			
+			// Set relative position to the container
+			$(this).closest('.topichead').css('position', 'relative').addClass('ext_add_to_list_topichead');
+		});
+
+		// Create dropdown event
+		$('.ext_dropdown').die().live('click', function() {
+			
+			if( $(this).find('ul').css('display') == 'none') {
+				$(this).find('ul').css('top', $(this).closest('.topichead').height() ).slideDown();
+			} else {
+				$(this).find('ul').slideUp();
+			}
+		});
+		
+		$('.ext_addtolist_list').find('*').remove();
+		
+		// Build list
+		add_to_list.buildList();
+
+		// Create events for blocklist
+		$('.ext_addtoblocklist').die().live('click', function() {
+			blocklist.block(this);
+		});
+		
+		// Create events for lists
+		$('.ext_addtolist').die().live('click', function() {
+			add_to_list.addToList( $(this).attr('class').match(/\d+/g), this );
+		});
+	},
+	
+	
+	buildList : function() {
+	
+		// Add the title
+		$('<li><h3>Hozzáadás listához</h3></li>').appendTo('.ext_addtolist_list');
+
+		// Insert separator
+		$('<li><hr></li>').appendTo('.ext_addtolist_list');
+
+		// Add blocklist option
+		$('<li class="ident ext_addtoblocklist">Tiltólista</li>').appendTo('.ext_addtolist_list');
+		
+		if(dataStore['profiles'] == '') {
+			return;
+		}
+		
+		// Get the profile groups
+		var profiles = JSON.parse(dataStore['profiles']);
+		
+		// Iterate over the groups, add each one to the list
+		for(c = 0; c < profiles.length; c++) {
+			$('<li><hr></li>').appendTo('.ext_addtolist_list');
+			$('<li class="ident ext_addtolist profile_'+c+'" style="color: #'+profiles[c]['color'][0]+';">'+profiles[c]['title']+'</li>').appendTo('.ext_addtolist_list');
+		}
+
+	},
+	
+	
+	addToList : function(group, ele) {
+		
+		// Get profiles
+		var list = JSON.parse(dataStore['profiles']);
+		
+		// Get user's nick
+		var anchor = $(ele).closest('.topichead').find('a[href*="forumuserinfo.php"]');
+
+		if(anchor.children('img').length > 0) {
+			var nick = anchor.children('img').attr('title').replace(" - VIP", "");
+	
+		} else {
+			var nick = anchor.html().replace(" - VIP", "");
+		}
+		
+		// Check user
+		if(list[group]['users'].indexOf(nick) == -1) {
+			list[group]['users'].push(nick);
+		} else {
+			list[group]['users'].splice( list[group]['users'].indexOf(nick), 1 );
+		}
+		
+		// Stringify the new profiles list
+		var data = JSON.stringify(list);
+		
+		// Save in dataStore
+		dataStore['profiles'] = data;
+		
+		// Save in localStorage
+		safari.self.tab.dispatchMessage("setSetting", { key : 'profiles', val : data });
+		
+		// Remove checked class for update
+		$(".topichead").each( function() {
+			
+			if(document.location.href.match('cikkek')) {
+			
+				var nick_2 = $(this).find('a:first').html();
+
+			} else {
+			
+				var nick_2 = ($(this).find("table tr:eq(0) td:eq(0) a img").length == 1) ? $(this).find("table tr:eq(0) td:eq(0) a img").attr("alt") : $(this).find("table tr:eq(0) td:eq(0) a")[0].innerHTML;
+					nick_2 = nick_2.replace(/ - VIP/, "");
+			}
+			
+			if(nick == nick_2) {
+				$(this).removeClass('checked');
+			}
+		});
+		
+		// Update content GUI
+		profiles.init();
+		
+		// Initiate sync
+		sync_cp.save('Profiles Content Script');
+	}
+};
+
+
+var columnify_comments = {
+	
+	activated : function() {
+
+		$('.topichead:not(.columnify)').each(function() {
+			
+			// Get the message element
+			var target = $(this).closest('center').find('.msg-text:first');
+			
+			// Add multi column when the text is larder than 200px
+			if( target.html().length > 800) {
+				target.css({ '-webkit-column-width' : 200, '-webkit-column-gap' : 20, 'text-align' : 'justify' });
+			}
+			
+			// Add 'columnify' class
+			$(this).addClass('columnify');
+		});
+	},
+	
+	disabled : function() {
+		
+		$('.topichead').each(function() {
+			$(this).next().find('.msg-text').css({ '-webkit-column-width' : 'auto', '-webkit-column-gap' : 0 });
+		});
+	}
+	
+};
 
 function extInit() {
 	
@@ -3323,7 +3524,7 @@ function extInit() {
 		}
 
 		// Set-up block buttons
-		blocklist.init();
+		add_to_list.init();
 
 		// Block users/messages
 		if(dataStore['block_list'] != '') {
@@ -3372,6 +3573,10 @@ function extInit() {
 
 		if(dataStore['profiles'] != '') {
 			profiles.init();
+		}
+		
+		if(dataStore['columnify_comments'] == 'true') {
+			columnify_comments.activated();
 		}
 
 	// FORUM.PHP
@@ -3428,7 +3633,6 @@ function extInit() {
 		if(dataStore['message_center'] == 'true' && isLoggedIn() ) {
 			message_center.init();
 		}
-
 	}
 	
 	// LISTAZAS.PHP
@@ -3470,7 +3674,7 @@ function extInit() {
 			}
 		
 			// Set-up block buttons
-			blocklist.init();
+			add_to_list.init();
 		
 			// Block users/messages
 			if(dataStore['block_list'] != '') {
@@ -3519,6 +3723,10 @@ function extInit() {
 			
 			if(dataStore['profiles'] != '') {
 				profiles.init();
+			}
+
+			if(dataStore['columnify_comments'] == 'true') {
+				columnify_comments.activated();
 			}
 
 		// Topic if whitelisted, show the navigation

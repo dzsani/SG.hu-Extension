@@ -29,6 +29,8 @@
 			if( typeof localStorage['fetch_new_comments']					== 'undefined') localStorage['fetch_new_comments']					= 'true';
 			if( typeof localStorage['disable_point_system']					== 'undefined') localStorage['disable_point_system']				= 'false';
 			if( typeof localStorage['profiles']								== 'undefined') localStorage['profiles']							= '';
+			if( typeof localStorage['debugger_messages']					== 'undefined') localStorage['debugger_messages']					= '';
+			if( typeof localStorage['columnify_comments']					== 'undefined') localStorage['columnify_comments']					= 'false';
 
 			// Message Center
 			if( typeof localStorage['message_center']						== 'undefined') localStorage['message_center']						= 'false';
@@ -36,9 +38,8 @@
 			if( typeof localStorage['mc_selected_tab']						== 'undefined') localStorage['mc_selected_tab']						= 0;
 			
 			// Sync
+			if( typeof localStorage['sync_auth_key']						== 'undefined') localStorage['sync_auth_key']						= '';
 			if( typeof localStorage['sync_nick']							== 'undefined') localStorage['sync_nick']							= '';
-			if( typeof localStorage['sync_pass']							== 'undefined') localStorage['sync_pass']							= '';
-			if( typeof localStorage['sync_status']							== 'undefined') localStorage['sync_status']							= 'false';
 			if( typeof localStorage['sync_last_sync']						== 'undefined') localStorage['sync_last_sync']						= '0';
 			
 			chrome.extension.onConnect.addListener(function(port) {
