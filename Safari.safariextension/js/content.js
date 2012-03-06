@@ -2909,7 +2909,7 @@ var message_center = {
 						}
 
 						// Count new messages
-						if( JSON.stringify(messages[key]['answers']) != JSON.stringify(messages) ) {
+						if( messages[key]['answers'].length != TmpAnswers.length ) {
 							counter = 1;
 						}
 
