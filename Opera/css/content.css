@@ -627,3 +627,58 @@ textarea[name="message"] {
 	font: normal normal normal 12px/14px Arial, serif;
 	text-align: left;
 }
+
+/* DROPDOWNS */
+.ext_dropdown {
+	display: inline-block !important;
+	width: 20px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.ext_dropdown ul {
+	display: none;
+	width: 200px;
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+	position: absolute;
+	top: 20px;
+	right: 0px;
+	z-index: 100;
+	border: 2px solid #666;
+	border-top: 0px;
+	background-color: #f0f0f0;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	text-align: left;
+}
+
+.ext_dropdown ul li {
+	padding-left: 5px;
+	cursor: pointer;
+	color: #fff;
+	font: normal normal normal 12px/16px Arial, serif;
+}
+
+.ext_dropdown ul li.ident {
+	padding-left: 15px;
+}
+
+.ext_dropdown ul li:last-child {
+	padding-bottom: 10px;
+}
+
+.ext_dropdown ul h3 {
+	margin: 0px;
+	padding: 5px;
+	font: normal normal bold 13px/16px Arial, serif;
+	text-shadow: 1px 1px 1px #333;
+	color: #fff;
+	text-align: center;
+}
+
+.ext_dropdown ul hr {
+	border-top: 1px solid #fff;
+	border-bottom: 1px solid #e0e0e0;
+}

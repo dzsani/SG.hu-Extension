@@ -29,6 +29,8 @@
 			if( typeof widget.preferences.fetch_new_comments					== 'undefined') widget.preferences.fetch_new_comments					= 'true';
 			if( typeof widget.preferences.disable_point_system					== 'undefined') widget.preferences.disable_point_system					= 'false';
 			if( typeof widget.preferences.profiles								== 'undefined') widget.preferences.profiles								= 'false';
+			if( typeof widget.preferences.debugger_messages						== 'undefined') widget.preferences.debugger_messages					= '';
+			if( typeof widget.preferences.columnify_comments					== 'undefined') widget.preferences.columnify_comments					= 'false';
 
 			// Message Center
 			if( typeof widget.preferences.message_center						== 'undefined') widget.preferences.message_center						= 'false';
@@ -36,9 +38,8 @@
 			if( typeof widget.preferences.mc_selected_tab						== 'undefined') widget.preferences.mc_selected_tab						= 0;			
 			
 			// SYNC
+			if( typeof widget.preferences.sync_auth_key							== 'undefined') widget.preferences.sync_auth_key						= '';
 			if( typeof widget.preferences.sync_nick								== 'undefined') widget.preferences.sync_nick							= '';
-			if( typeof widget.preferences.sync_pass								== 'undefined') widget.preferences.sync_pass							= '';
-			if( typeof widget.preferences.sync_status							== 'undefined') widget.preferences.sync_status							= 'false';
 			if( typeof widget.preferences.sync_last_sync						== 'undefined') widget.preferences.sync_last_sync						= '0';
 			
 			window.addEventListener("load", setupConnection, false);
