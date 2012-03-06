@@ -3246,7 +3246,12 @@ var add_to_list = {
 			
 			// Set dropdown background color
 			var color_id = $(this).closest('.topichead').css('background-image').match(/\d+/g);
-				list.css('background-color', '#' + add_to_list.colors[color_id]);
+
+				if(color_id) {
+					list.css('background-color', '#' + add_to_list.colors[color_id]);
+				} else {
+					list.css('background-color', '#ccc');
+				}
 			
 			// Set relative position to the container
 			$(this).closest('.topichead').css('position', 'relative').addClass('ext_add_to_list_topichead');
@@ -3337,9 +3342,6 @@ var add_to_list = {
 		// Save in localStorage
 		opera.extension.postMessage({ name : "setSetting", key : 'profiles', val : data });
 		
-		// Update settings GUI
-		profiles_cp.init();
-		
 		// Remove checked class for update
 		$(".topichead").each( function() {
 			
@@ -3360,6 +3362,9 @@ var add_to_list = {
 		
 		// Update content GUI
 		profiles.init();
+		
+		// Initiate sync
+		window['sync_cp']['save']('Profiles Content Script');
 	}
 };
 
