@@ -440,7 +440,7 @@
 	border-radius: 3px;
 	border: 1px solid #AAA;
 	box-shadow: 1px 1px 3px #aaa;
-	background-image: -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+	background-image: -o-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
 	font: normal normal normal 12px/20px Arial, serif;
 	cursor: pointer;
 }

@@ -215,13 +215,6 @@ var cp = {
 
 			html += '<div class="settings_page sync">';
 				
-				html += '<div class="set">';
-					html += '<form action="http://sgsync.dev.kreatura.hu/api_v2/set/" method="post">';
-						html += '<input type="hidden" name="auth_key">';
-						html += '<input type="hidden" name="data">';
-					html += '</form>';
-				html += '</div>';
-				
 				html += '<div class="signup">';
 					html += '<h3>Regisztráció</h3>';
 					html += '<p class="desc">';
@@ -929,19 +922,12 @@ window.sync_cp = {
 	
 	
 	save : function(origin) {
-		
-		// Target form
-		var form = $('.settings_page.sync .set form');
-		
-		// Set fields
-		$(form).find('input[name="auth_key"]').val(dataStore['sync_auth_key']);
-		$(form).find('input[name="data"]').val( JSON.stringify(dataStore) );
 
 		// Log the request
 		log.add('Initiating sync (UP) to save changes', origin);
 
 		// Make the request
-		opera.extension.postMessage({ name : 'makeRequest', message : { url : $(form).attr('action'), params : $(form).serialize(), callback : ['sync_cp', 'doSave'] } });
+		opera.extension.postMessage({ name : 'makeRequest', message : { url : 'http://sgsync.dev.kreatura.hu/api_v2/set/', params : $.param({ auth_key : dataStore['sync_auth_key'], data : JSON.stringify(dataStore) }), callback : ['sync_cp', 'doSave'] } });
 	},
 
 	doSave : function() {
