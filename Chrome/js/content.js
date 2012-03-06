@@ -2916,6 +2916,11 @@ var message_center = {
 							answers.push( AD );
 						}
 
+						// Count new messages
+						if( messages[key]['answers'].length != TmpAnswers.length ) {
+							counter = 1;
+						}
+
 						// Get current time
 						var time = Math.round(new Date().getTime() / 1000);
 					
@@ -2930,9 +2935,6 @@ var message_center = {
 						
 						// Store in dataStore
 						dataStore['mc_messages'] = JSON.stringify(messages);
-
-						// Count new messages
-						counter = TmpAnswers.length;
 					}
 				});
 				
@@ -2945,7 +2947,7 @@ var message_center = {
 
 		// Sync new messages if any
 		if(newmessages > 0 && dataStore['sync_auth_key'] != '') {
-			sync_cp.save();
+			sync_cp.save('Message Center');
 		}
 	},
 	
