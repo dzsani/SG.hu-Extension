@@ -53,8 +53,8 @@ var cp = {
 			
 			html += '<div class="settings_page">';
 				html += '<h3>SG Fórum+</h3>';
-				html += '<p>Verzió: 2.5.0<br></p>';
-				html += '<p>Kiadás dátuma: 2012. 01. 25.</p>';
+				html += '<p>Verzió: 2.6.0<br></p>';
+				html += '<p>Kiadás dátuma: 2012. 03. 07.</p>';
 				html += '<p>Fejlesztő: Gera János "dzsani" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 				html += '<p>Közreműködők: Viszt Péter "passatgt" <a href="http://visztpeter.me" target="_blank">http://visztpeter.me</a>, Krupa György "pyro" <a href="http://kreaturamedia.com" target="_blank">http://kreaturamedia.com</a></p>';
 			html += '</div>';

@@ -1,6 +1,6 @@
 {
 	"name": "SG Fórum+",
-	"version": "2.5.0",
+	"version": "2.6.0",
 	"description": "Az sg.hu nemhivatalos Chrome bővítménye.",
 	"background_page": "html/background.html",
 
