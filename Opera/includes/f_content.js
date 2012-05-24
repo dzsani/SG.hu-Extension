@@ -1766,36 +1766,11 @@ var fetch_new_comments_in_topic = {
 var show_mentioned_comments = {
 
 	activated : function() {
-		
-		$('.maskwindow:not(.checked),.msg-text').each(function() {
-			
-			// Filter out duplicates
-			if( $(this).parent().is('.maskwindow') ) {
-				return true;
-			}
 
-			// Search and replace mentioned comment numbers
-			if( $(this).html().match(/\#\d+/g) ){
-				if( $(this).html().match(/<a[^>]+>\#\d+<\/a>/g) && dataStore['show_mentioned_comments_in_links'] == 'true' ) {
-					var replaced = $(this).html().replace(/<a[^>]+>(\#\d+)<\/a>/g, "<span class=\"ext_mentioned\">$1</span>");
-				} else if( !$(this).html().match(/<.*\#\d+.*>/g) ) {
-					var replaced = $(this).html().replace(/(\#\d+)/g, "<span class=\"ext_mentioned\">$1</span>");					
-				}
-				
-				// Change the text in the original comment
-				$(this).html(replaced);
-			}
+		$('a[href*="hszmutat"]:not(.checked)').each(function() {
 			
-			// Change the text in the original comment
-			$(this).html(replaced);
-			
-			// Add a special class to not run again this comment
-			$(this).addClass('checked');
-
-			// Remove links from signature
-			if($(this).find('.msg-copyright').length > 0) {
-				$(this).find('.msg-copyright').html( $(this).find('.msg-copyright').html().replace(/<span class="ext_mentioned">(.*?)<\/span>/,"$1") );
-			}
+			// Remove original event
+			$(this).attr('class', 'ext_mentioned').addClass('checked');
 		});
 		
 		// Attach click events
@@ -1825,8 +1800,8 @@ var show_mentioned_comments = {
 				id = id.split('#')[0];
 				id = id.split('&')[0];
 		}
-		
-		var target = $(ele).closest('.msg-text').next().next().attr('id');
+
+		var target = $(ele).closest('div[id*="msg"]').children().eq(3).attr('id');
 		
 		if(document.location.href.match('cikkek')) {
 			eval("ext_valaszmsg('"+target+"', "+id+", "+no+", 1);");
