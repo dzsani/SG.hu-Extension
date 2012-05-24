@@ -110,9 +110,6 @@ var cp = {
 				html += '</div>';
 				html += '<div>';
 					html += '<h3>Említett kommentek beidézése</h3>';
-					html += '<p class="sub">';
-						html += '<label><input type="checkbox" id="show_mentioned_comments_in_links"> Linkeken belüli keresés is</label>';
-					html += '</p>';
 					html += '<p>Bármely topikban egy beírt kommentazonosító detektálása, kattintásra az említett komment beidézése</p>';
 					html += '<div class="button" id="show_mentioned_comments"></div>';
 				html += '</div>';
